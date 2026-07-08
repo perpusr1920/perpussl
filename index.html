@@ -500,6 +500,229 @@
                 document.getElementById('loginError').classList.remove('hidden');
             }
         }
+        <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
+
+    <script>
+        // ==========================================
+        // KONFIGURASI FIREBASE ANDA
+        // ==========================================
+        // SILAKAN GANTI isi objek di bawah ini dengan kredensial dari Firebase Console Anda!
+        const firebaseConfig = {
+            apiKey: "CONTOH_API_KEY_ANDA",
+            authDomain: "project-anda.firebaseapp.com",
+            projectId: "project-anda",
+            storageBucket: "project-anda.appspot.com",
+            messagingSenderId: "1234567890",
+            appId: "1:1234567890:web:abcdef123456"
+        };
+
+        // Inisialisasi Firebase
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.firestore();
+
+        // Referensi Koleksi Buku di Firestore
+        const booksCollection = db.collection("books");
+
+
+        // ==========================================
+        // 1. FUNGSI MENAMPILKAN DATA BUKU SECARA REALTIME
+        // ==========================================
+        function loadBooksRealtime() {
+            const tableBody = document.getElementById("bookTableBody");
+            
+            // Menggunakan onSnapshot agar tabel otomatis terupdate jika data di Cloud berubah
+            booksCollection.onSnapshot((snapshot) => {
+                tableBody.innerHTML = ""; // Bersihkan baris tabel lama
+                
+                if (snapshot.empty) {
+                    tableBody.innerHTML = `<tr><td colspan="5" style="text-align:center;">Belum ada koleksi buku di database cloud.</td></tr>`;
+                    return;
+                }
+
+                let no = 1;
+                snapshot.forEach((doc) => {
+                    const book = doc.data();
+                    const docId = doc.id; // Menyimpan ID dokumen Firestore untuk edit/delete
+
+                    const row = document.createElement("tr");
+                    row.innerHTML = `
+                        <td>${no++}</td>
+                        <td><code>${book.barcode || '-'}</code></td>
+                        <td><strong>${book.title || '-'}</strong></td>
+                        <td>${book.author || '-'}</td>
+                        <td style="text-align: center;">
+                            <button class="btn-action btn-edit" onclick="editBook('${docId}', '${book.title}', '${book.author}', '${book.barcode}')">
+                                <i class="fa-solid fa-pen-to-square"></i> Edit
+                            </button>
+                            <button class="btn-action btn-delete" onclick="deleteBook('${docId}')">
+                                <i class="fa-solid fa-trash"></i> Hapus
+                            </button>
+                        </td>
+                    `;
+                    tableBody.appendChild(row);
+                });
+            }, (error) => {
+                console.error("Gagal mengambil data: ", error);
+                tableBody.innerHTML = `<tr><td colspan="5" style="text-align:center; color:red;">Gagal memuat data dari cloud.</td></tr>`;
+            });
+        }
+
+
+        // ==========================================
+        // 2. FUNGSI SIMPAN & PERBARUI (EDIT) DATA BUKU
+        // ==========================================
+        window.saveBook = function() {
+            const docId = document.getElementById("editBookId").value;
+            const title = document.getElementById("bookTitleInput").value.trim();
+            const author = document.getElementById("bookAuthorInput").value.trim();
+            const barcode = document.getElementById("bookBarcodeInput").value.trim();
+
+            // Validasi input form
+            if (!title || !author || !barcode) {
+                alert("Semua data form buku harus diisi!");
+                return;
+            }
+
+            const bookData = {
+                title: title,
+                author: author,
+                barcode: barcode,
+                updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+            };
+
+            if (docId) {
+                // Skenario 1: Jika editBookId memiliki nilai, lakukan UPDATE data dokumen
+                booksCollection.doc(docId).update(bookData)
+                .then(() => {
+                    alert("Data buku berhasil diperbarui di cloud!");
+                    resetBookForm();
+                })
+                .catch((error) => {
+                    console.error("Error updating document: ", error);
+                    alert("Gagal memperbarui data buku.");
+                });
+            } else {
+                // Skenario 2: Jika editBookId kosong, buat data dokumen BARU (CREATE)
+                bookData.createdAt = firebase.firestore.FieldValue.serverTimestamp();
+                booksCollection.add(bookData)
+                .then(() => {
+                    alert("Buku baru berhasil disimpan ke Cloud Firebase!");
+                    resetBookForm();
+                })
+                .catch((error) => {
+                    console.error("Error adding document: ", error);
+                    alert("Gagal menyimpan buku ke database cloud.");
+                });
+            }
+        };
+
+
+        // ==========================================
+        // 3. FUNGSI MEMASUKKAN DATA KE FORM UNTUK DI-EDIT
+        // ==========================================
+        window.editBook = function(id, title, author, barcode) {
+            document.getElementById("editBookId").value = id;
+            document.getElementById("bookTitleInput").value = title;
+            document.getElementById("bookAuthorInput").value = author;
+            document.getElementById("bookBarcodeInput").value = barcode;
+
+            // Sesuaikan teks tombol aksi
+            document.getElementById("formFormTitle").innerText = "Edit Data Buku";
+            document.getElementById("btnSaveBookAction").innerText = "Perbarui Data";
+            document.getElementById("btnCancelEditAction").style.display = "inline-block";
+        };
+
+
+        // ==========================================
+        // 4. FUNGSI HAPUS DATA BUKU
+        // ==========================================
+        window.deleteBook = function(id) {
+            if (confirm("Apakah Anda yakin ingin menghapus buku ini secara permanen dari Cloud?")) {
+                booksCollection.doc(id).delete()
+                .then(() => {
+                    alert("Buku berhasil dihapus!");
+                })
+                .catch((error) => {
+                    console.error("Error removing document: ", error);
+                    alert("Gagal menghapus buku.");
+                });
+            }
+        };
+
+
+        // ==========================================
+        // 5. FUNGSI RESET / BATALKAN FORM
+        // ==========================================
+        window.resetBookForm = function() {
+            document.getElementById("editBookId").value = "";
+            document.getElementById("bookTitleInput").value = "";
+            document.getElementById("bookAuthorInput").value = "";
+            document.getElementById("bookBarcodeInput").value = "";
+
+            // Kembalikan teks UI tombol ke bentuk awal
+            document.getElementById("formFormTitle").innerText = "Tambah Buku Baru";
+            document.getElementById("btnSaveBookAction").innerText = "Simpan Buku";
+            document.getElementById("btnCancelEditAction").style.display = "none";
+        };
+
+
+        // ==========================================
+        // LOGIKA GLOBAL & PENDUKUNG NAVIGASI
+        // ==========================================
+        // Fungsi pemicu saat membuka manajer buku dari Dashboard
+        window.openBookManager = function() {
+            document.getElementById("adminGrid").style.display = "none";
+            document.getElementById("adminDetail").style.display = "block";
+            
+            // Sembunyikan semua kontainer detail lain terlebih dahulu
+            document.getElementById("crudBookContainer").style.display = "block";
+            document.getElementById("attendanceContainer").style.display = "none";
+            document.getElementById("loanTransactionContainer").style.display = "none";
+            document.getElementById("returnTransactionContainer").style.display = "none";
+            document.getElementById("reportTransactionContainer").style.display = "none";
+            
+            document.getElementById("detailSubTitle").innerText = "Katalog Buku";
+            document.getElementById("detailDesc").innerText = "Kelola data buku perpustakaan digital Anda di sini.";
+
+            // Jalankan sinkronisasi data cloud ke tabel
+            loadBooksRealtime();
+        };
+
+        window.hideAdminDetail = function() {
+            document.getElementById("adminGrid").style.display = "grid";
+            document.getElementById("adminDetail").style.display = "none";
+        };
+
+        window.showLogin = function() {
+            document.getElementById("userSection").style.display = "none";
+            document.getElementById("loginSection").style.display = "flex";
+            document.getElementById("mainNavbar").style.display = "none";
+        };
+
+        window.checkPassword = function() {
+            const pass = document.getElementById("passwordInput").value;
+            if(pass === "admin123") { // Silakan ganti password bawaan ini sesuai kebutuhan
+                document.getElementById("loginSection").style.display = "none";
+                document.getElementById("adminSection").style.display = "block";
+                document.getElementById("passwordInput").value = "";
+                document.getElementById("loginError").style.display = "none";
+            } else {
+                document.getElementById("loginError").style.display = "block";
+            }
+        };
+
+        window.handleKeyPress = function(e) {
+            if(e.key === 'Enter') checkPassword();
+        };
+
+        window.showUserSection = function(page) {
+            document.getElementById("userSection").style.display = "block";
+            document.getElementById("loginSection").style.display = "none";
+            document.getElementById("adminSection").style.display = "none";
+            document.getElementById("mainNavbar").style.display = "flex";
+        };
+   
     </script>
 </body>
 </html>
