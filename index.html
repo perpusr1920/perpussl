@@ -399,7 +399,7 @@
             // Tampilkan sub-page target
             const target = document.getElementById(`sub-${page}`);
             if (target) target.classList.remove('hidden');
-
+            
             // Reset visual active class menu desktop
             const links = ['home', 'tata-tertib', 'keanggotaan', 'ebook'];
             links.forEach(l => {
@@ -442,7 +442,6 @@
         function openAdminDetailBox(title, description, containerId) {
             document.getElementById('adminGrid').classList.add('hidden');
             document.getElementById('adminDetail').classList.remove('hidden');
-            
             document.getElementById('detailSubTitle').innerText = title;
             document.getElementById('detailDesc').innerText = description;
             
@@ -466,21 +465,26 @@
         // Hook fungsi pembuka dari setiap menu card admin agar terkoneksi dengan UI baru
         function openBookManager() {
             openAdminDetailBox("Manajemen Katalog Buku", "Tambahkan, edit, hapus, dan cari buku di perpustakaan.", "crudBookContainer");
-            if (window.loadBooksData) window.loadBooksData(); // Mengamankan trigger pemanggilan data backend lama Anda jika ada
+            if (window.loadBooksData) window.loadBooksData();
         }
+
         function openLoanManager() {
             openAdminDetailBox("Transaksi Peminjaman Baru", "Silakan proses peminjaman buku anggota di bawah ini.", "loanTransactionContainer");
             if (window.resetLoanSession) window.resetLoanSession();
         }
+
         function openReturnManager() {
             openAdminDetailBox("Sistem Pengembalian Buku", "Scan barcode buku untuk melakukan proses pengembalian.", "returnTransactionContainer");
         }
+
         function openAttendanceManager() {
             openAdminDetailBox("Absensi Pengunjung", "Pantau statistik kehadiran harian dan scan barcode presensi siswa.", "attendanceContainer");
         }
+
         function openStudentManager() {
-            openAdminDetailBox("Data Anggota Siswa", "Manajemen data keanggotaan siswa terdaftar.", "reportTransactionContainer"); 
+            openAdminDetailBox("Data Anggota Siswa", "Manajemen data keanggotaan siswa terdaftar.", "reportTransactionContainer");
         }
+
         function openReportManager() {
             openAdminDetailBox("Laporan Rekap Sirkulasi", "Unduh berkas sirkulasi peminjaman dalam format file excel spreadsheet.", "reportTransactionContainer");
         }
@@ -490,17 +494,15 @@
             if (e.key === 'Enter') checkPassword();
         }
 
-        // MOCKUP / PLACEHOLDER FUNGSI JAVASCRIPT BAWAAN JIKA BELUM TERKONEKSI FIREBASE
-        // (Tetap pertahankan fungsi asli Anda jika file index asli Anda memiliki script tag logic di bawahnya)
         function checkPassword() {
             const pass = document.getElementById('passwordInput').value;
-            if (pass === "admin" || pass === "1234") { // Sesuaikan password default backend Anda
+            if (pass === "admin" || pass === "1234") { 
                 showAdminDashboard();
             } else {
                 document.getElementById('loginError').classList.remove('hidden');
             }
         }
-        <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    </script> <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
 
     <script>
@@ -513,7 +515,7 @@
             messagingSenderId: "1234567890",
             appId: "1:1234567890:web:abc123xyz"
         };
-
+        
         // Inisialisasi Firebase
         firebase.initializeApp(firebaseConfig);
         const db = firebase.firestore();
@@ -525,6 +527,8 @@
         let localLoansArray = [];
         let loanCartArray = [];
         let selectedLoansToDelete = [];
+
+        // Lanjutkan sisa fungsi sinkronisasi database Firebase Anda di bawahnya...
 
         // Inisialisasi Real-time Database Firebase
         function initFirebaseSync() {
