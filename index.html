@@ -7,498 +7,1968 @@
     
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    fontFamily: { sans: ['Poppins', 'sans-serif'] },
-                    colors: {
-                        'primary-blue': '#2A5C99',
-                        'light-blue': '#E3F2FD',
-                        'accent-orange': '#FF9800',
-                        'text-dark': '#2B3674',
-                        'text-gray': '#707EAE',
-                        'danger-red': '#FF4B4B',
-                        'success-green': '#2ecc71',
-                    }
-                }
+
+    <style>
+        :root {
+            --primary-blue: #2563eb;
+            --primary-gradient: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+            --hero-gradient: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%);
+            --light-blue: #eff6ff;
+            --accent-orange: #f97316;
+            --text-dark: #0f172a;
+            --text-gray: #64748b;
+            --white: #ffffff;
+            --bg-body: #f8fafc;
+            --danger-red: #ef4444;
+            --success-green: #10b981;
+            --card-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.05);
+            --hover-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -6px rgba(0, 0, 0, 0.1);
+        }
+
+        * { 
+            margin: 0; 
+            padding: 0; 
+            box-sizing: border-box; 
+            font-family: 'Poppins', sans-serif; 
+        }
+        
+        body { 
+            background-color: var(--bg-body); 
+            color: var(--text-dark); 
+            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* --- NAVBAR --- */
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 25px 8%;
+            background-color: transparent;
+            position: absolute;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+        }
+        .nav-logo { 
+            display: flex; 
+            align-items: center; 
+            gap: 12px; 
+            font-weight: 700; 
+            font-size: 1.5rem;
+            color: var(--white); 
+            cursor: pointer; 
+            letter-spacing: -0.025em;
+        }
+        .nav-logo i { 
+            background: rgba(255, 255, 255, 0.2); 
+            color: var(--white);
+            padding: 10px; 
+            border-radius: 14px; 
+            backdrop-filter: blur(10px);
+            font-size: 1.3rem;
+        }
+        
+        .nav-container { 
+            display: flex;
+            align-items: center; 
+            gap: 30px; 
+        }
+        .nav-links { 
+            display: flex; 
+            list-style: none; 
+            gap: 8px; 
+            background: rgba(255, 255, 255, 0.1);
+            padding: 6px;
+            border-radius: 30px;
+            backdrop-filter: blur(10px);
+        }
+        .nav-links li { 
+            cursor: pointer;
+            font-weight: 500; 
+            color: var(--white); 
+            padding: 8px 20px;
+            border-radius: 25px;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            opacity: 0.85;
+            font-size: 0.95rem;
+        }
+        .nav-links li:hover { 
+            background: rgba(255, 255, 255, 0.15); 
+            opacity: 1;
+        }
+        .nav-links li.active { 
+            background: var(--white); 
+            color: var(--primary-blue); 
+            opacity: 1;
+            font-weight: 600;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .btn-admin-nav { 
+            background: var(--white); 
+            color: var(--primary-blue); 
+            border: none; 
+            padding: 12px 28px;
+            border-radius: 30px; 
+            font-weight: 600; 
+            cursor: pointer; 
+            transition: all 0.3s ease; 
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+            font-size: 0.95rem;
+        }
+        .btn-admin-nav:hover { 
+            background: var(--light-blue);
+            transform: translateY(-2px); 
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .menu-toggle { 
+            display: none; 
+            font-size: 1.6rem; 
+            color: var(--white); 
+            cursor: pointer; 
+            background: rgba(255, 255, 255, 0.1);
+            padding: 10px;
+            border-radius: 12px;
+            backdrop-filter: blur(10px);
+        }
+
+        /* --- HERO SECTION --- */
+        .hero {
+            position: relative;
+            background: var(--hero-gradient);
+            height: 520px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding-bottom: 80px;
+            padding-left: 20px;
+            padding-right: 20px;
+        }
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: radial-gradient(circle at top right, rgba(59, 130, 246, 0.4), transparent 60%);
+            pointer-events: none;
+        }
+        .hero-content { 
+            position: relative; 
+            z-index: 2; 
+            color: var(--white); 
+        }
+        .hero h1 { 
+            font-size: 3.5rem; 
+            font-weight: 800; 
+            letter-spacing: -0.03em;
+            line-height: 1.15; 
+            margin: 5px 0 15px 0;
+        }
+        .hero p { 
+            font-size: 1.25rem; 
+            opacity: 0.9; 
+            font-weight: 400; 
+            letter-spacing: 0.02em;
+        }
+        
+        .wave-container { 
+            position: absolute;
+            bottom: -1px; 
+            width: 100%; 
+            line-height: 0; 
+        }
+        .wave-container svg { 
+            position: relative;
+            display: block; 
+            width: calc(100% + 1.3px); 
+            height: 90px; 
+        }
+        .wave-container .shape-fill { 
+            fill: var(--bg-body);
+        }
+
+        /* --- MAIN LAYOUT --- */
+        .main-container { 
+            max-width: 1040px;
+            margin: -100px auto 60px auto; 
+            position: relative; 
+            z-index: 5; 
+            padding: 0 20px;
+        }
+        
+        /* --- CARDS --- */
+        .welcome-card {
+            background: var(--white);
+            border-radius: 24px;
+            padding: 50px 40px;
+            box-shadow: var(--card-shadow);
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            border: 1px solid rgba(255, 255, 255, 0.8);
+        }
+        .welcome-card .icon-circle {
+            width: 84px;
+            height: 84px; 
+            background: var(--light-blue); 
+            color: var(--primary-blue);
+            border-radius: 20px; 
+            display: flex; 
+            align-items: center; 
+            justify-content: center;
+            font-size: 2.2rem; 
+            margin-bottom: 25px; 
+            flex-shrink: 0;
+            box-shadow: inset 0 -4px 10px rgba(37, 99, 235, 0.05);
+        }
+        .welcome-card h2 { 
+            font-size: 2rem; 
+            color: var(--text-dark); 
+            margin-bottom: 12px;
+            letter-spacing: -0.02em;
+        }
+        .welcome-card p { 
+            font-size: 1.05rem; 
+            color: var(--text-gray); 
+            max-width: 650px; 
+            line-height: 1.75;
+        }
+
+        .info-bar {
+            margin-top: 35px;
+            background: #fafafa;
+            color: var(--text-dark);
+            padding: 18px 30px;
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+            border: 1px solid #f1f5f9;
+            width: 100%;
+            max-width: 750px;
+        }
+        .info-bar i { 
+            font-size: 1.25rem; 
+            color: var(--accent-orange); 
+            flex-shrink: 0;
+        }
+        .info-bar span {
+            font-size: 0.95rem;
+            color: var(--text-gray);
+            text-align: left;
+        }
+        .info-bar strong {
+            color: var(--text-dark);
+        }
+
+        .rules-list { 
+            text-align: left; 
+            max-width: 600px; 
+            margin: 30px auto 0 auto;
+            line-height: 1.8; 
+            font-size: 1.05rem; 
+            color: var(--text-dark); 
+            list-style: none; 
+        }
+        .rules-list li { 
+            margin-bottom: 16px;
+            display: flex; 
+            gap: 14px; 
+            align-items: flex-start; 
+        }
+        .rules-list li::before { 
+            content: "\f00c";
+            font-family: "Font Awesome 6 Free"; 
+            font-weight: 900; 
+            color: var(--success-green); 
+            background: #d1fae5;
+            padding: 4px;
+            font-size: 0.75rem;
+            border-radius: 50%;
+            width: 22px;
+            height: 22px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        /* --- LOGIN SECTION --- */
+        #loginSection { 
+            display: none;
+            min-height: 100vh; 
+            justify-content: center; 
+            align-items: center; 
+            background: radial-gradient(circle at top left, var(--light-blue), var(--bg-body)); 
+            padding: 20px;
+        }
+        .login-card { 
+            background: var(--white); 
+            padding: 45px 35px; 
+            border-radius: 28px;
+            box-shadow: var(--hover-shadow); 
+            text-align: center; 
+            width: 100%; 
+            max-width: 440px;
+            border: 1px solid rgba(255, 255, 255, 0.7);
+        }
+        .login-card input { 
+            width: 100%; 
+            padding: 14px 20px; 
+            margin-bottom: 20px;
+            border: 2px solid #e2e8f0; 
+            border-radius: 14px; 
+            outline: none; 
+            font-size: 1rem; 
+            transition: all 0.2s ease;
+            color: var(--text-dark);
+        }
+        .login-card input:focus { 
+            border-color: var(--primary-blue);
+            box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.1);
+        }
+        .login-card button { 
+            width: 100%; 
+            padding: 14px; 
+            background: var(--primary-gradient); 
+            color: white;
+            border: none; 
+            border-radius: 14px; 
+            font-weight: 600; 
+            cursor: pointer; 
+            font-size: 1rem;
+            transition: all 0.2s ease;
+            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.2);
+        }
+        .login-card button:hover {
+            opacity: 0.95;
+            transform: translateY(-1px);
+        }
+
+        /* --- ADMIN SECTION --- */
+        #adminSection { 
+            display: none;
+            max-width: 1140px; 
+            margin: 40px auto; 
+            padding: 0 20px; 
+        }
+        .admin-header { 
+            display: flex;
+            justify-content: space-between; 
+            align-items: center; 
+            margin-bottom: 35px; 
+            background: var(--white); 
+            padding: 25px 40px; 
+            border-radius: 20px; 
+            box-shadow: var(--card-shadow); 
+            gap: 15px;
+            border: 1px solid rgba(255, 255, 255, 0.7);
+        }
+        .admin-header h2 {
+            font-size: 1.6rem;
+            letter-spacing: -0.02em;
+        }
+        .btn-logout { 
+            background: #fef2f2; 
+            color: var(--danger-red); 
+            border: 1px solid #fee2e2; 
+            padding: 12px 24px;
+            border-radius: 12px; 
+            cursor: pointer; 
+            font-weight: 600; 
+            flex-shrink: 0; 
+            transition: all 0.2s ease;
+        }
+        .btn-logout:hover {
+            background: var(--danger-red);
+            color: white;
+        }
+
+        .grid-container { 
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); 
+            gap: 25px; 
+        }
+        .card { 
+            background: var(--white); 
+            border-radius: 20px;
+            padding: 35px 25px; 
+            display: flex; 
+            flex-direction: column; 
+            align-items: center; 
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); 
+            box-shadow: var(--card-shadow);
+            cursor: pointer; 
+            text-align: center;
+            border: 1px solid rgba(255, 255, 255, 0.5);
+        }
+        .card:hover { 
+            transform: translateY(-6px); 
+            background: var(--white); 
+            box-shadow: var(--hover-shadow);
+            border-color: var(--primary-blue);
+        }
+        .icon-wrapper { 
+            width: 64px; 
+            height: 64px; 
+            border-radius: 16px; 
+            background-color: var(--light-blue); 
+            display: flex;
+            align-items: center; 
+            justify-content: center; 
+            margin-bottom: 20px; 
+            color: var(--primary-blue); 
+            font-size: 1.6rem;
+            transition: all 0.3s ease;
+        }
+        .card h3 {
+            font-size: 1.2rem;
+            margin-bottom: 4px;
+            color: var(--text-dark);
+        }
+        .card p {
+            font-size: 0.9rem;
+            color: var(--text-gray);
+        }
+        .card:hover .icon-wrapper { 
+            background: var(--primary-gradient); 
+            color: white;
+            transform: scale(1.05);
+        }
+
+        /* Detail Halaman Admin & CRUD */
+        .admin-detail-box { 
+            display: none;
+            background: var(--white); 
+            border-radius: 24px; 
+            padding: 40px; 
+            box-shadow: var(--card-shadow);
+            border: 1px solid rgba(255, 255, 255, 0.7);
+        }
+        .btn-back-admin { 
+            background: #f1f5f9; 
+            color: var(--text-gray); 
+            border: none; 
+            padding: 10px 20px;
+            border-radius: 10px; 
+            cursor: pointer; 
+            font-weight: 600; 
+            margin-bottom: 25px; 
+            transition: all 0.2s ease;
+            font-size: 0.9rem;
+        }
+        .btn-back-admin:hover { 
+            background: #e2e8f0;
+            color: var(--text-dark);
+        }
+
+        /* Styling Form Buku & Siswa */
+        .book-form-container { 
+            background: #f8fafc;
+            padding: 30px; 
+            border-radius: 18px; 
+            margin-bottom: 35px; 
+            border: 1px solid #e2e8f0;
+        }
+        .form-grid { 
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); 
+            gap: 20px; 
+            margin-bottom: 20px; 
+        }
+        .form-grid .form-group { 
+            display: flex;
+            flex-direction: column; 
+            gap: 8px; 
+        }
+        .form-grid .form-group label { 
+            font-size: 0.85rem; 
+            font-weight: 600;
+            color: var(--text-dark); 
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+        .form-grid .form-group input { 
+            padding: 12px 16px;
+            border: 2px solid #e2e8f0; 
+            border-radius: 10px; 
+            outline: none; 
+            font-size: 0.95rem;
+            transition: all 0.2s ease;
+            background: var(--white);
+        }
+        .form-grid .form-group input:focus { 
+            border-color: var(--primary-blue);
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.08);
+        }
+        .btn-save-book { 
+            background: var(--primary-gradient); 
+            color: white; 
+            border: none; 
+            padding: 12px 28px;
+            border-radius: 10px; 
+            font-weight: 600; 
+            cursor: pointer; 
+            transition: all 0.2s ease; 
+            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.15);
+        }
+        .btn-save-book:hover { 
+            opacity: 0.95;
+        }
+        .btn-cancel-edit { 
+            background: #e2e8f0; 
+            color: var(--text-dark); 
+            border: none; 
+            padding: 12px 28px;
+            border-radius: 10px; 
+            font-weight: 600; 
+            cursor: pointer; 
+            display: none; 
+            transition: all 0.2s ease;
+        }
+        .btn-cancel-edit:hover {
+            background: #cbd5e1;
+        }
+
+        /* Styling Info Box Hasil scan */
+        .scanned-info-box { 
+            background: #ecf5ff;
+            border-left: 4px solid var(--primary-blue); 
+            padding: 18px 24px; 
+            border-radius: 12px; 
+            margin-bottom: 20px; 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center;
+        }
+
+        /* Badge Status */
+        .badge { 
+            padding: 6px 14px;
+            border-radius: 20px; 
+            font-size: 0.8rem; 
+            font-weight: 600; 
+            color: white; 
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .badge-loaned { 
+            background-color: #fff7ed;
+            color: #c2410c;
+            border: 1px solid #ffedd5;
+        }
+        .badge-returned { 
+            background-color: #ecfdf5;
+            color: #047857;
+            border: 1px solid #d1fae5;
+        }
+
+        /* Styling Table */
+        .table-responsive { 
+            width: 100%;
+            overflow-x: auto; 
+            margin-top: 25px; 
+            border-radius: 14px;
+            border: 1px solid #e2e8f0;
+        }
+        .book-table { 
+            width: 100%; 
+            border-collapse: collapse; 
+            text-align: left;
+            font-size: 0.95rem; 
+            background: var(--white);
+        }
+        .book-table th, .book-table td { 
+            padding: 16px 20px;
+            border-bottom: 1px solid #f1f5f9; 
+        }
+        .book-table th { 
+            background-color: #f8fafc; 
+            color: var(--text-dark);
+            font-weight: 600; 
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+        .book-table tr:last-child td {
+            border-bottom: none;
+        }
+        .book-table tr:hover { 
+            background-color: #fafafa;
+        }
+        
+        .btn-action { 
+            border: none;
+            padding: 8px 14px; 
+            border-radius: 8px; 
+            cursor: pointer; 
+            font-weight: 600; 
+            font-size: 0.85rem; 
+            transition: all 0.2s ease; 
+            margin-right: 5px;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .btn-edit { 
+            background: #fff7ed; 
+            color: #ea580c;
+            border: 1px solid #ffedd5;
+        }
+        .btn-edit:hover { 
+            background: #ea580c;
+            color: var(--white);
+        }
+        .btn-delete { 
+            background: #fef2f2; 
+            color: #dc2626;
+            border: 1px solid #fee2e2;
+        }
+        .btn-delete:hover { 
+            background: #dc2626;
+            color: var(--white);
+        }
+        
+        @media (max-width: 768px) {
+            .navbar { 
+                padding: 15px 5%;
+                background-color: var(--primary-blue); 
+                position: fixed; 
+                box-shadow: 0 4px 12px rgba(0,0,0,0.05); 
+            }
+            .nav-container {
+                display: none;
+                flex-direction: column; 
+                position: absolute;
+                top: 100%; left: 0; width: 100%; 
+                background-color: var(--primary-blue);
+                padding: 25px; 
+                box-shadow: 0 12px 20px rgba(0,0,0,0.1);
+                gap: 20px;
+            }
+            .nav-container.active { 
+                display: flex;
+            }
+            .nav-links { 
+                flex-direction: column; 
+                width: 100%; 
+                text-align: center;
+                gap: 8px; 
+                background: transparent;
+                backdrop-filter: none;
+            }
+            .nav-links li { 
+                width: 100%;
+                padding: 12px; 
+            }
+            .nav-links li.active { 
+                background: rgba(255,255,255,0.2);
+                color: var(--white); 
+                font-weight: 700; 
+            }
+            .btn-admin-nav { 
+                width: 100%; 
+                text-align: center; 
+            }
+            .menu-toggle { 
+                display: block; 
+            }
+            .hero { 
+                height: 440px; 
+                padding-top: 100px; 
+                padding-bottom: 40px;
+            }
+            .hero h1 { 
+                font-size: 2.4rem; 
+            }
+            .hero p { 
+                font-size: 1.1rem; 
+            }
+            .wave-container svg { 
+                height: 50px; 
+            }
+            .main-container { 
+                margin: -40px auto 40px auto; 
+            }
+            .welcome-card { 
+                padding: 35px 20px; 
+                border-radius: 20px; 
+            }
+            .welcome-card h2 { 
+                font-size: 1.6rem; 
+            }
+            .welcome-card p { 
+                font-size: 0.95rem; 
+                line-height: 1.6; 
+            }
+            .info-bar { 
+                padding: 15px 20px; 
+                border-radius: 14px;
+                flex-direction: column; 
+                text-align: center; 
+                gap: 8px; 
+            }
+            .admin-header { 
+                flex-direction: column;
+                text-align: center; 
+                padding: 25px; 
+                border-radius: 16px; 
+            }
+            .btn-logout { 
+                width: 100%; 
+            }
+            .admin-detail-box { 
+                padding: 25px 20px; 
+                border-radius: 18px;
+            }
+            .form-grid { 
+                grid-template-columns: 1fr; 
             }
         }
-    </script>
+
+        /* --- STYLING ABSENSI (MINIMALIS & STATS) --- */
+        .stats-grid { 
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); 
+            gap: 25px; 
+            margin-bottom: 35px; 
+        }
+        .stat-box { 
+            background: var(--white); 
+            border: 1px solid #e2e8f0;
+            padding: 24px; 
+            border-radius: 18px; 
+            display: flex; 
+            align-items: center; 
+            gap: 20px; 
+            box-shadow: var(--card-shadow);
+        }
+        .stat-box i { 
+            font-size: 1.8rem;
+            color: var(--primary-blue); 
+            background: var(--light-blue); 
+            padding: 14px; 
+            border-radius: 14px; 
+        }
+        .stat-box .stat-info h4 { 
+            font-size: 1.8rem; 
+            color: var(--text-dark);
+            font-weight: 700; 
+            line-height: 1.2;
+        }
+        .stat-box .stat-info p { 
+            font-size: 0.85rem; 
+            color: var(--text-gray);
+            font-weight: 500;
+        }
+    </style>
 </head>
-<body class="bg-[#F0F5FA] text-text-dark font-sans antialiased overflow-x-hidden">
+<body>
 
-    <header class="sticky top-0 z-50 bg-white/80 backdrop-blur-md border-b border-slate-200">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex items-center justify-between h-16">
-                <div class="flex-shrink-0 flex items-center gap-2 cursor-pointer" onclick="showUserSection('home')">
-                    <i class="fa-solid fa-book-open text-white bg-primary-blue p-2.5 rounded-xl"></i>
-                    <span class="text-xl font-bold bg-gradient-to-r from-primary-blue to-blue-600 bg-clip-text text-transparent">
-                        Pelangi Pustaka
-                    </span>
-                </div>
-                <nav class="hidden md:flex space-x-6 font-medium">
-                    <button id="li-home" onclick="navigateUser('home')" class="text-primary-blue border-b-2 border-primary-blue px-1 pt-1 text-sm font-semibold transition">Home</button>
-                    <button id="li-tata-tertib" onclick="navigateUser('tata-tertib')" class="text-text-gray hover:text-text-dark px-1 pt-1 text-sm transition">Tata Tertib</button>
-                    <button id="li-keanggotaan" onclick="navigateUser('keanggotaan')" class="text-text-gray hover:text-text-dark px-1 pt-1 text-sm transition">Keanggotaan</button>
-                    <button id="li-ebook" onclick="navigateUser('ebook')" class="text-text-gray hover:text-text-dark px-1 pt-1 text-sm transition">E-Book</button>
-                </nav>
-                <div class="hidden md:flex items-center">
-                    <button class="bg-accent-orange text-white px-5 py-2 rounded-xl font-bold text-sm shadow-md shadow-orange-500/20 hover:scale-105 transition duration-200" onclick="showLogin()">
-                        Admin Portal
-                    </button>
-                </div>
-                <div class="flex md:hidden">
-                    <button onclick="toggleMobileMenu()" type="button" class="text-text-dark hover:text-primary-blue focus:outline-none">
-                        <i class="fa-solid fa-bars text-xl" id="menuIcon"></i>
-                    </button>
-                </div>
+    <nav class="navbar" id="mainNavbar">
+        <div class="nav-logo" onclick="showUserSection('home')">
+            <i class="fa-solid fa-book-open"></i>
+            <span>Pelangi Pustaka</span>
+        </div>
+        
+        <div class="menu-toggle" onclick="toggleMobileMenu()">
+            <i class="fa-solid fa-bars" id="menuIcon"></i>
+        </div>
+
+        <div class="nav-container" id="navContainer">
+            <ul class="nav-links">
+                <li id="li-home" class="active" onclick="navigateUser('home')">Home</li>
+                <li id="li-tata-tertib" onclick="navigateUser('tata-tertib')">Tata Tertib</li>
+                <li id="li-keanggotaan" onclick="navigateUser('keanggotaan')">Keanggotaan</li>
+                <li id="li-ebook" onclick="navigateUser('ebook')">E-Book</li>
+            </ul>
+            <button class="btn-admin-nav" onclick="showLogin()">Admin Portal</button>
+        </div>
+    </nav>
+
+    <div id="userSection">
+        <div class="hero">
+            <div class="hero-content">
+                <p>Halo, Selamat Datang!</p>
+                <h1>Perpustakaan Digital</h1>
+                <p>SD Kristen Pelangi Bangsa</p>
+            </div>
+            <div class="wave-container">
+                <svg data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 120" preserveAspectRatio="none">
+                    <path d="M321.39,56.44c58-10.79,114.16-30.13,172-41.86,82.39-16.72,168.19-17.73,250.45-.39C823.78,31,906.67,72,985.66,92.83c70.05,18.48,146.53,26.09,214.34,3V120H0V95.8C58.47,87.05,114.67,92.43,172,99.57,235.38,107.41,282,77.17,321.39,56.44Z" class="shape-fill"></path>
+                </svg>
             </div>
         </div>
-        <div id="navContainer" class="hidden md:hidden bg-white border-b border-slate-200 px-4 pt-2 pb-4 space-y-2 shadow-inner">
-            <button onclick="navigateUser('home'); toggleMobileMenu()" class="block w-full text-left px-3 py-2 rounded-xl text-base font-medium text-primary-blue bg-blue-50">Home</button>
-            <button onclick="navigateUser('tata-tertib'); toggleMobileMenu()" class="block w-full text-left px-3 py-2 rounded-xl text-base font-medium text-text-gray hover:bg-slate-50">Tata Tertib</button>
-            <button onclick="navigateUser('keanggotaan'); toggleMobileMenu()" class="block w-full text-left px-3 py-2 rounded-xl text-base font-medium text-text-gray hover:bg-slate-50">Keanggotaan</button>
-            <button onclick="navigateUser('ebook'); toggleMobileMenu()" class="block w-full text-left px-3 py-2 rounded-xl text-base font-medium text-text-gray hover:bg-slate-50">E-Book</button>
-            <div class="pt-2 border-t border-slate-200">
-                <button class="w-full bg-accent-orange text-white py-2.5 rounded-xl font-bold text-center shadow-sm" onclick="showLogin(); toggleMobileMenu()">Admin Portal</button>
-            </div>
-        </div>
-    </header>
 
-    <div id="userSection" class="block">
-        <section class="relative bg-gradient-to-br from-blue-500 to-indigo-600 h-[350px] flex items-center justify-center text-center px-4 overflow-hidden shadow-md">
-            <div class="relative z-10 text-white space-y-2">
-                <p class="text-sm uppercase tracking-wider font-semibold opacity-90">Halo, Selamat Datang!</p>
-                <h1 class="text-4xl sm:text-5xl font-extrabold drop-shadow-md">Perpustakaan Digital</h1>
-                <p class="text-lg font-light opacity-85">SD Kristen Pelangi Bangsa</p>
-            </div>
-            <div class="absolute bottom-0 inset-x-0 h-12 bg-[#F0F5FA]" style="clip-path: ellipse(60% 100% at 50% 100%);"></div>
-        </section>
-
-        <main class="max-w-4xl mx-auto px-4 -mt-16 pb-16 relative z-20">
-            <div id="sub-home" class="user-sub-page bg-white rounded-[2rem] p-8 sm:p-12 shadow-xl border border-slate-100 flex flex-col items-center text-center space-y-6">
-                <div class="w-20 h-20 bg-light-blue text-primary-blue rounded-full flex items-center justify-center text-3xl shadow-inner">
-                    <i class="fa-solid fa-face-smile"></i>
-                </div>
-                <h2 class="text-2xl sm:text-3xl font-bold text-text-dark">Ayo Membaca Hari Ini!</h2>
-                <p class="text-text-gray max-w-xl leading-relaxed text-sm sm:text-base">
-                    Buku adalah jendela dunia. Di sini kamu bisa menemukan banyak petualangan seru melalui cerita dan ilmu pengetahuan yang luar biasa. Sudah siap menjelajah?
-                </p>
-                <div class="w-full bg-primary-blue text-white p-5 rounded-2xl flex items-center gap-4 text-left shadow-lg shadow-blue-900/10">
-                    <i class="fa-solid fa-star text-accent-orange text-xl flex-shrink-0 animate-pulse"></i>
-                    <span class="text-sm"><strong>Info Hari Ini:</strong> Belum ada pengumuman terbaru. Selamat membaca, Sobat Pustaka!</span>
+        <div class="main-container">
+            <div id="sub-home" class="welcome-card user-sub-page">
+                <div class="icon-circle"><i class="fa-solid fa-face-smile"></i></div>
+                <h2>Ayo Membaca Hari Ini!</h2>
+                <p>Buku adalah jendela dunia. Di sini kamu bisa menemukan banyak petualangan seru melalui cerita dan ilmu pengetahuan yang luar biasa. Sudah siap menjelajah?</p>
+                <div class="info-bar">
+                    <i class="fa-solid fa-star"></i>
+                    <span><strong>Info Hari Ini:</strong> Belum ada pengumuman terbaru. Selamat membaca, Sobat Pustaka!</span>
                 </div>
             </div>
 
-            <div id="sub-tata-tertib" class="user-sub-page hidden bg-white rounded-[2rem] p-8 sm:p-12 shadow-xl border border-slate-100 flex flex-col items-center space-y-6">
-                <div class="w-20 h-20 bg-light-blue text-primary-blue rounded-full flex items-center justify-center text-3xl shadow-inner">
-                    <i class="fa-solid fa-scale-balanced"></i>
-                </div>
-                <h2 class="text-2xl sm:text-3xl font-bold text-text-dark text-center">Tata Tertib Perpustakaan</h2>
-                <p class="text-text-gray max-w-xl leading-relaxed text-center text-sm">Mohon dipatuhi peraturan di dalam ruang Pelangi Pustaka demi kenyamanan bersama:</p>
-                <ul class="w-full max-w-lg space-y-3.5 text-text-dark text-sm sm:text-base">
-                    <li class="flex gap-3 items-start"><i class="fa-solid fa-check text-accent-orange mt-1"></i> <span>Harap tenang dan tidak membuat kegaduhan di area membaca.</span></li>
-                    <li class="flex gap-3 items-start"><i class="fa-solid fa-check text-accent-orange mt-1"></i> <span>Menjaga kebersihan dan tidak membawa makanan/minuman ke dalam ruangan.</span></li>
-                    <li class="flex gap-3 items-start"><i class="fa-solid fa-check text-accent-orange mt-1"></i> <span>Batas waktu peminjaman buku maksimal adalah 7 hari kerja.</span></li>
-                    <li class="flex gap-3 items-start"><i class="fa-solid fa-check text-accent-orange mt-1"></i> <span>Wajib mengembalikan buku dalam kondisi utuh dan tidak rusak.</span></li>
+            <div id="sub-tata-tertib" class="welcome-card user-sub-page" style="display: none;">
+                <div class="icon-circle"><i class="fa-solid fa-scale-balanced"></i></div>
+                <h2>Tata Tertib Perpustakaan</h2>
+                <p>Mohon dipatuhi peraturan di dalam ruang Pelangi Pustaka demi kenyamanan bersama:</p>
+                <ul class="rules-list">
+                    <li>Harap tenang dan tidak membuat kegaduhan di area membaca.</li>
+                    <li>Menjaga kebersihan dan tidak membawa makanan/minuman ke dalam ruangan.</li>
+                    <li>Batas waktu peminjaman buku maksimal adalah 7 hari kerja.</li>
+                    <li>Wajib mengembalikan buku dalam kondisi utuh dan tidak rusak.</li>
                 </ul>
             </div>
 
-            <div id="sub-keanggotaan" class="user-sub-page hidden bg-white rounded-[2rem] p-8 sm:p-12 shadow-xl border border-slate-100 flex flex-col items-center text-center space-y-6">
-                <div class="w-20 h-20 bg-light-blue text-primary-blue rounded-full flex items-center justify-center text-3xl shadow-inner">
-                    <i class="fa-solid fa-id-card"></i>
-                </div>
-                <h2 class="text-2xl sm:text-3xl font-bold text-text-dark">Keanggotaan Pustaka</h2>
-                <p class="text-text-gray max-w-xl leading-relaxed text-sm sm:text-base">
-                    Seluruh siswa-siswi dan guru SD Kristen Pelangi Bangsa otomatis terdaftar sebagai anggota resmi perpustakaan.
-                </p>
+            <div id="sub-keanggotaan" class="welcome-card user-sub-page" style="display: none;">
+                <div class="icon-circle"><i class="fa-solid fa-id-card"></i></div>
+                <h2>Keanggotaan Pustaka</h2>
+                <p>Seluruh siswa-siswi dan guru SD Kristen Pelangi Bangsa otomatis terdaftar sebagai anggota resmi perpustakaan.</p>
             </div>
 
-            <div id="sub-ebook" class="user-sub-page hidden bg-white rounded-[2rem] p-8 sm:p-12 shadow-xl border border-slate-100 flex flex-col items-center text-center space-y-6">
-                <div class="w-20 h-20 bg-light-blue text-primary-blue rounded-full flex items-center justify-center text-3xl shadow-inner">
-                    <i class="fa-solid fa-tablet-screen-button"></i>
-                </div>
-                <h2 class="text-2xl sm:text-3xl font-bold text-text-dark">Koleksi E-Book Digital</h2>
-                <p class="text-text-gray max-w-xl leading-relaxed text-sm sm:text-base">
-                    Kabar gembira! Layanan Buku Digital (E-Book) saat ini sedang dalam proses integrasi sistem.
-                </p>
+            <div id="sub-ebook" class="welcome-card user-sub-page" style="display: none;">
+                <div class="icon-circle"><i class="fa-solid fa-tablet-screen-button"></i></div>
+                <h2>Koleksi E-Book Digital</h2>
+                <p>Kabar gembira! Layanan Buku Digital (E-Book) saat ini sedang dalam proses integrasi sistem.</p>
             </div>
-        </main>
-    </div>
-
-    <div id="loginSection" class="hidden min-height-[80vh] flex items-center justify-center p-4 my-12">
-        <div class="bg-white p-8 sm:p-10 rounded-[2.5rem] shadow-xl text-center w-full max-w-md border border-slate-100 space-y-6">
-            <i class="fa-solid fa-lock text-5xl text-primary-blue bg-light-blue p-5 rounded-2xl inline-block shadow-inner"></i>
-            <div>
-                <h2 class="text-2xl font-bold text-text-dark">Akses Petugas</h2>
-                <p class="text-sm text-text-gray mt-1">Silakan masukkan sandi keamanan</p>
-            </div>
-            <input type="password" id="passwordInput" placeholder="Masukkan Password" onkeypress="handleKeyPress(event)" class="w-full px-5 py-3.5 border-2 border-light-blue rounded-2xl outline-none text-base focus:border-primary-blue transition">
-            <p id="loginError" class="hidden text-danger-red font-medium text-sm"><i class="fa-solid fa-circle-exclamation"></i> Akses ditolak!</p>
-            <button onclick="checkPassword()" class="w-full py-3.5 bg-primary-blue text-white rounded-2xl font-bold text-base shadow-lg shadow-blue-500/20 hover:bg-blue-800 transition">Masuk ke Panel</button>
-            <p onclick="showUserSection('home')" class="text-sm text-text-gray cursor-pointer hover:text-text-dark hover:underline transition">Kembali ke Beranda</p>
         </div>
     </div>
 
-    <div id="adminSection" class="hidden max-w-6xl mx-auto px-4 py-8 space-y-8">
-        <div class="bg-white rounded-3xl p-6 sm:p-8 shadow-md border border-slate-100 flex flex-col sm:flex-row justify-between items-center gap-4">
-            <div class="text-center sm:text-left">
-                <h2 id="adminTitle" class="text-2xl font-extrabold text-text-dark">Dashboard Admin</h2>
-                <p class="text-text-gray text-sm font-medium">Manajemen Perpustakaan Pelangi</p>
+    <div id="loginSection">
+        <div class="login-card">
+            <i class="fa-solid fa-lock" style="font-size: 3rem; color: var(--primary-blue); margin-bottom: 20px; display: block;"></i>
+            <h2 style="margin-bottom: 30px;">Akses Petugas</h2>
+            <input type="password" id="passwordInput" placeholder="Masukkan Password" onkeypress="handleKeyPress(event)">
+            <p id="loginError" style="color: red; display: none; margin-bottom: 15px;">Akses ditolak!</p>
+            <button onclick="checkPassword()">Masuk ke Panel</button>
+            <p onclick="showUserSection('home')" style="margin-top: 20px; color: var(--text-gray); cursor: pointer; font-size: 0.9rem;">Kembali ke Beranda</p>
+        </div>
+    </div>
+
+    <div id="adminSection">
+        <div class="admin-header">
+            <div>
+                <h2 id="adminTitle">Dashboard Admin</h2>
+                <p style="color: var(--text-gray); font-size: 0.9rem;">Manajemen Perpustakaan Pelangi</p>
             </div>
-            <button class="bg-danger-red text-white px-6 py-2.5 rounded-xl font-bold text-sm shadow-md hover:bg-red-600 transition" onclick="showUserSection('home')">Keluar</button>
+            <button class="btn-logout" onclick="showUserSection('home')">Keluar</button>
         </div>
         
-        <div id="adminGrid" class="grid grid-cols-2 md:grid-cols-3 gap-4 sm:gap-6">
-            <div class="bg-white border border-slate-100 p-6 sm:p-8 rounded-[2rem] flex flex-col items-center text-center shadow-sm cursor-pointer hover:-translate-y-2 hover:bg-primary-blue hover:text-white transition-all duration-300 group" onclick="openBookManager()">
-                <div class="w-14 h-14 bg-light-blue rounded-2xl flex items-center justify-center text-xl text-primary-blue mb-4 group-hover:bg-white/20 group-hover:text-white"><i class="fa-solid fa-book"></i></div>
-                <h3 class="font-bold text-lg">Buku</h3>
-                <p class="text-xs text-text-gray group-hover:text-white/80">Kelola Katalog</p>
+        <div id="adminGrid" class="grid-container">
+            <div class="card" onclick="openBookManager()">
+                <div class="icon-wrapper"><i class="fa-solid fa-book"></i></div>
+                <h3>Buku</h3>
+                <p>Kelola Katalog</p>
             </div>
-            <div class="bg-white border border-slate-100 p-6 sm:p-8 rounded-[2rem] flex flex-col items-center text-center shadow-sm cursor-pointer hover:-translate-y-2 hover:bg-primary-blue hover:text-white transition-all duration-300 group" onclick="openLoanManager()">
-                <div class="w-14 h-14 bg-light-blue rounded-2xl flex items-center justify-center text-xl text-primary-blue mb-4 group-hover:bg-white/20 group-hover:text-white"><i class="fa-solid fa-hand-holding-heart"></i></div>
-                <h3 class="font-bold text-lg">Pinjam</h3>
-                <p class="text-xs text-text-gray group-hover:text-white/80">Transaksi Baru</p>
+            <div class="card" onclick="openLoanManager()">
+                <div class="icon-wrapper"><i class="fa-solid fa-hand-holding-heart"></i></div>
+                <h3>Pinjam</h3>
+                <p>Transaksi Baru</p>
             </div>
-            <div class="bg-white border border-slate-100 p-6 sm:p-8 rounded-[2rem] flex flex-col items-center text-center shadow-sm cursor-pointer hover:-translate-y-2 hover:bg-primary-blue hover:text-white transition-all duration-300 group" onclick="openReturnManager()">
-                <div class="w-14 h-14 bg-light-blue rounded-2xl flex items-center justify-center text-xl text-primary-blue mb-4 group-hover:bg-white/20 group-hover:text-white"><i class="fa-solid fa-rotate-left"></i></div>
-                <h3 class="font-bold text-lg">Kembali</h3>
-                <p class="text-xs text-text-gray group-hover:text-white/80">Pengembalian</p>
+            <div class="card" onclick="openReturnManager()">
+                <div class="icon-wrapper"><i class="fa-solid fa-rotate-left"></i></div>
+                <h3>Kembali</h3>
+                <p>Pengembalian</p>
             </div>
-            <div class="bg-white border border-slate-100 p-6 sm:p-8 rounded-[2rem] flex flex-col items-center text-center shadow-sm cursor-pointer hover:-translate-y-2 hover:bg-primary-blue hover:text-white transition-all duration-300 group" onclick="openAttendanceManager()">
-                <div class="w-14 h-14 bg-light-blue rounded-2xl flex items-center justify-center text-xl text-primary-blue mb-4 group-hover:bg-white/20 group-hover:text-white"><i class="fa-solid fa-user-check"></i></div>
-                <h3 class="font-bold text-lg">Absensi</h3>
-                <p class="text-xs text-text-gray group-hover:text-white/80">Daftar Hadir</p>
+            <div class="card" onclick="openAttendanceManager()">
+                <div class="icon-wrapper"><i class="fa-solid fa-user-check"></i></div>
+                <h3>Absensi</h3>
+                <p>Daftar Hadir</p>
             </div>
-            <div class="bg-white border border-slate-100 p-6 sm:p-8 rounded-[2rem] flex flex-col items-center text-center shadow-sm cursor-pointer hover:-translate-y-2 hover:bg-primary-blue hover:text-white transition-all duration-300 group" onclick="openStudentManager()">
-                <div class="w-14 h-14 bg-light-blue rounded-2xl flex items-center justify-center text-xl text-primary-blue mb-4 group-hover:bg-white/20 group-hover:text-white"><i class="fa-solid fa-graduation-cap"></i></div>
-                <h3 class="font-bold text-lg">Siswa</h3>
-                <p class="text-xs text-text-gray group-hover:text-white/80">Data Anggota</p>
+            
+            <div class="card" onclick="openStudentManager()">
+                <div class="icon-wrapper"><i class="fa-solid fa-graduation-cap"></i></div>
+                <h3>Siswa</h3>
+                <p>Data Anggota</p>
             </div>
-            <div class="bg-white border border-slate-100 p-6 sm:p-8 rounded-[2rem] flex flex-col items-center text-center shadow-sm cursor-pointer hover:-translate-y-2 hover:bg-primary-blue hover:text-white transition-all duration-300 group" onclick="openReportManager()">
-                <div class="w-14 h-14 bg-light-blue rounded-2xl flex items-center justify-center text-xl text-primary-blue mb-4 group-hover:bg-white/20 group-hover:text-white"><i class="fa-solid fa-file-invoice"></i></div>
-                <h3 class="font-bold text-lg">Laporan</h3>
-                <p class="text-xs text-text-gray group-hover:text-white/80">Rekap Transaksi</p>
+            <div class="card" onclick="openReportManager()">
+                <div class="icon-wrapper"><i class="fa-solid fa-file-invoice"></i></div>
+                <h3>Laporan</h3>
+                <p>Rekap Transaksi</p>
             </div>
         </div>
 
-        <div id="adminDetail" class="hidden bg-white border border-slate-100 rounded-[2rem] p-6 sm:p-8 shadow-md">
-            <button class="bg-text-gray text-white px-4 py-2 rounded-xl text-sm font-semibold mb-6 hover:bg-text-dark transition" onclick="hideAdminDetail()">
-                <i class="fa-solid fa-arrow-left mr-1"></i> Kembali ke Dashboard
-            </button>
-            <h2 id="detailSubTitle" class="text-xl sm:text-2xl font-bold text-primary-blue mb-1">Judul Halaman</h2>
-            <p id="detailDesc" class="text-text-gray text-sm mb-6">Deskripsi konten.</p>
+        <div id="adminDetail" class="admin-detail-box">
+            <button class="btn-back-admin" onclick="hideAdminDetail()"><i class="fa-solid fa-arrow-left"></i> Kembali ke Dashboard</button>
+            <h2 id="detailSubTitle" style="margin-bottom: 15px; color: var(--primary-blue);">Judul Halaman</h2>
+            <p id="detailDesc" style="color: var(--text-gray); font-size: 1.1rem; line-height: 1.6; margin-bottom: 20px; display: block;">Deskripsi konten.</p>
 
-            <div id="crudBookContainer" class="hidden">
-                <div class="bg-[#F0F5FA] p-5 sm:p-6 rounded-2xl mb-6 space-y-4">
-                    <h3 id="formFormTitle" class="font-bold text-base text-text-dark">Tambah Buku Baru</h3>
+            <div id="crudBookContainer" style="display: none;">
+                <div class="book-form-container">
+                    <h3 id="formFormTitle" style="margin-bottom: 15px; font-size: 1.1rem;">Tambah Buku Baru</h3>
                     <input type="hidden" id="editBookId">
-                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                        <div class="flex flex-col gap-1.5">
-                            <label class="text-xs font-bold text-text-dark">Judul Buku</label>
-                            <input type="text" id="bookTitleInput" placeholder="Contoh: Laskar Pelangi" class="px-4 py-2.5 border border-slate-200 rounded-xl text-sm outline-none focus:border-primary-blue bg-white">
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label>Judul Buku</label>
+                            <input type="text" id="bookTitleInput" placeholder="Contoh: Laskar Pelangi">
                         </div>
-                        <div class="flex flex-col gap-1.5">
-                            <label class="text-xs font-bold text-text-dark">Pengarang</label>
-                            <input type="text" id="bookAuthorInput" placeholder="Contoh: Andrea Hirata" class="px-4 py-2.5 border border-slate-200 rounded-xl text-sm outline-none focus:border-primary-blue bg-white">
+                        <div class="form-group">
+                            <label>Pengarang</label>
+                            <input type="text" id="bookAuthorInput" placeholder="Contoh: Andrea Hirata">
                         </div>
-                        <div class="flex flex-col gap-1.5">
-                            <label class="text-xs font-bold text-text-dark">Nomor Barcode</label>
-                            <input type="text" id="bookBarcodeInput" placeholder="Contoh: 8991234567" class="px-4 py-2.5 border border-slate-200 rounded-xl text-sm outline-none focus:border-primary-blue bg-white">
+                        <div class="form-group">
+                            <label>Nomor Barcode</label>
+                            <input type="text" id="bookBarcodeInput" placeholder="Contoh: 8991234567">
                         </div>
                     </div>
-                    <div class="flex gap-2.5 pt-2">
-                        <button class="bg-primary-blue text-white px-5 py-2.5 rounded-xl font-semibold text-sm hover:bg-blue-800 transition" id="btnSaveBookAction" onclick="saveBook()">Simpan Buku</button>
-                        <button class="bg-text-gray text-white px-5 py-2.5 rounded-xl font-semibold text-sm hidden" id="btnCancelEditAction" onclick="resetBookForm()">Batal</button>
+                    <div style="display: flex; gap: 10px;">
+                        <button class="btn-save-book" id="btnSaveBookAction" onclick="saveBook()">Simpan Buku</button>
+                        <button class="btn-cancel-edit" id="btnCancelEditAction" onclick="resetBookForm()">Batal</button>
                     </div>
                 </div>
 
-                <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-4">
-                    <h3 class="font-bold text-lg text-text-dark">Daftar Koleksi Buku (Cloud Firebase)</h3>
-                    <button onclick="downloadBackupCSV()" class="bg-success-green text-white px-4 py-2 rounded-xl text-sm font-bold flex items-center gap-2 shadow-md hover:bg-green-600 transition">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 30px; margin-bottom: 15px; flex-wrap: wrap; gap: 15px;">
+                    <h3 style="margin: 0; font-size: 1.2rem; color: var(--text-dark);">Daftar Koleksi Buku (Cloud Firebase)</h3>
+                    <button onclick="downloadBackupCSV()" style="background-color: #2ecc71; color: white; border: none; padding: 8px 15px; border-radius: 5px; cursor: pointer; font-weight: bold; display: flex; align-items: center; gap: 8px;">
                         <i class="fa-solid fa-file-excel"></i> Backup Data Buku
                     </button>
                 </div>
 
-                <div class="relative mb-4">
-                    <i class="fa-solid fa-magnifying-glass absolute left-4 top-1/2 -translate-y-1/2 text-text-gray"></i>
-                    <input type="text" id="bookSearchInput" oninput="searchBook()" placeholder="Cari berdasarkan Judul, Pengarang, atau Barcode Buku..." class="w-full pl-11 pr-5 py-3 border border-slate-200 rounded-2xl outline-none text-sm focus:border-primary-blue shadow-sm">
+                <div style="position: relative; margin-bottom: 20px;">
+                    <i class="fa-solid fa-magnifying-glass" style="position: absolute; left: 15px; top: 50%; transform: translateY(-50%); color: var(--text-gray);"></i>
+                    <input type="text" id="bookSearchInput" oninput="searchBook()" placeholder="Cari berdasarkan Judul, Pengarang, atau Barcode Buku..." style="width: 100%; padding: 12px 20px 12px 45px; border: 2px solid var(--light-blue); border-radius: 25px; outline: none; font-size: 0.95rem; box-shadow: 0 4px 10px rgba(0,0,0,0.02); transition: 0.3s;">
                 </div>
 
-                <div class="overflow-x-auto rounded-xl border border-slate-100 shadow-sm">
-                    <table class="w-full border-collapse text-left text-sm bg-white">
+                <div class="table-responsive">
+                    <table class="book-table">
                         <thead>
-                            <tr class="bg-light-blue text-primary-blue font-bold">
-                                <th class="p-4">No</th>
-                                <th class="p-4">Barcode</th>
-                                <th class="p-4">Judul Buku</th>
-                                <th class="p-4">Pengarang</th>
-                                <th class="p-4 text-center">Aksi</th>
+                            <tr>
+                                <th>No</th>
+                                <th>Barcode</th>
+                                <th>Judul Buku</th>
+                                <th>Pengarang</th>
+                                <th style="text-align: center;">Aksi</th>
                             </tr>
                         </thead>
-                        <tbody id="bookTableBody" class="divide-y divide-slate-100">
-                            <tr><td colspan="5" class="p-4 text-center text-text-gray">Memuat data dari cloud...</td></tr>
+                        <tbody id="bookTableBody">
+                            <tr><td colspan="5" style="text-align:center;">Memuat data dari cloud...</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div id="attendanceContainer" style="display: none;">
+                <div class="stats-grid">
+                    <div class="stat-box">
+                        <i class="fa-solid fa-users"></i>
+                        <div class="stat-info">
+                            <h4 id="txtTotalAbsen">0</h4>
+                            <p>Total Absen Hari Ini</p>
+                        </div>
+                    </div>
+                    <div class="stat-box">
+                        <i class="fa-solid fa-chart-line"></i>
+                        <div class="stat-info">
+                            <h4 id="txtRataRataAbsen">0.0</h4>
+                            <p>Rata-rata Pengunjung / Hari</p>
+                        </div>
+                    </div>
+                </div>
+            
+                <div class="book-form-container" style="border-left: 5px solid var(--primary-blue);">
+                    <h3 style="margin-bottom: 15px; font-size: 1.1rem; color: var(--text-dark);">
+                        <i class="fa-solid fa-qrcode"></i> Scan Barcode / Input NIS Anggota
+                    </h3>
+                    <div style="display: flex; gap: 10px;">
+                        <input type="text" id="attendanceInput" placeholder="Masukkan Nomor Anggota / Scan Barcode Siswa..." onkeypress="handleAttendancePress(event)" style="flex: 1; padding: 14px 20px; border: 2px solid var(--light-blue); border-radius: 15px; outline: none; font-size: 1rem;">
+                        <button onclick="submitAttendance()" style="background: var(--primary-blue); color: white; border: none; padding: 0 25px; border-radius: 15px; font-weight: 600; cursor: pointer;">Absen Hadir</button>
+                    </div>
+                    <p id="attendanceMsg" style="margin-top: 10px; font-size: 0.9rem; font-weight: 600; display: none;"></p>
+                </div>
+            
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 30px; margin-bottom: 15px;">
+                    <h3 style="margin: 0; font-size: 1.2rem; color: var(--text-dark);">Riwayat Absensi Hari Ini</h3>
+                    <button onclick="clearAttendanceLog()" style="background-color: var(--danger-red); color: white; border: none; padding: 8px 15px; border-radius: 8px; cursor: pointer; font-size: 0.85rem; font-weight: 600;">
+                        <i class="fa-solid fa-trash-can"></i> Bersihkan Log
+                    </button>
+                </div>
+            
+                <div class="table-responsive">
+                    <table class="book-table" style="background: white; border-radius: 20px;">
+                        <thead>
+                            <tr>
+                                <th>No</th>
+                                <th>Waktu Kunjungan</th>
+                                <th>Barcode Siswa</th>
+                                <th>Nama Siswa</th>
+                                <th>Kelas</th>
+                            </tr>
+                        </thead>
+                        <tbody id="attendanceTableBody">
+                            <tr><td colspan="5" style="text-align: center; color: var(--text-gray);">Belum ada data absensi masuk hari ini.</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div id="loanTransactionContainer" style="display: none;">
+                <div class="book-form-container">
+                    <h3 style="margin-bottom: 15px; font-size: 1.1rem; color: var(--primary-blue);"><i class="fa-solid fa-id-card"></i> Langkah 1: Scan Barcode Anggota Siswa</h3>
+                    <div style="display: flex; gap: 10px; margin-bottom: 15px;">
+                        <input type="text" id="loanStudentBarcodeInput" placeholder="Masukkan / Scan Barcode Siswa..." onkeypress="handleStudentScan(event)" style="flex: 1; padding: 14px 20px; border: 2px solid var(--light-blue); border-radius: 15px; outline: none; font-size: 1rem;">
+                        <button onclick="checkStudentLoanBarcode()" style="background: var(--primary-blue); color: white; border: none; padding: 0 25px; border-radius: 15px; font-weight: 600; cursor: pointer;">Cari Siswa</button>
+                    </div>
+
+                    <div id="loanStudentInfoBox" class="scanned-info-box" style="display: none;">
+                        <div>
+                            <p style="font-size: 0.85rem; color: var(--text-gray); font-weight: 600;">Siswa Terverifikasi:</p>
+                            <h4 id="txtLoanStudentName" style="font-size: 1.2rem; color: var(--primary-blue);">Nama Siswa</h4>
+                            <p id="txtLoanStudentClass" style="font-size: 0.95rem;">Kelas: -</p>
+                        </div>
+                        <button onclick="resetLoanSession()" style="background: var(--danger-red); color: white; border: none; padding: 8px 15px; border-radius: 10px; cursor: pointer; font-size: 0.85rem;"><i class="fa-solid fa-rotate"></i> Ganti Siswa</button>
+                    </div>
+                </div>
+
+                <div id="loanBookSection" class="book-form-container" style="display: none; border-top: 4px solid var(--success-green);">
+                    <h3 style="margin-bottom: 15px; font-size: 1.1rem; color: var(--success-green);"><i class="fa-solid fa-book"></i> Langkah 2: Masukkan Barcode Buku</h3>
+                    <div style="display: flex; gap: 10px; margin-bottom: 15px;">
+                        <input type="text" id="loanBookBarcodeInput" placeholder="Masukkan / Scan Barcode Buku..." onkeypress="handleBookScan(event)" style="flex: 1; padding: 14px 20px; border: 2px solid var(--light-blue); border-radius: 15px; outline: none; font-size: 1rem;">
+                        <button onclick="addBookToLoanList()" style="background: var(--success-green); color: white; border: none; padding: 0 25px; border-radius: 15px; font-weight: 600; cursor: pointer;">Tambah Peminjaman</button>
+                    </div>
+
+                    <h4 style="margin-top: 25px; margin-bottom: 10px; font-size: 1rem;">Buku yang akan Dipinjam Saat Ini:</h4>
+                    <div class="table-responsive">
+                        <table class="book-table" style="background: white; border-radius: 15px;">
+                            <thead>
+                                <tr>
+                                    <th>Barcode</th>
+                                    <th>Judul Buku</th>
+                                    <th>Pengarang</th>
+                                    <th style="text-align: center;">Batal</th>
+                                </tr>
+                            </thead>
+                            <tbody id="loanCartTableBody">
+                                <tr><td colspan="4" style="text-align: center; color: var(--text-gray);">Belum ada buku dimasukkan.</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div style="margin-top: 25px; display: flex; justify-content: flex-end;">
+                        <button onclick="submitLoanTransaction()" style="background: var(--primary-blue); color: white; border: none; padding: 15px 40px; border-radius: 15px; font-weight: bold; font-size: 1.05rem; cursor: pointer; box-shadow: 0 5px 15px rgba(42, 92, 153, 0.3);"><i class="fa-solid fa-floppy-disk"></i> Proses Selesai & Simpan Transaksi</button>
+                    </div>
+                </div>
+            </div>
+
+            <div id="returnTransactionContainer" style="display: none;">
+                <div class="book-form-container" style="border-top: 4px solid var(--accent-orange);">
+                    <h3 style="margin-bottom: 15px; font-size: 1.1rem; color: var(--text-dark);">
+                        <i class="fa-solid fa-barcode"></i> Scan Barcode Buku untuk Pengembalian
+                    </h3>
+                    <div style="display: flex; gap: 10px; margin-bottom: 15px;">
+                        <input type="text" id="returnBookBarcodeInput" placeholder="Scan Barcode Buku di Sini..." onkeypress="handleReturnScan(event)" style="flex: 1; padding: 14px 20px; border: 2px solid var(--light-blue); border-radius: 15px; outline: none; font-size: 1rem;">
+                        <button onclick="processBookReturn()" style="background: var(--accent-orange); color: white; border: none; padding: 0 25px; border-radius: 15px; font-weight: 600; cursor: pointer;">Proses Kembali</button>
+                    </div>
+                </div>
+
+                <div id="returnSuccessBox" class="scanned-info-box" style="display: none; background: #e8f8f5; border-left: 5px solid var(--success-green);">
+                    <div>
+                        <p style="font-size: 0.85rem; color: var(--success-green); font-weight: 600;"><i class="fa-solid fa-circle-check"></i> PENGEMBALIAN BERHASIL!</p>
+                        <h4 id="txtReturnBookTitle" style="font-size: 1.2rem; color: var(--text-dark);">Judul Buku</h4>
+                        <p id="txtReturnStudentName" style="font-size: 0.95rem; color: var(--text-gray);">Dikembalikan oleh: -</p>
+                    </div>
+                </div>
+            </div>
+
+            <div id="reportTransactionContainer" style="display: none;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; flex-wrap: wrap; gap: 15px;">
+                    <h3 style="margin: 0; font-size: 1.2rem; color: var(--text-dark);">Log Riwayat Sirkulasi Buku</h3>
+                    
+                    <div style="display: flex; gap: 10px;">
+                        <button id="btnDeleteSelectedLoans" onclick="deleteSelectedLoans()" style="background-color: var(--danger-red); color: white; border: none; padding: 10px 18px; border-radius: 10px; cursor: pointer; font-weight: bold; display: flex; align-items: center; gap: 8px; font-size: 0.9rem; opacity: 0.6; cursor: not-allowed;" disabled>
+                            <i class="fa-solid fa-trash-can"></i> Hapus Terpilih (<span id="selectedLoanCount">0</span>)
+                        </button>
+                        <button onclick="downloadLoanReportCSV()" style="background-color: #2ecc71; color: white; border: none; padding: 10px 18px; border-radius: 10px; cursor: pointer; font-weight: bold; display: flex; align-items: center; gap: 8px; font-size: 0.9rem;">
+                            <i class="fa-solid fa-file-csv"></i> Cetak Laporan (.CSV)
+                        </button>
+                    </div>
+                </div>
+
+                <div style="position: relative; margin-bottom: 20px;">
+                    <i class="fa-solid fa-magnifying-glass" style="position: absolute; left: 15px; top: 50%; transform: translateY(-50%); color: var(--text-gray);"></i>
+                    <input type="text" id="loanReportSearchInput" oninput="searchLoanReport()" placeholder="Cari berdasarkan Nama Siswa, Barcode, atau Judul Buku yang tertransaksi..." style="width: 100%; padding: 12px 20px 12px 45px; border: 2px solid var(--light-blue); border-radius: 25px; outline: none; font-size: 0.95rem; box-shadow: 0 4px 10px rgba(0,0,0,0.02); transition: 0.3s;">
+                </div>
+
+                <div class="table-responsive">
+                    <table class="book-table" style="background: white; border-radius: 20px; box-shadow: 0 5px 15px rgba(0,0,0,0.01);">
+                        <thead>
+                            <tr>
+                                <th style="width: 40px; text-align: center;">
+                                    <input type="checkbox" id="checkAllLoans" onchange="toggleSelectAllLoans(this)" style="transform: scale(1.2); cursor: pointer;">
+                                </th>
+                                <th>No</th>
+                                <th>Tanggal</th>
+                                <th>Siswa (Barcode)</th>
+                                <th>Buku (Barcode)</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody id="loanReportTableBody">
+                            <tr><td colspan="6" style="text-align:center;">Memuat riwayat transaksi dari cloud...</td></tr>
                         </tbody>
                     </table>
                 </div>
             </div>
 
-            <div id="attendanceContainer" class="hidden space-y-6">
-                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    <div class="bg-white border border-slate-100 p-5 rounded-2xl flex items-center gap-4 shadow-sm">
-                        <i class="fa-solid fa-users text-2xl text-primary-blue bg-light-blue p-4 rounded-xl"></i>
-                        <div>
-                            <h4 id="txtTotalAbsen" class="text-3xl font-bold">0</h4>
-                            <p class="text-xs text-text-gray">Total Absen Hari Ini</p>
+            <div id="crudStudentContainer" style="display: none; margin-top: 20px;">
+                <div class="book-form-container">
+                    <h3 id="studentFormTitle" style="margin-bottom: 15px; font-size: 1.1rem;">Registrasi Anggota Siswa Baru</h3>
+                    <input type="hidden" id="editStudentId">
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label>Nama Siswa</label>
+                            <input type="text" id="studentNameInput" placeholder="Contoh: Budi Santoso">
+                        </div>
+                        <div class="form-group">
+                            <label>Kelas</label>
+                            <input type="text" id="studentClassInput" placeholder="Contoh: 4A atau 5">
+                        </div>
+                        <div class="form-group">
+                            <label>Nomor Barcode Siswa</label>
+                            <input type="text" id="studentBarcodeInput" placeholder="Contoh: SISWA12345">
                         </div>
                     </div>
-                    <div class="bg-white border border-slate-100 p-5 rounded-2xl flex items-center gap-4 shadow-sm">
-                        <i class="fa-solid fa-chart-line text-2xl text-primary-blue bg-light-blue p-4 rounded-xl"></i>
-                        <div>
-                            <h4 id="txtRataRataAbsen" class="text-3xl font-bold">0.0</h4>
-                            <p class="text-xs text-text-gray">Rata-rata Pengunjung / Hari</p>
-                        </div>
+                    <div style="display: flex; gap: 10px;">
+                        <button class="btn-save-book" id="btnSaveStudentAction" onclick="saveStudent()">Registrasikan Siswa</button>
+                        <button class="btn-cancel-edit" id="btnCancelStudentEditAction" onclick="resetStudentForm()">Batal</button>
                     </div>
                 </div>
-
-                <div class="bg-[#F0F5FA] p-5 sm:p-6 rounded-2xl border-l-4 border-primary-blue space-y-3">
-                    <h3 class="font-bold text-base text-text-dark flex items-center gap-2">
-                        <i class="fa-solid fa-qrcode text-primary-blue"></i> Scan Barcode / Input NIS Anggota
-                    </h3>
-                    <div class="flex flex-col sm:flex-row gap-2.5">
-                        <input type="text" id="attendanceInput" placeholder="Masukkan Nomor Anggota / Scan Barcode Siswa..." onkeypress="handleAttendancePress(event)" class="flex-1 px-4 py-3 border border-slate-200 rounded-xl text-base outline-none focus:border-primary-blue bg-white shadow-inner">
-                        <button onclick="submitAttendance()" class="bg-primary-blue text-white px-6 py-3 rounded-xl font-bold text-sm hover:bg-blue-800 transition shadow-md">Absen Hadir</button>
-                    </div>
-                    <p id="attendanceMsg" class="hidden text-sm font-semibold"></p>
+            
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 30px; margin-bottom: 15px; flex-wrap: wrap; gap: 15px;">
+                    <h3 style="margin: 0; font-size: 1.2rem; color: var(--text-dark);">Daftar Anggota Siswa Resmi (Cloud)</h3>
+                    <button onclick="downloadStudentBackupCSV()" style="background-color: #2ecc71; color: white; border: none; padding: 8px 15px; border-radius: 5px; cursor: pointer; font-weight: bold; display: flex; align-items: center; gap: 8px;">
+                        <i class="fa-solid fa-file-excel"></i> Backup Data Siswa
+                    </button>
                 </div>
-
-                <div class="space-y-4">
-                    <div class="flex justify-between items-center">
-                        <h3 class="font-bold text-lg text-text-dark">Riwayat Absensi Hari Ini</h3>
-                        <button onclick="clearAttendanceLog()" class="bg-danger-red text-white px-4 py-1.5 rounded-lg text-xs font-bold flex items-center gap-1.5 shadow hover:bg-red-600 transition">
-                            <i class="fa-solid fa-trash-can"></i> Bersihkan Log
-                        </button>
-                    </div>
-                    <div class="overflow-x-auto rounded-xl border border-slate-100 shadow-sm">
-                        <table class="w-full border-collapse text-left text-sm bg-white">
-                            <thead>
-                                <tr class="bg-light-blue text-primary-blue font-bold">
-                                    <th class="p-4">No</th>
-                                    <th class="p-4">Waktu Kunjungan</th>
-                                    <th class="p-4">Barcode Siswa</th>
-                                    <th class="p-4">Nama Siswa</th>
-                                    <th class="p-4">Kelas</th>
-                                </tr>
-                            </thead>
-                            <tbody id="attendanceTableBody" class="divide-y divide-slate-100">
-                                <tr><td colspan="5" class="p-4 text-center text-text-gray">Belum ada data absensi masuk hari ini.</td></tr>
-                            </tbody>
-                        </table>
-                    </div>
+            
+                <div style="position: relative; margin-bottom: 20px;">
+                    <i class="fa-solid fa-magnifying-glass" style="position: absolute; left: 15px; top: 50%; transform: translateY(-50%); color: var(--text-gray);"></i>
+                    <input type="text" id="studentSearchInput" oninput="searchStudent()" placeholder="Cari berdasarkan Nama, Kelas, atau Barcode Siswa..." style="width: 100%; padding: 12px 20px 12px 45px; border: 2px solid var(--light-blue); border-radius: 25px; outline: none; font-size: 0.95rem; box-shadow: 0 4px 10px rgba(0,0,0,0.02); transition: 0.3s;">
+                </div>
+            
+                <div class="table-responsive">
+                    <table class="book-table">
+                        <thead>
+                            <tr>
+                                <th>No</th>
+                                <th>Barcode Siswa</th>
+                                <th>Nama Siswa</th>
+                                <th>Kelas</th>
+                                <th style="text-align: center;">Aksi</th>
+                            </tr>
+                        </thead>
+                        <tbody id="studentTableBody">
+                            <tr><td colspan="5" style="text-align:center;">Memuat data siswa...</td></tr>
+                        </tbody>
+                    </table>
                 </div>
             </div>
-
-            <div id="loanTransactionContainer" class="hidden space-y-6">
-                <div class="bg-[#F0F5FA] p-5 sm:p-6 rounded-2xl space-y-3">
-                    <h3 class="font-bold text-base text-primary-blue flex items-center gap-2"><i class="fa-solid fa-id-card"></i> Langkah 1: Scan Barcode Anggota Siswa</h3>
-                    <div class="flex flex-col sm:flex-row gap-2.5">
-                        <input type="text" id="loanStudentBarcodeInput" placeholder="Masukkan / Scan Barcode Siswa..." onkeypress="handleStudentScan(event)" class="flex-1 px-4 py-3 border border-slate-200 rounded-xl text-base outline-none focus:border-primary-blue bg-white">
-                        <button onclick="checkStudentLoanBarcode()" class="bg-primary-blue text-white px-6 py-3 rounded-xl font-bold text-sm hover:bg-blue-800 transition">Cari Siswa</button>
-                    </div>
-                    <div id="loanStudentInfoBox" class="hidden bg-light-blue border-l-4 border-primary-blue p-4 rounded-r-xl justify-between items-center gap-4 flex-wrap sm:flex-nowrap shadow-sm">
-                        <div>
-                            <p class="text-xs font-semibold text-text-gray">Siswa Terverifikasi:</p>
-                            <h4 id="txtLoanStudentName" class="text-lg font-bold text-primary-blue">Nama Siswa</h4>
-                            <p id="txtLoanStudentClass" class="text-xs text-text-dark">Kelas: -</p>
-                        </div>
-                        <button onclick="resetLoanSession()" class="bg-danger-red text-white px-3 py-1.5 rounded-xl text-xs font-semibold flex items-center gap-1 shadow hover:bg-red-600 transition"><i class="fa-solid fa-rotate"></i> Ganti Siswa</button>
-                    </div>
-                </div>
-
-                <div id="loanBookSection" class="hidden bg-[#F0F5FA] p-5 sm:p-6 rounded-2xl border-t-4 border-success-green space-y-4">
-                    <h3 class="font-bold text-base text-success-green flex items-center gap-2"><i class="fa-solid fa-book"></i> Langkah 2: Masukkan Barcode Buku</h3>
-                    <div class="flex flex-col sm:flex-row gap-2.5">
-                        <input type="text" id="loanBookBarcodeInput" placeholder="Masukkan / Scan Barcode Buku..." onkeypress="handleBookScan(event)" class="flex-1 px-4 py-3 border border-slate-200 rounded-xl text-base outline-none focus:border-primary-blue bg-white">
-                        <button onclick="addBookToLoanList()" class="bg-success-green text-white px-6 py-3 rounded-xl font-bold text-sm hover:bg-green-600 transition">Tambah Peminjaman</button>
-                    </div>
-                    <h4 class="font-bold text-sm text-text-dark pt-2">Buku yang akan Dipinjam Saat Ini:</h4>
-                    <div class="overflow-x-auto rounded-xl border border-slate-200 shadow-sm bg-white">
-                        <table class="w-full border-collapse text-left text-sm bg-white">
-                            <thead>
-                                <tr class="bg-slate-100 text-slate-700 font-bold">
-                                    <th class="p-3">Barcode</th>
-                                    <th class="p-3">Judul Buku</th>
-                                    <th class="p-3">Pengarang</th>
-                                    <th class="p-3 text-center">Batal</th>
-                                </tr>
-                            </thead>
-                            <tbody id="loanCartTableBody" class="divide-y divide-slate-100">
-                                <tr><td colspan="4" class="p-3 text-center text-text-gray">Belum ada buku dimasukkan.</td></tr>
-                            </tbody>
-                        </table>
-                    </div>
-                    <div class="flex justify-end pt-2">
-                        <button onclick="submitLoanTransaction()" class="w-full sm:w-auto bg-primary-blue text-white px-8 py-3.5 rounded-xl font-bold text-base shadow-md shadow-blue-500/20 hover:bg-blue-800 transition flex items-center justify-center gap-2">
-                            <i class="fa-solid fa-floppy-disk"></i> Proses Selesai & Simpan Transaksi
-                        </button>
-                    </div>
-                </div>
-            </div>
-
-            <div id="returnTransactionContainer" class="hidden space-y-4">
-                <div class="bg-[#F0F5FA] p-5 sm:p-6 rounded-2xl border-t-4 border-accent-orange space-y-3">
-                    <h3 class="font-bold text-base text-text-dark flex items-center gap-2">
-                        <i class="fa-solid fa-barcode text-accent-orange"></i> Scan Barcode Buku untuk Pengembalian
-                    </h3>
-                    <div class="flex flex-col sm:flex-row gap-2.5">
-                        <input type="text" id="returnBookBarcodeInput" placeholder="Scan Barcode Buku di Sini..." onkeypress="handleReturnScan(event)" class="flex-1 px-4 py-3 border border-slate-200 rounded-xl text-base outline-none focus:border-primary-blue bg-white">
-                        <button onclick="processBookReturn()" class="bg-accent-orange text-white px-6 py-3 rounded-xl font-bold text-sm hover:bg-orange-600 transition">Proses Kembali</button>
-                    </div>
-                </div>
-                <div id="returnSuccessBox" class="hidden bg-[#e8f8f5] border-l-4 border-success-green p-4 rounded-r-xl shadow-sm">
-                    <div>
-                        <p class="text-xs font-bold text-success-green uppercase flex items-center gap-1"><i class="fa-solid fa-circle-check"></i> Pengembalian Berhasil!</p>
-                        <h4 id="txtReturnBookTitle" class="text-lg font-bold text-text-dark mt-1">Judul Buku</h4>
-                        <p id="txtReturnStudentName" class="text-xs text-text-gray">Dikembalikan oleh: -</p>
-                    </div>
-                </div>
-            </div>
-
-            <div id="reportTransactionContainer" class="hidden space-y-4">
-                <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 flex-wrap">
-                    <h3 class="font-bold text-lg text-text-dark">Log Riwayat Sirkulasi Buku</h3>
-                    <div class="flex gap-2 w-full sm:w-auto">
-                        <button id="btnDeleteSelectedLoans" onclick="deleteSelectedLoans()" class="bg-danger-red text-white px-4 py-2.5 rounded-xl font-bold text-xs flex items-center gap-1.5 opacity-50 cursor-not-allowed" disabled>
-                            <i class="fa-solid fa-trash-can"></i> Hapus Terpilih (<span id="selectedLoanCount">0</span>)
-                        </button>
-                        <button onclick="downloadLoanReportCSV()" class="bg-success-green text-white px-4 py-2.5 rounded-xl font-bold text-xs flex items-center gap-1.5 shadow hover:bg-green-600 transition">
-                            <i class="fa-solid fa-file-csv"></i> Cetak Laporan (.CSV)
-                        </button>
-                    </div>
-                </div>
-                </div>
 
         </div>
     </div>
 
     <script>
-        // Fungsi responsive menu mobile toggle
-        function toggleMobileMenu() {
-            const nav = document.getElementById('navContainer');
-            nav.classList.toggle('hidden');
+        // 1. Taruh ini di baris paling atas di dalam tag <script> Anda
+let attendanceData = JSON.parse(localStorage.getItem('attendance_logs')) || [];
+const masterSiswa = {
+    "12345": { nama: "Budi Santoso", kelas: "Kelas 4A" },
+    "12346": { nama: "Siti Rahma", kelas: "Kelas 5B" },
+    "12347": { nama: "Andi Wijaya", kelas: "Kelas 3" },
+    "899123": { nama: "Gisela Putri", kelas: "Kelas 6" }
+};
+        function showLogin() {
+            document.getElementById('mainNavbar').style.display = 'none';
+            document.getElementById('userSection').style.display = 'none';
+            document.getElementById('adminSection').style.display = 'none';
+            document.getElementById('loginSection').style.display = 'flex';
         }
+        function showUserSection(page) {
+            document.getElementById('mainNavbar').style.display = 'flex';
+            document.getElementById('loginSection').style.display = 'none';
+            document.getElementById('adminSection').style.display = 'none';
+            document.getElementById('userSection').style.display = 'block';
+        }
+        function navigateUser(target) {
+            document.querySelectorAll('.user-sub-page').forEach(div => div.style.display = 'none');
+            document.querySelectorAll('.nav-links li').forEach(li => li.classList.remove('active'));
+            document.getElementById('sub-' + target).style.display = 'block';
+            document.getElementById('li-' + target).classList.add('active');
+        }
+        function toggleMobileMenu() {
+            document.getElementById('navContainer').classList.toggle('active');
+        }
+        function checkPassword() {
+            if(document.getElementById('passwordInput').value === "admin") {
+                document.getElementById('mainNavbar').style.display = 'none';
+                document.getElementById('loginSection').style.display = 'none';
+                document.getElementById('adminSection').style.display = 'block';
+                hideAdminDetail();
+            } else {
+                document.getElementById('loginError').style.display = 'block';
+            }
+        }
+        function handleKeyPress(e) { if(e.key === 'Enter') checkPassword(); }
+        
+        function showAdminDetail(type, subtitle, desc) {
+    document.getElementById('adminGrid').style.display = 'none';
+    document.getElementById('adminDetail').style.display = 'block';
+    document.getElementById('detailSubTitle').innerText = subtitle;
+    document.getElementById('detailDesc').innerText = desc;
 
-        // Navigasi User Section Menu Utama
-        function navigateUser(page) {
-            // Sembunyikan semua sub-page user
-            document.querySelectorAll('.user-sub-page').forEach(el => el.classList.add('hidden'));
+    // Kontrol visibilitas masing-masing menu (Pastikan baris ini sesuai)
+    document.getElementById('crudBookContainer').style.display = (type === 'Buku') ? 'block' : 'none';
+    document.getElementById('loanTransactionContainer').style.display = (type === 'Pinjam') ? 'block' : 'none';
+    document.getElementById('returnTransactionContainer').style.display = (type === 'Kembali') ? 'block' : 'none';
+    document.getElementById('crudStudentContainer').style.display = (type === 'Siswa') ? 'block' : 'none';
+    document.getElementById('reportTransactionContainer').style.display = (type === 'Laporan') ? 'block' : 'none';
+    
+    // Tambahkan baris logika khusus untuk menu Absensi di sini
+    document.getElementById('attendanceContainer').style.display = (type === 'Absensi') ? 'block' : 'none';
+}
+        function hideAdminDetail() {
+            document.getElementById('adminGrid').style.display = 'grid';
+            document.getElementById('adminDetail').style.display = 'none';
+        }
+        function openBookManager() { showAdminDetail('Buku', 'Katalog Buku Perpustakaan', 'Kelola data buku yang tersedia.'); }
+        function openStudentManager() { showAdminDetail('Siswa', 'Data Anggota Siswa', 'Manajemen basis data siswa.'); }
+        function openLoanManager() { 
+            showAdminDetail('Pinjam', 'Transaksi Peminjaman Buku', 'Masukkan Barcode Siswa terlebih dahulu untuk mulai meminjam buku.'); 
+            if (typeof window.resetLoanSession === 'function') { window.resetLoanSession(); }
+        }
+        function openReturnManager() {
+            showAdminDetail('Kembali', 'Pengembalian Buku', 'Silakan scan langsung barcode fisik buku untuk memproses pengembalian.');
+            setTimeout(() => { 
+                const returnInput = document.getElementById('returnBookBarcodeInput');
+                if(returnInput) returnInput.focus();
+            }, 200);
+        }
+        function openReportManager() {
+            showAdminDetail('Laporan', 'Laporan Riwayat Transaksi', 'Memantau data riwayat sirkulasi keluar masuknya buku secara real-time.');
+        }
+        // ==================== LOGIKA FITUR ABSENSI PERPUSTAKAAN ====================
+function openAttendanceManager() {
+    showAdminDetail('Absensi', 'Daftar Hadir Pengunjung', 'Melihat statistik serta menginput absensi kunjungan harian siswa.');
+    renderAttendanceTable();
+    calculateAttendanceStats();
+}
+
+function handleAttendancePress(e) {
+    if(e.key === 'Enter') submitAttendance();
+}
+
+function submitAttendance() {
+    const inputField = document.getElementById('attendanceInput');
+    const msgEl = document.getElementById('attendanceMsg');
+    
+    if(!inputField) return;
+    
+    // `.trim()` digunakan untuk menghapus spasi kosong di awal/akhir input tanpa sengaja
+    const barcodeValue = inputField.value.trim();
+
+    if(!barcodeValue) return;
+
+    // 1. Nilai default jika data siswa tidak ditemukan
+    let namaSiswa = "Pengunjung Umum";
+    let kelasSiswa = "-";
+
+    // 2. Pencarian cerdas ke database anggota (localStudentsArray)
+    if (typeof localStudentsArray !== 'undefined' && localStudentsArray.length > 0) {
+        
+        const siswaDitemukan = localStudentsArray.find(siswa => {
+            // Kita ubah dua-duanya menjadi String murni, lalu hilangkan spasinya agar pencocokan 100% akurat
+            const barcodeDatabase = siswa.barcode ? String(siswa.barcode).trim() : "";
+            const barcodeInput = String(barcodeValue).trim();
             
-            // Tampilkan sub-page target
-            const target = document.getElementById(`sub-${page}`);
-            if (target) target.classList.remove('hidden');
+            return barcodeDatabase === barcodeInput;
+        });
+        
+        // Jika ditemukan, ambil data asli dari database siswa Anda
+        if(siswaDitemukan) {
+            namaSiswa = siswaDitemukan.name || siswaDitemukan.nama || "Siswa Aktif";
+            kelasSiswa = siswaDitemukan.class || siswaDitemukan.kelas || "-";
+        }
+    }
 
-            // Reset visual active class menu desktop
-            const links = ['home', 'tata-tertib', 'keanggotaan', 'ebook'];
-            links.forEach(l => {
-                const linkEl = document.getElementById(`li-${l}`);
-                if (linkEl) {
-                    if (l === page) {
-                        linkEl.className = "text-primary-blue border-b-2 border-primary-blue px-1 pt-1 text-sm font-semibold transition";
-                    } else {
-                        linkEl.className = "text-text-gray hover:text-text-dark px-1 pt-1 text-sm transition";
-                    }
-                }
+    const now = new Date();
+    const timeString = now.toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit', second: '2-digit' }) + " WIB";
+    const dateString = now.toLocaleDateString('id-ID');
+
+    const newLog = {
+        waktu: timeString,
+        tanggal: dateString,
+        id: barcodeValue,
+        nama: namaSiswa,
+        status: kelasSiswa
+    };
+
+    // Masukkan ke baris paling atas di tabel log absensi
+    attendanceData.unshift(newLog);
+    localStorage.setItem('attendance_logs', JSON.stringify(attendanceData));
+
+    // Memunculkan pesan sukses di bawah kotak input
+    msgEl.style.color = '#2ecc71';
+    msgEl.innerHTML = `<i class="fa-solid fa-circle-check"></i> Absen Berhasil! Selamat Datang, <b>${namaSiswa}</b> (${kelasSiswa})`;
+    msgEl.style.display = 'block';
+
+    // Reset kotak input agar siap discan kembali
+    inputField.value = '';
+    inputField.focus();
+    renderAttendanceTable();
+    calculateAttendanceStats();
+
+    // Sembunyikan notifikasi setelah 4 detik
+    setTimeout(() => { msgEl.style.display = 'none'; }, 4000);
+}
+function renderAttendanceTable() {
+    const tbody = document.getElementById('attendanceTableBody');
+    if(!tbody) return;
+
+    const todayStr = new Date().toLocaleDateString('id-ID');
+    const todayLogs = attendanceData.filter(item => item.tanggal === todayStr);
+
+    if(todayLogs.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="5" style="text-align: center; color: var(--text-gray);">Belum ada data absensi masuk hari ini.</td></tr>`;
+        return;
+    }
+
+    tbody.innerHTML = todayLogs.map((item, index) => `
+        <tr>
+            <td><b>${index + 1}</b></td>
+            <td><i class="fa-regular fa-clock" style="color: var(--primary-blue)"></i> ${item.waktu}</td>
+            <td><code>${item.id}</code></td>
+            <td><strong>${item.nama}</strong></td>
+            <td><span class="badge badge-returned" style="background-color: var(--primary-blue); color: white; padding: 4px 10px; border-radius: 8px; font-size: 0.85rem;">${item.status}</span></td>
+        </tr>
+    `).join('');
+}
+
+function calculateAttendanceStats() {
+    const todayStr = new Date().toLocaleDateString('id-ID');
+    
+    const totalToday = attendanceData.filter(item => item.tanggal === todayStr).length;
+    const txtTotal = document.getElementById('txtTotalAbsen');
+    if(txtTotal) txtTotal.innerText = totalToday;
+
+    const uniqueDates = [...new Set(attendanceData.map(item => item.tanggal))];
+    const totalDaysRecorded = uniqueDates.length || 1;
+    const totalAllDays = attendanceData.length;
+
+    const averagePerDay = (totalAllDays / totalDaysRecorded).toFixed(1);
+    const txtAvg = document.getElementById('txtRataRataAbsen');
+    if(txtAvg) txtAvg.innerText = averagePerDay;
+}
+
+function clearAttendanceLog() {
+    if(confirm("Apakah Anda yakin ingin menghapus semua history log absensi?")) {
+        attendanceData = [];
+        localStorage.removeItem('attendance_logs');
+        renderAttendanceTable();
+        calculateAttendanceStats();
+    }
+}
+// ===========================================================================
+    </script>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { 
+            getFirestore, collection, addDoc, onSnapshot, doc, updateDoc, deleteDoc, getDocs, query, where 
+        } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyC-DIolrfqSIxhZVGE5JjFaeGOCtsMRz3c",
+            authDomain: "perpus-lentera.firebaseapp.com",
+            projectId: "perpus-lentera",
+            storageBucket: "perpus-lentera.firebasestorage.app",
+            messagingSenderId: "767330778517",
+            appId: "1:767330778517:web:bf8d3058be09cee206ca9c",
+            measurementId: "G-7MXKTJV66C"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+        
+        const booksCollection = collection(db, "books");
+        const studentsCollection = collection(db, "students");
+        const loansCollection = collection(db, "loans");
+
+        let localBooksArray = [];
+        let localStudentsArray = [];
+        let localLoansArray = []; 
+        
+        let currentActiveStudent = null;
+        let loanCartBooks = [];
+
+        /* --- MANAJEMEN LIVE DATA BUKU --- */
+        onSnapshot(booksCollection, (snapshot) => {
+            localBooksArray = [];
+            snapshot.forEach((doc) => {
+                localBooksArray.push({ id: doc.id, ...doc.data() });
+            });
+            const searchInput = document.getElementById('bookSearchInput');
+            if (searchInput && searchInput.value) {
+                searchBook();
+            } else {
+                renderBooksTable(localBooksArray);
+            }
+        });
+
+        window.renderBooksTable = function(dataArray) {
+            const tbody = document.getElementById('bookTableBody');
+            if (!tbody) return;
+            tbody.innerHTML = "";
+            if(dataArray.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="5" style="text-align:center; color: var(--text-gray);">Data tidak ditemukan / Katalog kosong.</td></tr>`;
+                return;
+            }
+            dataArray.forEach((book, index) => {
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td>${index + 1}</td>
+                    <td><strong style="color:var(--primary-blue); font-family:monospace;">${book.barcode || ''}</strong></td>
+                    <td>${book.title || ''}</td>
+                    <td>${book.author || ''}</td>
+                    <td style="text-align: center; white-space: nowrap;">
+                        <button class="btn-action btn-edit" onclick="editBookTrigger('${book.id}')"><i class="fa-solid fa-pen-to-square"></i> Edit</button>
+                        <button class="btn-action btn-delete" onclick="deleteBook('${book.id}')"><i class="fa-solid fa-trash"></i> Hapus</button>
+                    </td>
+                `;
+                tbody.appendChild(tr);
             });
         }
 
-        // Tampilan Router Utama
-        function showUserSection(defaultSubPage = 'home') {
-            document.getElementById('userSection').classList.remove('hidden');
-            document.getElementById('loginSection').classList.add('hidden');
-            document.getElementById('adminSection').classList.add('hidden');
-            if (defaultSubPage) navigateUser(defaultSubPage);
-        }
+        window.saveBook = async function() {
+            const idHidden = document.getElementById('editBookId').value;
+            const titleInput = document.getElementById('bookTitleInput').value.trim();
+            const authorInput = document.getElementById('bookAuthorInput').value.trim();
+            const barcodeInput = document.getElementById('bookBarcodeInput').value.trim();
 
-        function showLogin() {
-            document.getElementById('userSection').classList.add('hidden');
-            document.getElementById('loginSection').classList.remove('hidden');
-            document.getElementById('adminSection').classList.add('hidden');
-            document.getElementById('passwordInput').value = '';
-            document.getElementById('loginError').classList.add('hidden');
-            document.getElementById('passwordInput').focus();
-        }
-
-        function showAdminDashboard() {
-            document.getElementById('userSection').classList.add('hidden');
-            document.getElementById('loginSection').classList.add('hidden');
-            document.getElementById('adminSection').classList.remove('hidden');
-            hideAdminDetail();
-        }
-
-        // Fungsi Membuka Box Detail Manajemen CRUD
-        function openAdminDetailBox(title, description, containerId) {
-            document.getElementById('adminGrid').classList.add('hidden');
-            document.getElementById('adminDetail').classList.remove('hidden');
-            
-            document.getElementById('detailSubTitle').innerText = title;
-            document.getElementById('detailDesc').innerText = description;
-            
-            // Sembunyikan semua kontainer CRUD internal terlebih dahulu
-            document.getElementById('crudBookContainer').classList.add('hidden');
-            document.getElementById('attendanceContainer').classList.add('hidden');
-            document.getElementById('loanTransactionContainer').classList.add('hidden');
-            document.getElementById('returnTransactionContainer').classList.add('hidden');
-            document.getElementById('reportTransactionContainer').classList.add('hidden');
-            
-            // Tampilkan kontainer yang dipilih
-            const targetBox = document.getElementById(containerId);
-            if(targetBox) targetBox.classList.remove('hidden');
-        }
-
-        function hideAdminDetail() {
-            document.getElementById('adminGrid').classList.remove('hidden');
-            document.getElementById('adminDetail').classList.add('hidden');
-        }
-
-        // Hook fungsi pembuka dari setiap menu card admin agar terkoneksi dengan UI baru
-        function openBookManager() {
-            openAdminDetailBox("Manajemen Katalog Buku", "Tambahkan, edit, hapus, dan cari buku di perpustakaan.", "crudBookContainer");
-            if (window.loadBooksData) window.loadBooksData(); // Mengamankan trigger pemanggilan data backend lama Anda jika ada
-        }
-        function openLoanManager() {
-            openAdminDetailBox("Transaksi Peminjaman Baru", "Silakan proses peminjaman buku anggota di bawah ini.", "loanTransactionContainer");
-            if (window.resetLoanSession) window.resetLoanSession();
-        }
-        function openReturnManager() {
-            openAdminDetailBox("Sistem Pengembalian Buku", "Scan barcode buku untuk melakukan proses pengembalian.", "returnTransactionContainer");
-        }
-        function openAttendanceManager() {
-            openAdminDetailBox("Absensi Pengunjung", "Pantau statistik kehadiran harian dan scan barcode presensi siswa.", "attendanceContainer");
-        }
-        function openStudentManager() {
-            openAdminDetailBox("Data Anggota Siswa", "Manajemen data keanggotaan siswa terdaftar.", "reportTransactionContainer"); 
-        }
-        function openReportManager() {
-            openAdminDetailBox("Laporan Rekap Sirkulasi", "Unduh berkas sirkulasi peminjaman dalam format file excel spreadsheet.", "reportTransactionContainer");
-        }
-
-        // Penanganan tombol keyboard enter trigger password login
-        function handleKeyPress(e) {
-            if (e.key === 'Enter') checkPassword();
-        }
-
-        // MOCKUP / PLACEHOLDER FUNGSI JAVASCRIPT BAWAAN JIKA BELUM TERKONEKSI FIREBASE
-        // (Tetap pertahankan fungsi asli Anda jika file index asli Anda memiliki script tag logic di bawahnya)
-        function checkPassword() {
-            const pass = document.getElementById('passwordInput').value;
-            if (pass === "admin" || pass === "1234") { // Sesuaikan password default backend Anda
-                showAdminDashboard();
-            } else {
-                document.getElementById('loginError').classList.remove('hidden');
+            if(!titleInput || !authorInput || !barcodeInput) {
+                alert("Mohon isi seluruh data buku sebelum menyimpan!");
+                return;
             }
+
+            try {
+                const bookData = { title: titleInput, author: authorInput, barcode: barcodeInput };
+                if(idHidden) {
+                    await updateDoc(doc(db, "books", idHidden), bookData);
+                    alert("Data buku berhasil diperbarui!");
+                } else {
+                    await addDoc(booksCollection, bookData);
+                    alert("Buku baru berhasil disimpan ke Katalog!");
+                }
+                resetBookForm();
+            } catch(e) { console.error(e); }
+        }
+
+        window.editBookTrigger = function(id) {
+            const book = localBooksArray.find(b => b.id === id);
+            if(!book) return;
+            document.getElementById('editBookId').value = book.id;
+            document.getElementById('bookTitleInput').value = book.title || '';
+            document.getElementById('bookAuthorInput').value = book.author || '';
+            document.getElementById('bookBarcodeInput').value = book.barcode || '';
+            document.getElementById('formFormTitle').innerText = "Edit Data Buku";
+            document.getElementById('btnSaveBookAction').innerText = "Simpan Perubahan";
+            document.getElementById('btnCancelEditAction').style.display = "inline-block";
+        }
+
+        window.deleteBook = async function(id) {
+            if(!confirm("Apakah Anda yakin ingin menghapus buku ini dari katalog?")) return;
+            try { await deleteDoc(doc(db, "books", id)); alert("Buku berhasil dihapus."); } catch(e) { console.error(e); }
+        }
+
+        window.resetBookForm = function() {
+            document.getElementById('editBookId').value = "";
+            document.getElementById('bookTitleInput').value = "";
+            document.getElementById('bookAuthorInput').value = "";
+            document.getElementById('bookBarcodeInput').value = "";
+            document.getElementById('formFormTitle').innerText = "Tambah Buku Baru";
+            document.getElementById('btnSaveBookAction').innerText = "Simpan Buku";
+            document.getElementById('btnCancelEditAction').style.display = "none";
+        }
+
+        window.searchBook = function() {
+            const keyword = document.getElementById('bookSearchInput').value.toLowerCase().trim();
+            if(!keyword) { renderBooksTable(localBooksArray); return; }
+            const filtered = localBooksArray.filter(b => {
+                return (b.title||"").toLowerCase().includes(keyword) || (b.author||"").toLowerCase().includes(keyword) || (b.barcode||"").toLowerCase().includes(keyword);
+            });
+            renderBooksTable(filtered);
+        }
+
+        /* --- SISTEM TRANSAKSI PEMINJAMAN --- */
+        window.handleStudentScan = function(e) { if(e.key === 'Enter') checkStudentLoanBarcode(); }
+        window.checkStudentLoanBarcode = function() {
+            const inputVal = document.getElementById('loanStudentBarcodeInput').value.trim();
+            if(!inputVal) return;
+            const studentFound = localStudentsArray.find(s => (s.barcode || '').toLowerCase() === inputVal.toLowerCase());
+            if(studentFound) {
+                currentActiveStudent = studentFound;
+                document.getElementById('txtLoanStudentName').innerText = studentFound.name || '-';
+                document.getElementById('txtLoanStudentClass').innerText = "Kelas: " + (studentFound.class || '-');
+                document.getElementById('loanStudentInfoBox').style.display = "flex";
+                document.getElementById('loanBookSection').style.display = "block";
+                document.getElementById('loanStudentBarcodeInput').disabled = true;
+                document.getElementById('loanBookBarcodeInput').focus();
+            } else {
+                alert("Barcode siswa tidak ditemukan!");
+                document.getElementById('loanStudentBarcodeInput').value = "";
+            }
+        }
+
+        window.handleBookScan = function(e) { if(e.key === 'Enter') addBookToLoanList(); }
+        window.addBookToLoanList = function() {
+            const inputVal = document.getElementById('loanBookBarcodeInput').value.trim();
+            if(!inputVal) return;
+            const bookFound = localBooksArray.find(b => (b.barcode || '').toLowerCase() === inputVal.toLowerCase());
+            if(!bookFound) { alert("Barcode buku tidak ditemukan!"); document.getElementById('loanBookBarcodeInput').value = ""; return; }
+            if(loanCartBooks.some(b => b.id === bookFound.id)) { alert("Buku sudah ada di daftar!"); document.getElementById('loanBookBarcodeInput').value = ""; return; }
+            loanCartBooks.push(bookFound);
+            document.getElementById('loanBookBarcodeInput').value = "";
+            renderLoanCartTable();
+        }
+
+        function renderLoanCartTable() {
+            const tbody = document.getElementById('loanCartTableBody');
+            tbody.innerHTML = "";
+            if(loanCartBooks.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="4" style="text-align: center; color: var(--text-gray);">Belum ada buku dimasukkan.</td></tr>`;
+                return;
+            }
+            loanCartBooks.forEach((book, index) => {
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td><strong style="color:var(--primary-blue); font-family:monospace;">${book.barcode || ''}</strong></td>
+                    <td>${book.title || ''}</td>
+                    <td>${book.author || ''}</td>
+                    <td style="text-align: center;"><button onclick="removeBookFromLoanCart(${index})" style="background: none; border: none; color: var(--danger-red); cursor: pointer;"><i class="fa-solid fa-circle-xmark"></i></button></td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        window.removeBookFromLoanCart = function(index) { loanCartBooks.splice(index, 1); renderLoanCartTable(); }
+        window.resetLoanSession = function() {
+            currentActiveStudent = null; loanCartBooks = [];
+            document.getElementById('loanStudentBarcodeInput').disabled = false;
+            document.getElementById('loanStudentBarcodeInput').value = "";
+            document.getElementById('loanBookBarcodeInput').value = "";
+            document.getElementById('loanStudentInfoBox').style.display = "none";
+            document.getElementById('loanBookSection').style.display = "none";
+            renderLoanCartTable();
+        }
+
+        window.submitLoanTransaction = async function() {
+            if(!currentActiveStudent || loanCartBooks.length === 0) return;
+            const todayStr = new Date().toISOString().split('T')[0];
+            try {
+                for(let book of loanCartBooks) {
+                    await addDoc(loansCollection, {
+                        studentBarcode: currentActiveStudent.barcode || '',
+                        studentName: currentActiveStudent.name || '',
+                        studentClass: currentActiveStudent.class || '',
+                        bookBarcode: book.barcode || '',
+                        bookTitle: book.title || '',
+                        loanDate: todayStr,
+                        status: "Dipinjam"
+                    });
+                }
+                alert("Transaksi peminjaman sukses disimpan!");
+                resetLoanSession();
+                hideAdminDetail();
+            } catch(e) { console.error(e); }
+        }
+
+        /* --- SISTEM TRANSAKSI PENGEMBALIAN BUKU --- */
+        window.handleReturnScan = function(e) {
+            if(e.key === 'Enter') processBookReturn();
+        }
+
+        window.processBookReturn = async function() {
+            const barcodeInput = document.getElementById('returnBookBarcodeInput').value.trim();
+            const successBox = document.getElementById('returnSuccessBox');
+            
+            if(!barcodeInput) return;
+
+            try {
+                const q = query(loansCollection, where("bookBarcode", "==", barcodeInput), where("status", "==", "Dipinjam"));
+                const querySnapshot = await getDocs(q);
+
+                if(querySnapshot.empty) {
+                    alert("Gagal: Buku dengan barcode tersebut tidak ditemukan dalam daftar aktif peminjaman!");
+                    document.getElementById('returnBookBarcodeInput').value = "";
+                    document.getElementById('returnBookBarcodeInput').focus();
+                    successBox.style.display = "none";
+                    return;
+                }
+
+                querySnapshot.forEach(async (docSnap) => {
+                    const loanId = docSnap.id;
+                    const loanData = docSnap.data();
+
+                    await updateDoc(doc(db, "loans", loanId), {
+                        status: "Kembali"
+                    });
+
+                    document.getElementById('txtReturnBookTitle').innerText = loanData.bookTitle || "Buku Tanpa Judul";
+                    document.getElementById('txtReturnStudentName').innerText = `Dikembalikan oleh: ${loanData.studentName || '-'} (Kelas ${loanData.studentClass || '-'})`;
+                    successBox.style.display = "flex";
+                    
+                    document.getElementById('returnBookBarcodeInput').value = "";
+                    document.getElementById('returnBookBarcodeInput').focus();
+                });
+
+            } catch (error) {
+                console.error(error);
+                alert("Sistem error saat mencoba mengembalikan buku.");
+            }
+        }
+
+        /* --- SINKRONISASI & LIVE LAPORAN TRANSAKSI + CHECKBOX --- */
+        onSnapshot(loansCollection, (snapshot) => {
+            localLoansArray = [];
+            snapshot.forEach((doc) => {
+                localLoansArray.push({ id: doc.id, ...doc.data() });
+            });
+            
+            localLoansArray.sort((a, b) => (b.loanDate || '').localeCompare(a.loanDate || ''));
+
+            const searchInput = document.getElementById('loanReportSearchInput');
+            if(searchInput && searchInput.value) {
+                searchLoanReport();
+            } else {
+                renderLoanReportTable(localLoansArray);
+            }
+        });
+
+        /* --- SINKRONISASI & LIVE LAPORAN TRANSAKSI + PERHITUNGAN TERLAMBAT --- */
+        window.renderLoanReportTable = function(dataArray) {
+            const tbody = document.getElementById('loanReportTableBody');
+            if(!tbody) return;
+            tbody.innerHTML = "";
+
+            const masterCheck = document.getElementById('checkAllLoans');
+            if(masterCheck) masterCheck.checked = false;
+            updateDeleteButtonState();
+
+            if(dataArray.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="6" style="text-align:center; color:var(--text-gray);">Belum ada riwayat sirkulasi buku.</td></tr>`;
+                return;
+            }
+
+            // Ambil tanggal hari ini (format YYYY-MM-DD)
+            const today = new Date();
+            today.setHours(0,0,0,0);
+
+            dataArray.forEach((loan, index) => {
+                const tr = document.createElement('tr');
+                
+                let statusBadge = "";
+                let rowStyle = "";
+
+                if (loan.status === "Dipinjam") {
+                    // Hitung selisih hari
+                    const borrowDate = new Date(loan.loanDate);
+                    borrowDate.setHours(0,0,0,0);
+                    
+                    // Selisih dalam milidetik diubah ke hari
+                    const timeDiff = today.getTime() - borrowDate.getTime();
+                    const daysElapsed = Math.floor(timeDiff / (1000 * 60 * 60 * 24));
+
+                    if (daysElapsed > 7) {
+                        const lateDays = daysElapsed - 7;
+                        statusBadge = `<span class="badge" style="background-color: var(--danger-red);"><i class="fa-solid fa-triangle-exclamation"></i> Terlambat ${lateDays} Hari</span>`;
+                        rowStyle = `style="background-color: rgba(255, 75, 75, 0.08);"`; // Beri highlight merah tipis pada baris yang terlambat
+                    } else {
+                        statusBadge = `<span class="badge badge-loaned"><i class="fa-solid fa-clock"></i> Dipinjam</span>`;
+                    }
+                } else {
+                    statusBadge = `<span class="badge badge-returned"><i class="fa-solid fa-circle-check"></i> Kembali</span>`;
+                }
+
+                tr.innerHTML = `
+                    <td style="text-align: center;">
+                        <input type="checkbox" class="loan-checkbox" value="${loan.id}" onchange="updateDeleteButtonState()" style="transform: scale(1.2); cursor: pointer;">
+                    </td>
+                    <td>${index + 1}</td>
+                    <td style="white-space:nowrap; font-size:0.9rem;">${loan.loanDate || '-'}</td>
+                    <td>
+                        <strong>${loan.studentName || '-'}</strong><br>
+                        <span style="font-size:0.8rem; color:var(--text-gray);">Barcode: ${loan.studentBarcode || '-'} (Kl: ${loan.studentClass || '-'})</span>
+                    </td>
+                    <td>
+                        <strong>${loan.bookTitle || '-'}</strong><br>
+                        <span style="font-size:0.8rem; color:var(--text-gray);">Barcode: ${loan.bookBarcode || '-'}</span>
+                    </td>
+                    <td>${statusBadge}</td>
+                `;
+                
+                if(rowStyle) tr.setAttribute('style', tr.getAttribute('style') ? tr.getAttribute('style') + rowStyle.replace('style="','').replace('"','') : rowStyle.replace('style="','').replace('"',''));
+                tbody.appendChild(tr);
+            });
+        }
+
+        // Perbarui juga fungsi unduh laporan agar keterangan keterlambatan masuk ke file Excel/CSV
+        window.downloadLoanReportCSV = function() {
+            if(localLoansArray.length === 0) return;
+            
+            let csvContent = "\uFEFFNo,Tanggal Pinjam,Nama Siswa,Barcode Siswa,Kelas,Judul Buku,Barcode Buku,Status Keterangan\n";
+            const today = new Date();
+            today.setHours(0,0,0,0);
+
+            localLoansArray.forEach((loan, index) => {
+                let statusInfo = loan.status;
+                
+                if (loan.status === "Dipinjam") {
+                    const borrowDate = new Date(loan.loanDate);
+                    borrowDate.setHours(0,0,0,0);
+                    const timeDiff = today.getTime() - borrowDate.getTime();
+                    const daysElapsed = Math.floor(timeDiff / (1000 * 60 * 60 * 24));
+                    
+                    if (daysElapsed > 7) {
+                        statusInfo = `Terlambat ${daysElapsed - 7} Hari`;
+                    } else {
+                        statusInfo = "Dipinjam (Aman)";
+                    }
+                } else {
+                    statusInfo = "Sudah Kembali";
+                }
+
+                csvContent += `${index + 1},"${loan.loanDate || ''}","${loan.studentName || ''}","${loan.studentBarcode || ''}","${loan.studentClass || ''}","${loan.bookTitle || ''}","${loan.bookBarcode || ''}","${statusInfo}"\n`;
+            });
+
+            const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+            const link = document.createElement("a");
+            const url = URL.createObjectURL(blob);
+            
+            link.setAttribute("href", url);
+            link.setAttribute("download", "Laporan_Sirkulasi_Pelangi_Pustaka.csv");
+            link.style.visibility = 'hidden';
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
+        window.toggleSelectAllLoans = function(masterCheckbox) {
+            const checkboxes = document.querySelectorAll('.loan-checkbox');
+            checkboxes.forEach(cb => { cb.checked = masterCheckbox.checked; });
+            updateDeleteButtonState();
+        }
+
+        window.updateDeleteButtonState = function() {
+            const checkboxes = document.querySelectorAll('.loan-checkbox:checked');
+            const deleteBtn = document.getElementById('btnDeleteSelectedLoans');
+            const countSpan = document.getElementById('selectedLoanCount');
+            
+            if(!deleteBtn || !countSpan) return;
+            const totalSelected = checkboxes.length;
+            countSpan.innerText = totalSelected;
+
+            if(totalSelected > 0) {
+                deleteBtn.disabled = false;
+                deleteBtn.style.opacity = "1";
+                deleteBtn.style.cursor = "pointer";
+            } else {
+                deleteBtn.disabled = true;
+                deleteBtn.style.opacity = "0.6";
+                deleteBtn.style.cursor = "not-allowed";
+            }
+        }
+
+        window.deleteSelectedLoans = async function() {
+            const checkboxes = document.querySelectorAll('.loan-checkbox:checked');
+            if(checkboxes.length === 0) return;
+
+            const konfirmasi = confirm(`Apakah Anda yakin ingin menghapus ${checkboxes.length} data transaksi terpilih secara permanen dari cloud?`);
+            if(!konfirmasi) return;
+
+            try {
+                for(let cb of checkboxes) {
+                    await deleteDoc(doc(db, "loans", cb.value));
+                }
+                alert("Data transaksi terpilih berhasil dihapus!");
+            } catch (error) {
+                console.error(error);
+                alert("Terjadi kesalahan saat menghapus data.");
+            }
+        }
+
+        window.searchLoanReport = function() {
+            const keyword = document.getElementById('loanReportSearchInput').value.toLowerCase().trim();
+            if(!keyword) { renderLoanReportTable(localLoansArray); return; }
+
+            const filtered = localLoansArray.filter(loan => {
+                return (loan.studentName || "").toLowerCase().includes(keyword) || 
+                       (loan.studentBarcode || "").toLowerCase().includes(keyword) || 
+                       (loan.bookTitle || "").toLowerCase().includes(keyword) || 
+                       (loan.bookBarcode || "").toLowerCase().includes(keyword) || 
+                       (loan.status || "").toLowerCase().includes(keyword);
+            });
+            renderLoanReportTable(filtered);
+        }
+
+        window.downloadLoanReportCSV = function() {
+            if(localLoansArray.length === 0) return;
+            let csvContent = "data:text/csv;charset=utf-8,No,Tanggal Pinjam,Nama Siswa,Barcode Siswa,Kelas,Judul Buku,Barcode Buku,Status\n";
+            localLoansArray.forEach((loan, index) => {
+                csvContent += `${index + 1},"${loan.loanDate || ''}","${loan.studentName || ''}","${loan.studentBarcode || ''}","${loan.studentClass || ''}","${loan.bookTitle || ''}","${loan.bookBarcode || ''}","${loan.status || ''}"\n`;
+            });
+            const encodedUri = encodeURI(csvContent);
+            const link = document.createElement("a");
+            link.setAttribute("href", encodedUri);
+            link.setAttribute("download", "Laporan_Sirkulasi_Pelangi_Pustaka.csv");
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
+
+        /* --- MANAJEMEN LIVE DATA SISWA --- */
+        onSnapshot(studentsCollection, (snapshot) => {
+            localStudentsArray = [];
+            snapshot.forEach((doc) => { localStudentsArray.push({ id: doc.id, ...doc.data() }); });
+            const searchInput = document.getElementById('studentSearchInput');
+            if (searchInput && searchInput.value) { searchStudent(); } else { renderStudentsTable(localStudentsArray); }
+        });
+
+        window.renderStudentsTable = function(dataArray) {
+            const tbody = document.getElementById('studentTableBody');
+            if (!tbody) return;
+            tbody.innerHTML = "";
+            if(dataArray.length === 0) { tbody.innerHTML = `<tr><td colspan="5" style="text-align:center; color: var(--text-gray);">Data siswa tidak ditemukan / Kosong.</td></tr>`; return; }
+            dataArray.forEach((student, index) => {
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td>${index + 1}</td>
+                    <td><strong style="color:var(--primary-blue); font-family:monospace;">${student.barcode || '-'}</strong></td>
+                    <td>${student.name || '-'}</td>
+                    <td>${student.class || '-'}</td>
+                    <td style="text-align: center; white-space: nowrap;">
+                        <button class="btn-action btn-edit" onclick="editStudentTrigger('${student.id}')"><i class="fa-solid fa-pen-to-square"></i> Edit</button>
+                        <button class="btn-action btn-delete" onclick="deleteStudent('${student.id}')"><i class="fa-solid fa-trash"></i> Hapus</button>
+                    </td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        window.saveStudent = async function() {
+            const idHidden = document.getElementById('editStudentId').value;
+            const nameInput = document.getElementById('studentNameInput').value.trim();
+            const classInput = document.getElementById('studentClassInput').value.trim();
+            const barcodeInput = document.getElementById('studentBarcodeInput').value.trim();
+            
+            if(!nameInput || !classInput || !barcodeInput) {
+                alert("Mohon isi seluruh data siswa sebelum menyimpan!");
+                return;
+            }
+            
+            try {
+                const studentData = { name: nameInput, class: classInput, barcode: barcodeInput };
+                if(idHidden) { 
+                    await updateDoc(doc(db, "students", idHidden), studentData); 
+                    alert("Data siswa berhasil diperbarui!");
+                } else { 
+                    await addDoc(studentsCollection, studentData); 
+                    alert("Siswa baru berhasil diregistrasikan!");
+                }
+                resetStudentForm();
+            } catch(e) { console.error(e); }
+        }
+
+        window.editStudentTrigger = function(id) {
+            const student = localStudentsArray.find(s => s.id === id);
+            if(!student) return;
+            document.getElementById('editStudentId').value = student.id;
+            document.getElementById('studentNameInput').value = student.name || '';
+            document.getElementById('studentClassInput').value = student.class || '';
+            document.getElementById('studentBarcodeInput').value = student.barcode || '';
+            document.getElementById('studentFormTitle').innerText = "Edit Data Anggota Siswa";
+            document.getElementById('btnSaveStudentAction').innerText = "Simpan Perubahan";
+            document.getElementById('btnCancelStudentEditAction').style.display = "inline-block";
+        }
+
+        window.deleteStudent = async function(id) { 
+            if(!confirm("Apakah Anda yakin ingin menghapus data siswa ini?")) return; 
+            try { await deleteDoc(doc(db, "students", id)); alert("Data siswa berhasil dihapus."); } catch(e) { console.error(e); }
+        }
+        
+        window.resetStudentForm = function() { 
+            document.getElementById('editStudentId').value = ""; 
+            document.getElementById('studentNameInput').value = ""; 
+            document.getElementById('studentClassInput').value = ""; 
+            document.getElementById('studentBarcodeInput').value = ""; 
+            document.getElementById('studentFormTitle').innerText = "Registrasi Anggota Siswa Baru";
+            document.getElementById('btnSaveStudentAction').innerText = "Registrasikan Siswa";
+            document.getElementById('btnCancelStudentEditAction').style.display = "none";
+        }
+        
+        window.searchStudent = function() {
+            const keyword = document.getElementById('studentSearchInput').value.toLowerCase().trim();
+            if(!keyword) { renderStudentsTable(localStudentsArray); return; }
+            const filtered = localStudentsArray.filter(s => (s.name||"").toLowerCase().includes(keyword) || (s.barcode||"").toLowerCase().includes(keyword) || (s.class||"").toLowerCase().includes(keyword));
+            renderStudentsTable(filtered);
+        }
+
+        /* ======================================================= */
+        /* --- FUNGSI BARU: EKSPOR DATA (BUKU & SISWA) KE CSV --- */
+        /* ======================================================= */
+
+        // 1. Ekspor / Backup Data Buku
+        window.downloadBackupCSV = function() {
+            if(localBooksArray.length === 0) {
+                alert("Tidak ada data buku yang bisa diekspor!");
+                return;
+            }
+            
+            // Membuat header kolom CSV beserta bom UTF-8 agar karakter terbaca dengan baik di Excel
+            let csvContent = "\uFEFFNo,Barcode Buku,Judul Buku,Pengarang\n";
+            
+            localBooksArray.forEach((book, index) => {
+                // Membuka string dengan tanda kutip untuk mencegah eror tanda koma dalam judul/nama
+                csvContent += `${index + 1},"${book.barcode || ''}","${book.title || ''}","${book.author || ''}"\n`;
+            });
+            
+            const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+            const link = document.createElement("a");
+            const url = URL.createObjectURL(blob);
+            
+            link.setAttribute("href", url);
+            link.setAttribute("download", "Backup_Katalog_Buku_Pelangi_Pustaka.csv");
+            link.style.visibility = 'hidden';
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
+
+        // 2. Ekspor / Backup Data Anggota Siswa
+        window.downloadStudentBackupCSV = function() {
+            if(localStudentsArray.length === 0) {
+                alert("Tidak ada data siswa yang bisa diekspor!");
+                return;
+            }
+            
+            let csvContent = "\uFEFFNo,Barcode Siswa,Nama Siswa,Kelas\n";
+            
+            localStudentsArray.forEach((student, index) => {
+                csvContent += `${index + 1},"${student.barcode || ''}","${student.name || ''}","${student.class || ''}"\n`;
+            });
+            
+            const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+            const link = document.createElement("a");
+            const url = URL.createObjectURL(blob);
+            
+            link.setAttribute("href", url);
+            link.setAttribute("download", "Backup_Data_Siswa_Pelangi_Pustaka.csv");
+            link.style.visibility = 'hidden';
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
         }
     </script>
 </body>
