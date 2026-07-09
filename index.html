@@ -755,6 +755,42 @@
             color: var(--text-gray);
             font-weight: 500;
         }
+        /* --- STYLING TABEL HOME BARU --- */
+        .home-table-section {
+            margin-top: 40px;
+            width: 100%;
+            background: var(--white);
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: var(--card-shadow);
+            border: 1px solid rgba(0,0,0,0.05);
+        }
+        .home-table-section h3 {
+            font-size: 1.3rem;
+            margin-bottom: 20px;
+            color: var(--text-dark);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .modern-table {
+            width: 100%;
+            border-collapse: collapse;
+            text-align: left;
+        }
+        .modern-table th, .modern-table td {
+            padding: 14px 18px;
+            border-bottom: 1px solid #f1f5f9;
+            font-size: 0.95rem;
+        }
+        .modern-table th {
+            background-color: #f8fafc;
+            color: var(--text-dark);
+            font-weight: 600;
+        }
+        .modern-table tr:hover {
+            background-color: #fbfbfb;
+        }
     </style>
 </head>
 <body>
@@ -830,7 +866,35 @@
             </div>
         </div>
     </div>
-
+    <div class="home-table-section">
+        <h3><i class="fa-solid fa-table-list" style="color: var(--primary-blue);"></i> Informasi & Data Terbaru</h3>
+        <div class="table-responsive">
+            <table class="modern-table">
+                <thead>
+                    <tr>
+                        <th>No</th>
+                        <th>Kategori / Keterangan</th>
+                        <th>Jumlah / Status</th>
+                        <th>Pembaruan Terakhir</th>
+                    </tr>
+                </thead>
+                <tbody id="homeTableBody">
+                    <tr>
+                        <td>1</td>
+                        <td>Buku Terpopuler Bulan Ini</td>
+                        <td>Laskar Pelangi (14x Dipinjam)</td>
+                        <td>Hari Ini</td>
+                    </tr>
+                    <tr>
+                        <td>2</td>
+                        <td>Total Pengunjung Minggu Ini</td>
+                        <td>120 Siswa</td>
+                        <td>Kemarin</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
     <div id="loginSection">
         <div class="login-card">
             <i class="fa-solid fa-lock" style="font-size: 3rem; color: var(--primary-blue); margin-bottom: 20px; display: block;"></i>
@@ -856,6 +920,13 @@
                 <div class="icon-wrapper"><i class="fa-solid fa-book"></i></div>
                 <h3>Buku</h3>
                 <p>Kelola Katalog</p>
+            </div>
+            <div class="card" onclick="openHomeTableManager()">
+                <div class="icon-wrapper">
+                    <i class="fa-solid fa-pen-to-square"></i>
+                </div>
+                <h3>Kelola Tabel Home</h3>
+                <p>Ubah baris data & informasi beranda</p>
             </div>
             <div class="card" onclick="openLoanManager()">
                 <div class="icon-wrapper"><i class="fa-solid fa-hand-holding-heart"></i></div>
@@ -1157,7 +1228,45 @@
                     </table>
                 </div>
             </div>
-
+            <div id="homeTableManagerBox" class="admin-detail-box" style="display: none;">
+                <button class="btn-back-admin" onclick="closeHomeTableManager()"><i class="fa-solid fa-arrow-left"></i> Kembali ke Menu Admin</button>
+                <h3>Pengaturan Baris Tabel Home</h3>
+                <p style="color: var(--text-gray); margin-bottom: 20px;">Silakan ubah konten tabel di bawah ini yang akan langsung tampil di halaman depan (Home).</p>
+                
+                <div class="book-form-container">
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label>Baris 1: Keterangan</label>
+                            <input type="text" id="editRow1Ket" value="Buku Terpopuler Bulan Ini">
+                        </div>
+                        <div class="form-group">
+                            <label>Baris 1: Status / Jumlah</label>
+                            <input type="text" id="editRow1Status" value="Laskar Pelangi (14x Dipinjam)">
+                        </div>
+                        <div class="form-group">
+                            <label>Baris 1: Waktu</label>
+                            <input type="text" id="editRow1Time" value="Hari Ini">
+                        </div>
+                    </div>
+                    <div class="form-grid" style="margin-top: 15px;">
+                        <div class="form-group">
+                            <label>Baris 2: Keterangan</label>
+                            <input type="text" id="editRow2Ket" value="Total Pengunjung Minggu Ini">
+                        </div>
+                        <div class="form-group">
+                            <label>Baris 2: Status / Jumlah</label>
+                            <input type="text" id="editRow2Status" value="120 Siswa">
+                        </div>
+                        <div class="form-group">
+                            <label>Baris 2: Waktu</label>
+                            <input type="text" id="editRow2Time" value="Kemarin">
+                        </div>
+                    </div>
+                    <div style="margin-top: 20px;">
+                        <button class="btn-save-book" onclick="saveHomeTableData()">Simpan Perubahan Tabel</button>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 
@@ -1361,6 +1470,71 @@ function clearAttendanceLog() {
     }
 }
 // ===========================================================================
+// Fungsi untuk membuka & menutup panel kelola tabel di dashboard admin
+window.openHomeTableManager = function() {
+    // Sembunyikan semua box detail admin lainnya terlebih dahulu jika ada
+    document.querySelectorAll('.admin-detail-box').forEach(box => box.style.display = 'none');
+    // Tampilkan box editor tabel home
+    document.getElementById('homeTableManagerBox').style.style.display = 'block';
+};
+
+window.closeHomeTableManager = function() {
+    document.getElementById('homeTableManagerBox').style.style.display = 'none';
+};
+
+// Fungsi menyimpan perubahan dari admin ke tabel depan
+window.saveHomeTableData = function() {
+    const dataTabel = {
+        r1Ket: document.getElementById('editRow1Ket').value,
+        r1Stat: document.getElementById('editRow1Status').value,
+        r1Time: document.getElementById('editRow1Time').value,
+        r2Ket: document.getElementById('editRow2Ket').value,
+        r2Stat: document.getElementById('editRow2Status').value,
+        r2Time: document.getElementById('editRow2Time').value
+    };
+    
+    localStorage.setItem('customHomeTableData', JSON.stringify(dataTabel));
+    renderHomeTable();
+    alert('Tabel di halaman Home berhasil diperbarui!');
+    closeHomeTableManager();
+};
+
+// Fungsi memuat data ke tabel halaman utama
+window.renderHomeTable = function() {
+    const savedData = localStorage.getItem('customHomeTableData');
+    if(savedData) {
+        const data = JSON.parse(savedData);
+        document.getElementById('homeTableBody').innerHTML = `
+            <tr>
+                <td>1</td>
+                <td>${data.r1Ket}</td>
+                <td>${data.r1Stat}</td>
+                <td>${data.r1Time}</td>
+            </tr>
+            <tr>
+                <td>2</td>
+                <td>${data.r2Ket}</td>
+                <td>${data.r2Stat}</td>
+                <td>${data.r2Time}</td>
+            </tr>
+        `;
+        
+        // Sinkronkan isi input admin agar sesuai data yang tersimpan
+        if(document.getElementById('editRow1Ket')) {
+            document.getElementById('editRow1Ket').value = data.r1Ket;
+            document.getElementById('editRow1Status').value = data.r1Stat;
+            document.getElementById('editRow1Time').value = data.r1Time;
+            document.getElementById('editRow2Ket').value = data.r2Ket;
+            document.getElementById('editRow2Status').value = data.r2Stat;
+            document.getElementById('editRow2Time').value = data.r2Time;
+        }
+    }
+};
+
+// Jalankan fungsi render otomatis saat aplikasi pertama kali dimuat
+document.addEventListener("DOMContentLoaded", function() {
+    renderHomeTable();
+});
     </script>
 
     <script type="module">
