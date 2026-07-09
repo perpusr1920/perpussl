@@ -755,41 +755,68 @@
             color: var(--text-gray);
             font-weight: 500;
         }
-        /* --- STYLING TABEL HOME BARU --- */
-        .home-table-section {
-            margin-top: 40px;
+        /* --- CSS TABEL JADWAL KUNJUNG HOME --- */
+        .schedule-section {
+            margin-top: 45px;
             width: 100%;
             background: var(--white);
-            padding: 30px;
-            border-radius: 20px;
-            box-shadow: var(--card-shadow);
-            border: 1px solid rgba(0,0,0,0.05);
+            padding: 35px;
+            border-radius: 30px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.03);
+            border: 1px solid rgba(0,0,0,0.02);
         }
-        .home-table-section h3 {
+        .schedule-section h3 {
             font-size: 1.3rem;
-            margin-bottom: 20px;
+            margin-bottom: 5px;
             color: var(--text-dark);
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 12px;
         }
-        .modern-table {
+        .schedule-section p.subtitle {
+            font-size: 0.9rem;
+            color: var(--text-gray);
+            margin-bottom: 25px;
+        }
+        .schedule-table {
             width: 100%;
             border-collapse: collapse;
-            text-align: left;
-        }
-        .modern-table th, .modern-table td {
-            padding: 14px 18px;
-            border-bottom: 1px solid #f1f5f9;
+            text-align: center;
             font-size: 0.95rem;
         }
-        .modern-table th {
-            background-color: #f8fafc;
-            color: var(--text-dark);
-            font-weight: 600;
+        .schedule-table th, .schedule-table td {
+            padding: 12px 10px;
+            border: 1px solid #e2e8f0;
         }
-        .modern-table tr:hover {
-            background-color: #fbfbfb;
+        .schedule-table th {
+            background-color: var(--light-blue);
+            color: var(--primary-blue);
+            font-weight: 700;
+        }
+        .schedule-table td:first-child {
+            background-color: #f8fafc;
+            font-weight: 600;
+            color: var(--text-dark);
+            width: 50px;
+        }
+        .schedule-table tr:hover td {
+            background-color: rgba(227, 242, 253, 0.2);
+        }
+
+        /* Input khusus panel admin jadwal */
+        .admin-table-input {
+            width: 100%;
+            padding: 8px 10px;
+            border: 1px solid var(--light-blue);
+            border-radius: 8px;
+            outline: none;
+            text-align: center;
+            font-family: inherit;
+            font-size: 0.9rem;
+        }
+        .admin-table-input:focus {
+            border-color: var(--primary-blue);
+            background-color: #fafcfe;
         }
     </style>
 </head>
@@ -839,6 +866,26 @@
                     <i class="fa-solid fa-star"></i>
                     <span><strong>Info Hari Ini:</strong> Belum ada pengumuman terbaru. Selamat membaca, Sobat Pustaka!</span>
                 </div>
+                <div class="schedule-section" style="text-align: left; width: 100%;">
+                    <h3><i class="fa-solid fa-calendar-days" style="color: var(--primary-blue);"></i> Jadwal Wajib Kunjung Baca Pinjam</h3>
+                    <p class="subtitle">Gukar Sekolah Kristen Lentera Ambarawa • Tahun Pelajaran 2025/2026</p>
+                    <div class="table-responsive">
+                        <table class="schedule-table">
+                            <thead>
+                                <tr>
+                                    <th>No</th>
+                                    <th>Senin</th>
+                                    <th>Selasa</th>
+                                    <th>Rabu</th>
+                                    <th>Kamis</th>
+                                    <th>Jumat</th>
+                                </tr>
+                            </thead>
+                            <tbody id="userScheduleBody">
+                                </tbody>
+                        </table>
+                    </div>
+                </div>
             </div>
 
             <div id="sub-tata-tertib" class="welcome-card user-sub-page" style="display: none;">
@@ -866,35 +913,7 @@
             </div>
         </div>
     </div>
-    <div class="home-table-section">
-        <h3><i class="fa-solid fa-table-list" style="color: var(--primary-blue);"></i> Informasi & Data Terbaru</h3>
-        <div class="table-responsive">
-            <table class="modern-table">
-                <thead>
-                    <tr>
-                        <th>No</th>
-                        <th>Kategori / Keterangan</th>
-                        <th>Jumlah / Status</th>
-                        <th>Pembaruan Terakhir</th>
-                    </tr>
-                </thead>
-                <tbody id="homeTableBody">
-                    <tr>
-                        <td>1</td>
-                        <td>Buku Terpopuler Bulan Ini</td>
-                        <td>Laskar Pelangi (14x Dipinjam)</td>
-                        <td>Hari Ini</td>
-                    </tr>
-                    <tr>
-                        <td>2</td>
-                        <td>Total Pengunjung Minggu Ini</td>
-                        <td>120 Siswa</td>
-                        <td>Kemarin</td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-    </div>
+
     <div id="loginSection">
         <div class="login-card">
             <i class="fa-solid fa-lock" style="font-size: 3rem; color: var(--primary-blue); margin-bottom: 20px; display: block;"></i>
@@ -921,13 +940,6 @@
                 <h3>Buku</h3>
                 <p>Kelola Katalog</p>
             </div>
-            <div class="card" onclick="openHomeTableManager()">
-                <div class="icon-wrapper">
-                    <i class="fa-solid fa-pen-to-square"></i>
-                </div>
-                <h3>Kelola Tabel Home</h3>
-                <p>Ubah baris data & informasi beranda</p>
-            </div>
             <div class="card" onclick="openLoanManager()">
                 <div class="icon-wrapper"><i class="fa-solid fa-hand-holding-heart"></i></div>
                 <h3>Pinjam</h3>
@@ -953,6 +965,11 @@
                 <div class="icon-wrapper"><i class="fa-solid fa-file-invoice"></i></div>
                 <h3>Laporan</h3>
                 <p>Rekap Transaksi</p>
+            </div>
+            <div class="card" onclick="openScheduleManager()">
+                <div class="icon-wrapper"><i class="fa-solid fa-table-cells"></i></div>
+                <h3>Jadwal Kunjung</h3>
+                <p>Ubah Tabel Beranda</p>
             </div>
         </div>
 
@@ -1228,43 +1245,30 @@
                     </table>
                 </div>
             </div>
-            <div id="homeTableManagerBox" class="admin-detail-box" style="display: none;">
-                <button class="btn-back-admin" onclick="closeHomeTableManager()"><i class="fa-solid fa-arrow-left"></i> Kembali ke Menu Admin</button>
-                <h3>Pengaturan Baris Tabel Home</h3>
-                <p style="color: var(--text-gray); margin-bottom: 20px;">Silakan ubah konten tabel di bawah ini yang akan langsung tampil di halaman depan (Home).</p>
+            <div id="scheduleManagerContainer" style="display: none;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                    <div>
+                        <h3 style="margin: 0; font-size: 1.2rem; color: var(--text-dark);">Pengisian Data Baris Tabel Jadwal Beranda</h3>
+                        <p style="color: var(--text-gray); font-size: 0.9rem; margin-top: 2px;">Silakan isi sel kolom yang kosong di bawah ini. Perubahan akan langsung disimpan ke beranda.</p>
+                    </div>
+                    <button class="btn-save-book" onclick="saveScheduleData()" style="background: var(--success-green);"><i class="fa-solid fa-floppy-disk"></i> Simpan Tabel</button>
+                </div>
                 
-                <div class="book-form-container">
-                    <div class="form-grid">
-                        <div class="form-group">
-                            <label>Baris 1: Keterangan</label>
-                            <input type="text" id="editRow1Ket" value="Buku Terpopuler Bulan Ini">
-                        </div>
-                        <div class="form-group">
-                            <label>Baris 1: Status / Jumlah</label>
-                            <input type="text" id="editRow1Status" value="Laskar Pelangi (14x Dipinjam)">
-                        </div>
-                        <div class="form-group">
-                            <label>Baris 1: Waktu</label>
-                            <input type="text" id="editRow1Time" value="Hari Ini">
-                        </div>
-                    </div>
-                    <div class="form-grid" style="margin-top: 15px;">
-                        <div class="form-group">
-                            <label>Baris 2: Keterangan</label>
-                            <input type="text" id="editRow2Ket" value="Total Pengunjung Minggu Ini">
-                        </div>
-                        <div class="form-group">
-                            <label>Baris 2: Status / Jumlah</label>
-                            <input type="text" id="editRow2Status" value="120 Siswa">
-                        </div>
-                        <div class="form-group">
-                            <label>Baris 2: Waktu</label>
-                            <input type="text" id="editRow2Time" value="Kemarin">
-                        </div>
-                    </div>
-                    <div style="margin-top: 20px;">
-                        <button class="btn-save-book" onclick="saveHomeTableData()">Simpan Perubahan Tabel</button>
-                    </div>
+                <div class="table-responsive" style="background: white; padding: 20px; border-radius: 20px; border: 1px solid var(--light-blue);">
+                    <table class="schedule-table">
+                        <thead>
+                            <tr>
+                                <th>No</th>
+                                <th>Senin</th>
+                                <th>Selasa</th>
+                                <th>Rabu</th>
+                                <th>Kamis</th>
+                                <th>Jumat</th>
+                            </tr>
+                        </thead>
+                        <tbody id="adminScheduleBody">
+                            </tbody>
+                    </table>
                 </div>
             </div>
         </div>
@@ -1470,71 +1474,134 @@ function clearAttendanceLog() {
     }
 }
 // ===========================================================================
-// Fungsi untuk membuka & menutup panel kelola tabel di dashboard admin
-window.openHomeTableManager = function() {
-    // Sembunyikan semua box detail admin lainnya terlebih dahulu jika ada
-    document.querySelectorAll('.admin-detail-box').forEach(box => box.style.display = 'none');
-    // Tampilkan box editor tabel home
-    document.getElementById('homeTableManagerBox').style.style.display = 'block';
-};
+// ==================== LOGIKA TRANSAKSI TABEL JADWAL HOME ====================
+const TOTAL_ROWS = 12;
+const DAYS_KEY = ['senin', 'selasa', 'rabu', 'kamis', 'jumat'];
 
-window.closeHomeTableManager = function() {
-    document.getElementById('homeTableManagerBox').style.style.display = 'none';
-};
+// Fungsi inisialisasi awal saat halaman dibuka
+function initScheduleTable() {
+    let savedSchedule = localStorage.getItem('library_schedule_data');
+    if (!savedSchedule) {
+        // Buat data kosong sebanyak 12 baris jika data belum ada
+        let emptyData = {};
+        for (let i = 1; i <= TOTAL_ROWS; i++) {
+            emptyData[i] = { senin: "", selasa: "", rabu: "", kamis: "", jumat: "" };
+        }
+        localStorage.setItem('library_schedule_data', JSON.stringify(emptyData));
+    }
+    renderUserScheduleTable();
+}
 
-// Fungsi menyimpan perubahan dari admin ke tabel depan
-window.saveHomeTableData = function() {
-    const dataTabel = {
-        r1Ket: document.getElementById('editRow1Ket').value,
-        r1Stat: document.getElementById('editRow1Status').value,
-        r1Time: document.getElementById('editRow1Time').value,
-        r2Ket: document.getElementById('editRow2Ket').value,
-        r2Stat: document.getElementById('editRow2Status').value,
-        r2Time: document.getElementById('editRow2Time').value
-    };
+// Menampilkan data tabel di halaman Home depan
+function renderUserScheduleTable() {
+    const tbody = document.getElementById('userScheduleBody');
+    if (!tbody) return;
     
-    localStorage.setItem('customHomeTableData', JSON.stringify(dataTabel));
-    renderHomeTable();
-    alert('Tabel di halaman Home berhasil diperbarui!');
-    closeHomeTableManager();
-};
-
-// Fungsi memuat data ke tabel halaman utama
-window.renderHomeTable = function() {
-    const savedData = localStorage.getItem('customHomeTableData');
-    if(savedData) {
-        const data = JSON.parse(savedData);
-        document.getElementById('homeTableBody').innerHTML = `
+    const scheduleData = JSON.parse(localStorage.getItem('library_schedule_data'));
+    let htmlContent = "";
+    
+    for (let i = 1; i <= TOTAL_ROWS; i++) {
+        const rowData = scheduleData[i] || { senin: "", selasa: "", rabu: "", kamis: "", jumat: "" };
+        htmlContent += `
             <tr>
-                <td>1</td>
-                <td>${data.r1Ket}</td>
-                <td>${data.r1Stat}</td>
-                <td>${data.r1Time}</td>
-            </tr>
-            <tr>
-                <td>2</td>
-                <td>${data.r2Ket}</td>
-                <td>${data.r2Stat}</td>
-                <td>${data.r2Time}</td>
+                <td>${i}</td>
+                <td>${rowData.senin}</td>
+                <td>${rowData.selasa}</td>
+                <td>${rowData.rabu}</td>
+                <td>${rowData.kamis}</td>
+                <td>${rowData.jumat}</td>
             </tr>
         `;
-        
-        // Sinkronkan isi input admin agar sesuai data yang tersimpan
-        if(document.getElementById('editRow1Ket')) {
-            document.getElementById('editRow1Ket').value = data.r1Ket;
-            document.getElementById('editRow1Status').value = data.r1Stat;
-            document.getElementById('editRow1Time').value = data.r1Time;
-            document.getElementById('editRow2Ket').value = data.r2Ket;
-            document.getElementById('editRow2Status').value = data.r2Stat;
-            document.getElementById('editRow2Time').value = data.r2Time;
-        }
+    }
+    tbody.innerHTML = htmlContent;
+}
+
+// Membuka Halaman Editor Jadwal di Sisi Admin
+window.openScheduleManager = function() {
+    showAdminDetail('Jadwal Kunjung', 'Kelola Jadwal Wajib Kunjung Baca Pinjam', 'Silakan ubah isi tabel langsung pada kolom yang disediakan di bawah ini.');
+    
+    // Menyembunyikan sub-container admin lainnya untuk mencegah tumpang tindih
+    document.getElementById('crudBookContainer').style.display = 'none';
+    document.getElementById('attendanceContainer').style.display = 'none';
+    if(document.getElementById('loanTransactionContainer')) document.getElementById('loanTransactionContainer').style.display = 'none';
+    if(document.getElementById('returnContainer')) document.getElementById('returnContainer').style.display = 'none';
+    if(document.getElementById('studentContainer')) document.getElementById('studentContainer').style.display = 'none';
+    if(document.getElementById('reportTransactionContainer')) document.getElementById('reportTransactionContainer').style.display = 'none';
+    
+    // Tampilkan container jadwal
+    document.getElementById('scheduleManagerContainer').style.display = 'block';
+    renderAdminScheduleForm();
+}
+
+// Merender form input tabel di menu admin
+function renderAdminScheduleForm() {
+    const tbody = document.getElementById('adminScheduleBody');
+    if (!tbody) return;
+    
+    const scheduleData = JSON.parse(localStorage.getItem('library_schedule_data'));
+    let htmlContent = "";
+    
+    for (let i = 1; i <= TOTAL_ROWS; i++) {
+        const rowData = scheduleData[i] || { senin: "", selasa: "", rabu: "", kamis: "", jumat: "" };
+        htmlContent += `
+            <tr>
+                <td>${i}</td>
+                <td><input type="text" class="admin-table-input" data-row="${i}" data-day="senin" value="${rowData.senin}" placeholder="..."></td>
+                <td><input type="text" class="admin-table-input" data-row="${i}" data-day="selasa" value="${rowData.selasa}" placeholder="..."></td>
+                <td><input type="text" class="admin-table-input" data-row="${i}" data-day="rabu" value="${rowData.rabu}" placeholder="..."></td>
+                <td><input type="text" class="admin-table-input" data-row="${i}" data-day="kamis" value="${rowData.kamis}" placeholder="..."></td>
+                <td><input type="text" class="admin-table-input" data-row="${i}" data-day="jumat" value="${rowData.jumat}" placeholder="..."></td>
+            </tr>
+        `;
+    }
+    tbody.innerHTML = htmlContent;
+}
+
+// Fungsi tombol Simpan Tabel Jadwal oleh Admin
+window.saveScheduleData = function() {
+    let updatedData = {};
+    for (let i = 1; i <= TOTAL_ROWS; i++) {
+        updatedData[i] = { senin: "", selasa: "", rabu: "", kamis: "", jumat: "" };
+    }
+    
+    // Mengambil semua data dari elemen input form admin
+    const inputs = document.querySelectorAll('.admin-table-input');
+    inputs.forEach(input => {
+        const row = input.getAttribute('data-row');
+        const day = input.getAttribute('data-day');
+        updatedData[row][day] = input.value.trim();
+    });
+    
+    localStorage.setItem('library_schedule_data', JSON.stringify(updatedData));
+    renderUserScheduleTable();
+    alert('Jadwal wajib kunjung berhasil diperbarui!');
+    hideAdminDetail();
+}
+
+// Menghubungkan fungsi inisialisasi agar berjalan saat pertama halaman dimuat
+document.addEventListener("DOMContentLoaded", function() {
+    initScheduleTable();
+});
+
+// Modifikasi/override aman pada fungsi bawaan showAdminDetail agar dapat merespon menu Jadwal
+const originalShowAdminDetail = window.showAdminDetail;
+window.showAdminDetail = function(type, title, desc) {
+    if (typeof originalShowAdminDetail === "function") {
+        originalShowAdminDetail(type, title, desc);
+    } else {
+        // Jika fungsi tidak dilepas ke window, pasang status standar layouting detail
+        document.getElementById('adminGrid').style.display = 'none';
+        document.getElementById('adminDetail').style.display = 'block';
+        document.getElementById('detailSubTitle').innerText = title;
+        document.getElementById('detailDesc').innerText = desc;
+    }
+    // Tambahkan kondisi penyembunyian kontainer jadwal jika menu lain yang diakses
+    if (type !== 'Jadwal Kunjung') {
+        const container = document.getElementById('scheduleManagerContainer');
+        if(container) container.style.display = 'none';
     }
 };
-
-// Jalankan fungsi render otomatis saat aplikasi pertama kali dimuat
-document.addEventListener("DOMContentLoaded", function() {
-    renderHomeTable();
-});
+// ============================================================================
     </script>
 
     <script type="module">
