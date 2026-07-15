@@ -1369,57 +1369,67 @@ function submitAttendance() {
     
     if(!inputField) return;
     
-    // `.trim()` digunakan untuk menghapus spasi kosong di awal/akhir input tanpa sengaja
+    // Mengambil nilai barcode dan membersihkan spasi di awal/akhir
     const barcodeValue = inputField.value.trim();
 
     if(!barcodeValue) return;
 
-    // 1. Nilai default jika data siswa tidak ditemukan
+    // 1. Nilai default jika data siswa tidak terdaftar di database
     let namaSiswa = "Pengunjung Umum";
     let kelasSiswa = "-";
 
-    // 2. Pencarian cerdas ke database anggota (localStudentsArray)
+    // 2. Pencarian data secara real-time ke database siswa (localStudentsArray)
     if (typeof localStudentsArray !== 'undefined' && localStudentsArray.length > 0) {
-        
         const siswaDitemukan = localStudentsArray.find(siswa => {
-            // Kita ubah dua-duanya menjadi String murni, lalu hilangkan spasinya agar pencocokan 100% akurat
-            const barcodeDatabase = siswa.barcode ? String(siswa.barcode).trim() : "";
-            const barcodeInput = String(barcodeValue).trim();
-            
+            const barcodeDatabase = siswa.barcode ? String(siswa.barcode).trim().toLowerCase() : "";
+            const barcodeInput = String(barcodeValue).trim().toLowerCase();
             return barcodeDatabase === barcodeInput;
         });
         
-        // Jika ditemukan, ambil data asli dari database siswa Anda
+        // Jika siswa terdaftar, ambil nama dan kelas aslinya
         if(siswaDitemukan) {
             namaSiswa = siswaDitemukan.name || siswaDitemukan.nama || "Siswa Aktif";
             kelasSiswa = siswaDitemukan.class || siswaDitemukan.kelas || "-";
+        } else {
+            // Backup pencarian opsional ke masterSiswa lokal (jika ada)
+            if (typeof masterSiswa !== 'undefined' && masterSiswa[barcodeValue]) {
+                namaSiswa = masterSiswa[barcodeValue].nama;
+                kelasSiswa = masterSiswa[barcodeValue].kelas;
+            }
         }
+    } else if (typeof masterSiswa !== 'undefined' && masterSiswa[barcodeValue]) {
+        // Fallback jika array Firebase belum termuat sempurna
+        namaSiswa = masterSiswa[barcodeValue].nama;
+        kelasSiswa = masterSiswa[barcodeValue].kelas;
     }
 
     const now = new Date();
     const timeString = now.toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit', second: '2-digit' }) + " WIB";
     const dateString = now.toLocaleDateString('id-ID');
 
+    // Menyimpan data terstruktur (Barcode, Nama, dan Kelas) ke objek log
     const newLog = {
         waktu: timeString,
         tanggal: dateString,
         id: barcodeValue,
         nama: namaSiswa,
-        status: kelasSiswa
+        status: kelasSiswa // Properti status digunakan untuk menampung data Kelas siswa
     };
 
-    // Masukkan ke baris paling atas di tabel log absensi
+    // Masukkan ke baris paling atas log absensi
     attendanceData.unshift(newLog);
     localStorage.setItem('attendance_logs', JSON.stringify(attendanceData));
 
-    // Memunculkan pesan sukses di bawah kotak input
-    msgEl.style.color = '#2ecc71';
-    msgEl.innerHTML = `<i class="fa-solid fa-circle-check"></i> Absen Berhasil! Selamat Datang, <b>${namaSiswa}</b> (${kelasSiswa})`;
+    // Memunculkan pesan notifikasi sukses dengan Nama & Kelas
+    msgEl.style.color = '#2563eb';
+    msgEl.innerHTML = `<i class="fa-solid fa-circle-check"></i> Absen Berhasil! Selamat Datang, <b>${namaSiswa}</b> (Kelas: ${kelasSiswa})`;
     msgEl.style.display = 'block';
 
-    // Reset kotak input agar siap discan kembali
+    // Reset dan fokuskan kembali input untuk scan barcode selanjutnya
     inputField.value = '';
     inputField.focus();
+    
+    // Perbarui tabel visual dan statistik dashboard
     renderAttendanceTable();
     calculateAttendanceStats();
 
