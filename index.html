@@ -1363,7 +1363,7 @@ function handleAttendancePress(e) {
     if(e.key === 'Enter') submitAttendance();
 }
 
-function submitAttendance() {
+window.submitAttendance = function() {
     const inputField = document.getElementById('attendanceInput');
     const msgEl = document.getElementById('attendanceMsg');
     
@@ -1372,11 +1372,11 @@ function submitAttendance() {
     const barcodeValue = inputField.value.trim();
     if(!barcodeValue) return;
 
-    // Nilai default jika tidak ditemukan di database siswa
+    // Default jika barcode tidak/belum terdaftar di database siswa
     let namaSiswa = "Pengunjung Umum";
     let kelasSiswa = "-";
 
-    // MENIRU CARA PEMINJAMAN: Mencari langsung ke array database siswa yang aktif
+    // MENIRU PERSIS BAGIAN PEMINJAMAN: Mencari ke localStudentsArray
     if (typeof localStudentsArray !== 'undefined' && localStudentsArray.length > 0) {
         const siswaDitemukan = localStudentsArray.find(siswa => {
             const barcodeDB = siswa.barcode ? String(siswa.barcode).trim().toLowerCase() : "";
@@ -1385,6 +1385,7 @@ function submitAttendance() {
         });
         
         if(siswaDitemukan) {
+            // Mengambil field .name dan .class sesuai database Firestore Anda
             namaSiswa = siswaDitemukan.name || "Siswa Aktif";
             kelasSiswa = siswaDitemukan.class || "-";
         }
@@ -1394,10 +1395,10 @@ function submitAttendance() {
     const timeString = now.toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit', second: '2-digit' }) + " WIB";
     const dateString = now.toLocaleDateString('id-ID');
 
-    // Simpan objek log lengkap dengan nama dan kelas hasil pencarian database
+    // Membuat objek log baru dengan properti nama dan kelas hasil pencarian database
     const newLog = {
         waktu: timeString,
-        tanggal: dateString, // Disamakan dengan 'tanggal' agar statistik dashboard Anda tidak eror/nol
+        tanggal: dateString, // Menggunakan 'tanggal' agar sesuai fungsi statistik harian Anda
         id: barcodeValue,
         nama: namaSiswa,
         kelas: kelasSiswa
@@ -1406,7 +1407,7 @@ function submitAttendance() {
     attendanceData.unshift(newLog);
     localStorage.setItem('attendance_logs', JSON.stringify(attendanceData));
 
-    // Notifikasi popup di bawah form input
+    // Menampilkan pesan sukses tepat di bawah input box
     msgEl.style.color = '#2563eb';
     msgEl.innerHTML = `<i class="fa-solid fa-circle-check"></i> Absen Berhasil! Selamat Datang, <b>${namaSiswa}</b> (Kelas: ${kelasSiswa})`;
     msgEl.style.display = 'block';
@@ -1419,7 +1420,7 @@ function submitAttendance() {
 
     setTimeout(() => { msgEl.style.display = 'none'; }, 4000);
 }
-function renderAttendanceTable() {
+window.renderAttendanceTable = function() {
     const tbody = document.getElementById('attendanceTableBody');
     if(!tbody) return;
     
@@ -1433,9 +1434,11 @@ function renderAttendanceTable() {
     attendanceData.forEach((log, index) => {
         const tr = document.createElement('tr');
         
+        // Membaca data nama dan kelas dari log (atau default jika kosong/log lama)
         const namaTampil = log.nama || "Pengunjung Umum";
         const kelasTampil = log.kelas || "-";
         
+        // Tentukan badge status berdasarkan ada tidaknya kelas
         const statusBadge = kelasTampil !== "-" 
             ? `<span class="badge badge-success">Siswa</span>` 
             : `<span class="badge badge-warning">Umum</span>`;
