@@ -1369,94 +1369,92 @@ function submitAttendance() {
     
     if(!inputField) return;
     
-    // Mengambil nilai barcode dan membersihkan spasi di awal/akhir
     const barcodeValue = inputField.value.trim();
-
     if(!barcodeValue) return;
 
-    // 1. Nilai default jika data siswa tidak terdaftar di database
+    // Nilai default jika data siswa tidak ditemukan
     let namaSiswa = "Pengunjung Umum";
     let kelasSiswa = "-";
 
-    // 2. Pencarian data secara real-time ke database siswa (localStudentsArray)
+    // Cari data di database siswa Firebase (localStudentsArray)
     if (typeof localStudentsArray !== 'undefined' && localStudentsArray.length > 0) {
         const siswaDitemukan = localStudentsArray.find(siswa => {
-            const barcodeDatabase = siswa.barcode ? String(siswa.barcode).trim().toLowerCase() : "";
+            const barcodeDB = siswa.barcode ? String(siswa.barcode).trim().toLowerCase() : "";
             const barcodeInput = String(barcodeValue).trim().toLowerCase();
-            return barcodeDatabase === barcodeInput;
+            return barcodeDB === barcodeInput;
         });
         
-        // Jika siswa terdaftar, ambil nama dan kelas aslinya
         if(siswaDitemukan) {
-            namaSiswa = siswaDitemukan.name || siswaDitemukan.nama || "Siswa Aktif";
-            kelasSiswa = siswaDitemukan.class || siswaDitemukan.kelas || "-";
-        } else {
-            // Backup pencarian opsional ke masterSiswa lokal (jika ada)
-            if (typeof masterSiswa !== 'undefined' && masterSiswa[barcodeValue]) {
-                namaSiswa = masterSiswa[barcodeValue].nama;
-                kelasSiswa = masterSiswa[barcodeValue].kelas;
-            }
+            namaSiswa = siswaDitemukan.name || "-";
+            kelasSiswa = siswaDitemukan.class || "-";
         }
-    } else if (typeof masterSiswa !== 'undefined' && masterSiswa[barcodeValue]) {
-        // Fallback jika array Firebase belum termuat sempurna
-        namaSiswa = masterSiswa[barcodeValue].nama;
-        kelasSiswa = masterSiswa[barcodeValue].kelas;
     }
 
     const now = new Date();
     const timeString = now.toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit', second: '2-digit' }) + " WIB";
     const dateString = now.toLocaleDateString('id-ID');
 
-    // Menyimpan data terstruktur (Barcode, Nama, dan Kelas) ke objek log
+    // Simpan objek lengkap ke dalam log
     const newLog = {
         waktu: timeString,
-        tanggal: dateString,
+        date: dateString, // Menyesuaikan nama properti bawaan kode Anda (date)
         id: barcodeValue,
         nama: namaSiswa,
-        status: kelasSiswa // Properti status digunakan untuk menampung data Kelas siswa
+        kelas: kelasSiswa
     };
 
-    // Masukkan ke baris paling atas log absensi
     attendanceData.unshift(newLog);
     localStorage.setItem('attendance_logs', JSON.stringify(attendanceData));
 
-    // Memunculkan pesan notifikasi sukses dengan Nama & Kelas
+    // Tampilkan notifikasi sukses
     msgEl.style.color = '#2563eb';
-    msgEl.innerHTML = `<i class="fa-solid fa-circle-check"></i> Absen Berhasil! Selamat Datang, <b>${namaSiswa}</b> (Kelas: ${kelasSiswa})`;
+    msgEl.innerHTML = `<i class="fa-solid fa-circle-check"></i> Absen Berhasil! <b>${namaSiswa}</b> (${kelasSiswa})`;
     msgEl.style.display = 'block';
 
-    // Reset dan fokuskan kembali input untuk scan barcode selanjutnya
     inputField.value = '';
     inputField.focus();
     
-    // Perbarui tabel visual dan statistik dashboard
+    // Render ulang tabel dan update statistik
     renderAttendanceTable();
     calculateAttendanceStats();
 
-    // Sembunyikan notifikasi setelah 4 detik
     setTimeout(() => { msgEl.style.display = 'none'; }, 4000);
 }
 function renderAttendanceTable() {
     const tbody = document.getElementById('attendanceTableBody');
     if(!tbody) return;
-
-    const todayStr = new Date().toLocaleDateString('id-ID');
-    const todayLogs = attendanceData.filter(item => item.tanggal === todayStr);
-
-    if(todayLogs.length === 0) {
-        tbody.innerHTML = `<tr><td colspan="5" style="text-align: center; color: var(--text-gray);">Belum ada data absensi masuk hari ini.</td></tr>`;
+    
+    tbody.innerHTML = '';
+    
+    if(attendanceData.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="5" style="text-align:center; color:var(--text-gray);">Belum ada data absensi hari ini.</td></tr>`;
         return;
     }
+    
+    attendanceData.forEach((log, index) => {
+        const tr = document.createElement('tr');
+        
+        // Ambil nilai nama dan kelas dari log, berikan fallback jika log lama masih kosong
+        const namaTampil = log.nama || "Pengunjung Umum";
+        const kelasTampil = log.kelas || "-";
+        
+        // Tentukan badge status berdasarkan kelas
+        const statusBadge = kelasTampil !== "-" 
+            ? `<span class="badge badge-success">Siswa</span>` 
+            : `<span class="badge badge-warning">Umum</span>`;
 
-    tbody.innerHTML = todayLogs.map((item, index) => `
-        <tr>
-            <td><b>${index + 1}</b></td>
-            <td><i class="fa-regular fa-clock" style="color: var(--primary-blue)"></i> ${item.waktu}</td>
-            <td><code>${item.id}</code></td>
-            <td><strong>${item.nama}</strong></td>
-            <td><span class="badge badge-returned" style="background-color: var(--primary-blue); color: white; padding: 4px 10px; border-radius: 8px; font-size: 0.85rem;">${item.status}</span></td>
-        </tr>
-    `).join('');
+        tr.innerHTML = `
+            <td>${index + 1}</td>
+            <td>${log.waktu}</td>
+            <td>${log.id}</td>
+            <td>
+                <div style="font-weight:600; color:var(--text-dark);">${namaTampil}</div>
+                <div style="font-size:0.8rem; color:var(--text-gray);">Kelas: ${kelasTampil}</div>
+            </td>
+            <td>${statusBadge}</td>
+        `;
+        tbody.appendChild(tr);
+    });
 }
 
 function calculateAttendanceStats() {
