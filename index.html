@@ -1372,11 +1372,11 @@ function submitAttendance() {
     const barcodeValue = inputField.value.trim();
     if(!barcodeValue) return;
 
-    // Nilai default jika data siswa tidak ditemukan
+    // Nilai default awal
     let namaSiswa = "Pengunjung Umum";
     let kelasSiswa = "-";
 
-    // Cari data di database siswa Firebase (localStudentsArray)
+    // Cari langsung ke localStudentsArray (Array utama data Firebase Anda)
     if (typeof localStudentsArray !== 'undefined' && localStudentsArray.length > 0) {
         const siswaDitemukan = localStudentsArray.find(siswa => {
             const barcodeDB = siswa.barcode ? String(siswa.barcode).trim().toLowerCase() : "";
@@ -1385,7 +1385,8 @@ function submitAttendance() {
         });
         
         if(siswaDitemukan) {
-            namaSiswa = siswaDitemukan.name || "-";
+            // Sesuai properti di Firebase Anda: .name dan .class
+            namaSiswa = siswaDitemukan.name || "Siswa Aktif";
             kelasSiswa = siswaDitemukan.class || "-";
         }
     }
@@ -1394,10 +1395,10 @@ function submitAttendance() {
     const timeString = now.toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit', second: '2-digit' }) + " WIB";
     const dateString = now.toLocaleDateString('id-ID');
 
-    // Simpan objek lengkap ke dalam log
+    // Buat log dengan data lengkap
     const newLog = {
         waktu: timeString,
-        date: dateString, // Menyesuaikan nama properti bawaan kode Anda (date)
+        date: dateString,
         id: barcodeValue,
         nama: namaSiswa,
         kelas: kelasSiswa
@@ -1406,7 +1407,7 @@ function submitAttendance() {
     attendanceData.unshift(newLog);
     localStorage.setItem('attendance_logs', JSON.stringify(attendanceData));
 
-    // Tampilkan notifikasi sukses
+    // Notifikasi popup di bawah form
     msgEl.style.color = '#2563eb';
     msgEl.innerHTML = `<i class="fa-solid fa-circle-check"></i> Absen Berhasil! <b>${namaSiswa}</b> (${kelasSiswa})`;
     msgEl.style.display = 'block';
@@ -1414,7 +1415,6 @@ function submitAttendance() {
     inputField.value = '';
     inputField.focus();
     
-    // Render ulang tabel dan update statistik
     renderAttendanceTable();
     calculateAttendanceStats();
 
@@ -1434,12 +1434,13 @@ function renderAttendanceTable() {
     attendanceData.forEach((log, index) => {
         const tr = document.createElement('tr');
         
-        // Ambil nilai nama dan kelas dari log, berikan fallback jika log lama masih kosong
-        const namaTampil = log.nama || "Pengunjung Umum";
-        const kelasTampil = log.kelas || "-";
+        // Ambil data dari log, jika kosong gunakan data default
+        const namaSiswa = log.nama || "Pengunjung Umum";
+        const kelasSiswa = log.kelas || "-";
         
-        // Tentukan badge status berdasarkan kelas
-        const statusBadge = kelasTampil !== "-" 
+        // Cek tipe badge status berdasarkan kelas siswa
+        const isSiswa = kelasSiswa !== "-";
+        const statusBadge = isSiswa 
             ? `<span class="badge badge-success">Siswa</span>` 
             : `<span class="badge badge-warning">Umum</span>`;
 
@@ -1448,15 +1449,14 @@ function renderAttendanceTable() {
             <td>${log.waktu}</td>
             <td>${log.id}</td>
             <td>
-                <div style="font-weight:600; color:var(--text-dark);">${namaTampil}</div>
-                <div style="font-size:0.8rem; color:var(--text-gray);">Kelas: ${kelasTampil}</div>
+                <div style="font-weight: 600; color: var(--text-dark);">${namaSiswa}</div>
+                <div style="font-size: 0.8rem; color: var(--text-gray);">Kelas: ${kelasSiswa}</div>
             </td>
             <td>${statusBadge}</td>
         `;
         tbody.appendChild(tr);
     });
 }
-
 function calculateAttendanceStats() {
     const todayStr = new Date().toLocaleDateString('id-ID');
     
