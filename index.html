@@ -1372,13 +1372,13 @@ function submitAttendance() {
     const barcodeValue = inputField.value.trim();
     if(!barcodeValue) return;
 
-    // Default jika barcode tidak terdaftar di database Firebase Anda
+    // Default jika barcode tidak/belum terdaftar di data siswa Firebase
     let namaSiswa = "Pengunjung Umum";
     let kelasSiswa = "-";
 
-    // Menyelaraskan dengan variabel asli di kode Anda yaitu 'studentsData'
-    if (typeof studentsData !== 'undefined' && studentsData.length > 0) {
-        const siswaDitemukan = studentsData.find(siswa => {
+    // MENCARI DATA BERDASARKAN VARIABEL ASLI ANDA: localStudentsArray
+    if (typeof localStudentsArray !== 'undefined' && localStudentsArray.length > 0) {
+        const siswaDitemukan = localStudentsArray.find(siswa => {
             const barcodeDB = siswa.barcode ? String(siswa.barcode).trim().toLowerCase() : "";
             const barcodeInput = String(barcodeValue).trim().toLowerCase();
             return barcodeDB === barcodeInput;
@@ -1394,10 +1394,10 @@ function submitAttendance() {
     const timeString = now.toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit', second: '2-digit' }) + " WIB";
     const dateString = now.toLocaleDateString('id-ID');
 
-    // Membuat objek log baru dengan properti lengkap
+    // Menyimpan tanggal lengkap untuk keperluan pencarian atau filter statistik hari ini
     const newLog = {
         waktu: timeString,
-        date: dateString,
+        tanggal: dateString, // Diubah menjadi 'tanggal' agar sesuai dengan kalkulasi statistik harian Anda
         id: barcodeValue,
         nama: namaSiswa,
         kelas: kelasSiswa
@@ -1406,7 +1406,7 @@ function submitAttendance() {
     attendanceData.unshift(newLog);
     localStorage.setItem('attendance_logs', JSON.stringify(attendanceData));
 
-    // Menampilkan pesan sukses tepat di bawah input
+    // Menampilkan pesan notifikasi berhasil scan di bawah input
     msgEl.style.color = '#2563eb';
     msgEl.innerHTML = `<i class="fa-solid fa-circle-check"></i> Absen Berhasil! Selamat Datang, <b>${namaSiswa}</b> (Kelas: ${kelasSiswa})`;
     msgEl.style.display = 'block';
@@ -1433,11 +1433,10 @@ function renderAttendanceTable() {
     attendanceData.forEach((log, index) => {
         const tr = document.createElement('tr');
         
-        // Membaca nama dan kelas dari log (atau default jika kosong)
         const namaTampil = log.nama || "Pengunjung Umum";
         const kelasTampil = log.kelas || "-";
         
-        // Tentukan badge status (Jika kelasnya bukan "-", maka dia Siswa)
+        // Membuat badge status apakah siswa terdaftar atau pengunjung umum
         const statusBadge = kelasTampil !== "-" 
             ? `<span class="badge badge-success">Siswa</span>` 
             : `<span class="badge badge-warning">Umum</span>`;
