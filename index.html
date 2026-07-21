@@ -600,61 +600,6 @@
         .rule-card h4 { font-size: 1.05rem; font-weight: 700; color: var(--text-dark); margin-bottom: 6px; }
         .rule-card p { font-size: 0.9rem; color: var(--text-gray); line-height: 1.55; }
 
-        /* --- PANDUAN PENGUNJUNG: LANGKAH KUNJUNGAN --- */
-        .guide-section {
-            margin-top: 36px;
-            padding-top: 32px;
-            border-top: var(--border-soft);
-        }
-        .guide-section-header {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            margin-bottom: 22px;
-        }
-        .guide-section-header .icon-badge {
-            width: 40px;
-            height: 40px;
-            border-radius: 12px;
-            background: linear-gradient(135deg, #14b8a6, #0d9488);
-            color: white;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1rem;
-            box-shadow: 0 8px 16px -6px rgba(13,148,136,.4);
-            flex-shrink: 0;
-        }
-        .guide-section-header h3 { font-size: 1.15rem; font-weight: 700; color: var(--text-dark); }
-        .guide-section-header p { font-size: 0.88rem; color: var(--text-gray); }
-        .guide-steps {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
-            gap: 16px;
-        }
-        .guide-step {
-            position: relative;
-            background: #f0fdfa;
-            border: 1px solid #ccfbf1;
-            border-radius: var(--radius-md);
-            padding: 20px 18px;
-        }
-        .guide-step-number {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            width: 30px;
-            height: 30px;
-            border-radius: 50%;
-            background: var(--accent-teal);
-            color: white;
-            font-weight: 700;
-            font-size: 0.9rem;
-            margin-bottom: 12px;
-        }
-        .guide-step h4 { font-size: 0.98rem; font-weight: 700; color: var(--text-dark); margin-bottom: 6px; }
-        .guide-step p { font-size: 0.87rem; color: var(--text-gray); line-height: 1.5; }
-
         /* --- KEANGGOTAAN: BADGE ANGGOTA --- */
         .membership-page {
             background: var(--white);
@@ -1796,38 +1741,6 @@
                         <p>Wajib mengembalikan buku dalam kondisi utuh dan tidak rusak.</p>
                     </div>
                 </div>
-
-                <div class="guide-section">
-                    <div class="guide-section-header">
-                        <div class="icon-badge"><i class="fa-solid fa-map-signs"></i></div>
-                        <div>
-                            <h3>Panduan Pengunjung</h3>
-                            <p>Langkah mudah saat berkunjung ke SKL Library.</p>
-                        </div>
-                    </div>
-                    <div class="guide-steps">
-                        <div class="guide-step">
-                            <div class="guide-step-number">1</div>
-                            <h4>Isi Daftar Hadir</h4>
-                            <p>Scan barcode kartu anggota atau input NIS di meja absensi saat masuk.</p>
-                        </div>
-                        <div class="guide-step">
-                            <div class="guide-step-number">2</div>
-                            <h4>Cari Buku</h4>
-                            <p>Telusuri rak sesuai kategori atau tanyakan kepada petugas perpustakaan.</p>
-                        </div>
-                        <div class="guide-step">
-                            <div class="guide-step-number">3</div>
-                            <h4>Proses Peminjaman</h4>
-                            <p>Bawa buku ke meja petugas untuk dicatat sebelum dibawa pulang.</p>
-                        </div>
-                        <div class="guide-step">
-                            <div class="guide-step-number">4</div>
-                            <h4>Kembalikan Tepat Waktu</h4>
-                            <p>Kembalikan buku sebelum batas waktu peminjaman berakhir.</p>
-                        </div>
-                    </div>
-                </div>
             </div>
 
             <div id="sub-keanggotaan" class="user-sub-page membership-page" style="display: none;">
@@ -2286,7 +2199,6 @@
                 theme: '',
                 badgeIcon: 'fa-scale-balanced',
                 badgeText: 'Panduan Pengunjung',
-                showBadge: false,
                 titleMain: 'Tata Tertib',
                 titleAccent: 'Perpustakaan',
                 desc: 'Empat aturan sederhana supaya ruang baca tetap nyaman dan menyenangkan untuk semua.',
@@ -2325,7 +2237,6 @@
 
             document.getElementById('heroBadgeIcon').className = 'fa-solid ' + c.badgeIcon;
             document.getElementById('heroBadgeText').innerText = c.badgeText;
-            document.querySelector('.hero-badge').style.display = (c.showBadge === false) ? 'none' : 'inline-flex';
             document.getElementById('heroTitleMain').innerText = c.titleMain;
             document.getElementById('heroTitleAccent').innerText = c.titleAccent;
             document.getElementById('heroDesc').innerText = c.desc;
