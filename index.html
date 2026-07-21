@@ -3028,6 +3028,11 @@ window.showAdminDetail = function(type, title, desc) {
             renderBooksTable(filtered);
         }
 
+        // Mengecek apakah sebuah buku (berdasarkan barcode) sedang dalam status dipinjam
+        function isBookCurrentlyLoaned(barcode) {
+            return localLoansArray.some(loan => loan.bookBarcode === barcode && loan.status === "Dipinjam");
+        }
+
         /* --- OPAC: PENCARIAN KATALOG UNTUK PENGUNJUNG --- */
         window.searchOpac = function() {
             const keyword = document.getElementById('opacSearchInput').value.toLowerCase().trim();
@@ -3063,13 +3068,20 @@ window.showAdminDetail = function(type, title, desc) {
                 if (book.publisher) metaParts.push(book.publisher);
                 if (book.year) metaParts.push(book.year);
                 const metaHtml = metaParts.length > 0 ? `<div class="opac-meta">${metaParts.join(' &bull; ')}</div>` : '';
+                const loaned = isBookCurrentlyLoaned(book.barcode);
+                const statusBadge = loaned
+                    ? `<span class="badge badge-loaned"><i class="fa-solid fa-clock"></i> Dipinjam</span>`
+                    : `<span class="badge badge-returned"><i class="fa-solid fa-circle-check"></i> Tersedia</span>`;
                 return `
                     <div class="opac-book-card">
                         <div class="opac-book-cover">${coverHtml}</div>
                         <h4>${book.title || ''}</h4>
                         <div class="opac-author">${book.author || ''}</div>
                         ${metaHtml}
-                        <span class="opac-barcode">${book.barcode || ''}</span>
+                        <div style="display:flex; align-items:center; justify-content:space-between; gap:8px; margin-top:4px;">
+                            <span class="opac-barcode">${book.barcode || ''}</span>
+                            ${statusBadge}
+                        </div>
                     </div>`;
             }).join('');
 
@@ -3220,6 +3232,12 @@ window.showAdminDetail = function(type, title, desc) {
                 searchLoanReport();
             } else {
                 renderLoanReportTable(localLoansArray);
+            }
+
+            // Refresh hasil OPAC juga jika sedang menampilkan pencarian, supaya status pinjam selalu terbaru
+            const opacInput = document.getElementById('opacSearchInput');
+            if (opacInput && opacInput.value.trim()) {
+                searchOpac();
             }
         });
 
