@@ -151,14 +151,11 @@
         .hero {
             position: relative;
             background: var(--hero-gradient);
-            height: 520px;
+            min-height: 560px;
             display: flex;
-            justify-content: center;
             align-items: center;
-            text-align: center;
-            padding-bottom: 80px;
-            padding-left: 20px;
-            padding-right: 20px;
+            padding: 150px 8% 110px 8%;
+            overflow: hidden;
         }
         .hero::before {
             content: '';
@@ -178,23 +175,169 @@
             opacity: 0.5;
             pointer-events: none;
         }
-        .hero-content { 
-            position: relative; 
-            z-index: 2; 
-            color: var(--white); 
+        .hero-inner {
+            position: relative;
+            z-index: 2;
+            width: 100%;
+            max-width: 1180px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1.15fr 0.85fr;
+            align-items: center;
+            gap: 40px;
         }
+        .hero-content {
+            color: var(--white);
+            text-align: left;
+        }
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 9px;
+            background: rgba(255, 255, 255, 0.14);
+            border: 1px solid rgba(255, 255, 255, 0.25);
+            backdrop-filter: blur(10px);
+            padding: 8px 18px;
+            border-radius: 30px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            letter-spacing: 0.02em;
+            margin-bottom: 22px;
+        }
+        .hero-badge i { color: var(--accent-amber); }
         .hero h1 { 
-            font-size: 3.5rem; 
+            font-size: 3.4rem; 
             font-weight: 800; 
             letter-spacing: -0.03em;
-            line-height: 1.15; 
-            margin: 5px 0 15px 0;
+            line-height: 1.12; 
+            margin: 0 0 16px 0;
+        }
+        .hero h1 span {
+            background: linear-gradient(100deg, #fde68a, #fdba74);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
         }
         .hero p { 
-            font-size: 1.25rem; 
-            opacity: 0.9; 
+            font-size: 1.15rem; 
+            opacity: 0.88; 
             font-weight: 400; 
-            letter-spacing: 0.02em;
+            letter-spacing: 0.01em;
+            max-width: 460px;
+            line-height: 1.6;
+        }
+        .hero-mini-stats {
+            display: flex;
+            gap: 14px;
+            margin-top: 32px;
+            flex-wrap: wrap;
+        }
+        .hero-mini-stats .mini-stat {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.18);
+            backdrop-filter: blur(10px);
+            padding: 10px 16px;
+            border-radius: 16px;
+            color: var(--white);
+        }
+        .hero-mini-stats .mini-stat i { font-size: 1rem; color: var(--accent-amber); }
+        .hero-mini-stats .mini-stat b { font-size: 1.05rem; font-weight: 700; }
+        .hero-mini-stats .mini-stat span { font-size: 0.78rem; opacity: 0.85; display: block; }
+
+        /* --- HERO VISUAL: KARTU ANGGOTA DIGITAL --- */
+        .hero-visual {
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100%;
+            min-height: 260px;
+        }
+        .library-card {
+            position: relative;
+            z-index: 2;
+            width: 300px;
+            padding: 28px 26px;
+            border-radius: 24px;
+            background: linear-gradient(145deg, rgba(255,255,255,0.18), rgba(255,255,255,0.06));
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            backdrop-filter: blur(16px);
+            box-shadow: 0 30px 60px -20px rgba(15, 12, 60, 0.55);
+            color: var(--white);
+            transform: rotate(-4deg);
+            transition: transform 0.4s ease;
+        }
+        .library-card:hover { transform: rotate(0deg) translateY(-4px); }
+        .library-card-top {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-weight: 700;
+            font-size: 1.05rem;
+            margin-bottom: 26px;
+        }
+        .library-card-top i {
+            background: rgba(255,255,255,0.2);
+            padding: 9px;
+            border-radius: 10px;
+            font-size: 1rem;
+        }
+        .library-card-chip {
+            width: 42px;
+            height: 32px;
+            border-radius: 7px;
+            background: linear-gradient(135deg, #fde68a, #fbbf24);
+            margin-bottom: 22px;
+        }
+        .library-card-title {
+            font-size: 0.72rem;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            opacity: 0.75;
+            margin-bottom: 4px;
+        }
+        .library-card-name {
+            font-size: 1.15rem;
+            font-weight: 700;
+            margin-bottom: 22px;
+        }
+        .library-card-foot {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.78rem;
+            opacity: 0.85;
+            border-top: 1px dashed rgba(255,255,255,0.3);
+            padding-top: 14px;
+        }
+        .floating-chip {
+            position: absolute;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 54px;
+            height: 54px;
+            border-radius: 16px;
+            background: rgba(255,255,255,0.16);
+            border: 1px solid rgba(255,255,255,0.25);
+            backdrop-filter: blur(10px);
+            color: var(--white);
+            font-size: 1.2rem;
+            box-shadow: 0 12px 24px -8px rgba(15, 12, 60, 0.4);
+            animation: floatChip 5s ease-in-out infinite;
+        }
+        .chip-1 { top: 4%; right: 4%; color: var(--accent-amber); animation-delay: 0s; }
+        .chip-2 { bottom: 10%; left: 0%; color: var(--accent-teal); animation-delay: 1.2s; }
+        .chip-3 { top: 46%; right: -6%; color: var(--accent-pink); animation-delay: 2.4s; }
+        @keyframes floatChip {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-12px); }
+        }
+        @media (prefers-reduced-motion: reduce) {
+            .floating-chip { animation: none; }
         }
         
         .wave-container { 
@@ -271,6 +414,66 @@
             color: var(--text-gray); 
             max-width: 700px; 
             line-height: 1.8; 
+        }
+
+        /* --- HOME DASHBOARD (BENTO GRID) --- */
+        .home-page.main-container {
+            max-width: 1180px;
+        }
+        .home-grid {
+            display: grid;
+            grid-template-columns: 1.6fr 1fr;
+            gap: 24px;
+            align-items: start;
+        }
+        .home-welcome {
+            grid-column: 1;
+            background: var(--white);
+            border-radius: var(--radius-lg);
+            padding: 44px 40px;
+            box-shadow: var(--hover-shadow);
+            border: 1px solid rgba(255,255,255,0.8);
+        }
+        .home-welcome .icon-circle {
+            width: 68px;
+            height: 68px;
+            background: var(--primary-gradient);
+            color: var(--white);
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.7rem;
+            margin-bottom: 20px;
+            box-shadow: 0 12px 24px -8px rgba(67, 56, 202, 0.4);
+        }
+        .home-welcome h2 {
+            font-size: 1.7rem;
+            font-weight: 700;
+            color: var(--text-dark);
+            margin-bottom: 12px;
+            letter-spacing: -0.01em;
+        }
+        .home-welcome p {
+            font-size: 1.02rem;
+            color: var(--text-gray);
+            line-height: 1.75;
+            max-width: 560px;
+        }
+        .home-stats-col {
+            grid-column: 2;
+            display: flex;
+            flex-direction: column;
+            gap: 18px;
+            height: 100%;
+        }
+        .home-stats-col .book-notif-card {
+            flex: 1;
+            align-items: center;
+        }
+        .home-schedule {
+            grid-column: 1 / -1;
+            margin-top: 0;
         }
 
         .info-bar {
@@ -974,15 +1177,23 @@
                 display: block; 
             }
             .hero { 
-                height: 440px; 
-                padding-top: 100px; 
-                padding-bottom: 40px;
+                min-height: 0;
+                padding: 110px 6% 60px 6%;
             }
+            .hero-inner {
+                grid-template-columns: 1fr;
+                gap: 30px;
+                text-align: center;
+            }
+            .hero-content { text-align: center; }
+            .hero p { margin-left: auto; margin-right: auto; }
+            .hero-mini-stats { justify-content: center; }
+            .hero-visual { display: none; }
             .hero h1 { 
-                font-size: 2.4rem; 
+                font-size: 2.2rem; 
             }
             .hero p { 
-                font-size: 1.1rem; 
+                font-size: 1.05rem; 
             }
             .wave-container svg { 
                 height: 50px; 
@@ -993,6 +1204,18 @@
             .welcome-card { 
                 padding: 35px 20px; 
                 border-radius: 20px; 
+            }
+            .home-grid {
+                grid-template-columns: 1fr;
+            }
+            .home-welcome, .home-stats-col {
+                grid-column: 1;
+            }
+            .home-stats-col {
+                flex-direction: row;
+            }
+            .home-welcome {
+                padding: 32px 24px;
             }
             .welcome-card h2 { 
                 font-size: 1.6rem; 
@@ -1204,10 +1427,31 @@
 
     <div id="userSection">
         <div class="hero">
-            <div class="hero-content">
-                <p>Halo, Selamat Datang!</p>
-                <h1>Perpustakaan Digital</h1>
-                <p>SD Kristen Pelangi Bangsa</p>
+            <div class="hero-inner">
+                <div class="hero-content">
+                    <span class="hero-badge"><i class="fa-solid fa-sparkles"></i> Perpustakaan Digital Sekolah</span>
+                    <h1>Ayo Membaca<br><span>Hari Ini!</span></h1>
+                    <p>Selamat datang di SKL Library — jendela dunia milik SD Kristen Pelangi Bangsa. Temukan buku, jadwal kunjungan, dan info terbaru di satu tempat.</p>
+                    <div class="hero-mini-stats">
+                        <div class="mini-stat"><i class="fa-solid fa-book"></i> <div><b id="heroTotalJudul">0</b><span>Judul Buku</span></div></div>
+                        <div class="mini-stat"><i class="fa-solid fa-layer-group"></i> <div><b id="heroTotalEksemplar">0</b><span>Eksemplar</span></div></div>
+                    </div>
+                </div>
+                <div class="hero-visual">
+                    <div class="library-card">
+                        <div class="library-card-top"><i class="fa-solid fa-book-open"></i> SKL Library</div>
+                        <div class="library-card-chip"></div>
+                        <div class="library-card-title">Kartu Anggota Digital</div>
+                        <div class="library-card-name">SD Kristen Pelangi Bangsa</div>
+                        <div class="library-card-foot">
+                            <span>Tahun Ajaran 2025/2026</span>
+                            <i class="fa-solid fa-qrcode"></i>
+                        </div>
+                    </div>
+                    <div class="floating-chip chip-1"><i class="fa-solid fa-star"></i></div>
+                    <div class="floating-chip chip-2"><i class="fa-solid fa-bookmark"></i></div>
+                    <div class="floating-chip chip-3"><i class="fa-solid fa-graduation-cap"></i></div>
+                </div>
             </div>
             <div class="wave-container">
                 <svg data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 120" preserveAspectRatio="none">
@@ -1216,49 +1460,54 @@
             </div>
         </div>
 
-        <div class="main-container">
-            <div id="sub-home" class="welcome-card user-sub-page">
-                <div class="icon-circle"><i class="fa-solid fa-face-smile"></i></div>
-                <h2>Ayo Membaca Hari Ini!</h2>
-                <p>Buku adalah jendela dunia. Di sini kamu bisa menemukan banyak petualangan seru melalui cerita dan ilmu pengetahuan yang luar biasa. Sudah siap menjelajah?</p>
-                <div class="info-bar">
-                    <i class="fa-solid fa-star"></i>
-                    <span><strong>Info Hari Ini:</strong> Belum ada pengumuman terbaru. Selamat membaca, Sobat Pustaka!</span>
-                </div>
-                <div class="schedule-section" style="text-align: left; width: 100%;">
-                    <h3><i class="fa-solid fa-calendar-days" style="color: var(--primary-blue);"></i> Jadwal Kunjungan</h3>
-                    <p class="subtitle">Gukar Sekolah Kristen Lentera Ambarawa • Tahun Pelajaran 2025/2026</p>
-                    <div class="table-responsive">
-                        <table class="schedule-table">
-                            <thead>
-                                <tr>
-                                    <th>No</th>
-                                    <th>Senin</th>
-                                    <th>Selasa</th>
-                                    <th>Rabu</th>
-                                    <th>Kamis</th>
-                                    <th>Jumat</th>
-                                </tr>
-                            </thead>
-                            <tbody id="userScheduleBody">
-                                </tbody>
-                        </table>
-                    </div>
-                </div>
-
-                <div class="book-notif-grid">
-                    <div class="book-notif-card">
-                        <div class="book-notif-icon judul"><i class="fa-solid fa-book"></i></div>
-                        <div class="book-notif-info">
-                            <h4 id="txtTotalJudulBuku">0</h4>
-                            <p>Judul Buku Tercatat di Sistem</p>
+        <div class="main-container home-page">
+            <div id="sub-home" class="user-sub-page">
+                <div class="home-grid">
+                    <div class="home-welcome">
+                        <div class="icon-circle"><i class="fa-solid fa-face-smile"></i></div>
+                        <h2>Ayo Membaca Hari Ini!</h2>
+                        <p>Buku adalah jendela dunia. Di sini kamu bisa menemukan banyak petualangan seru melalui cerita dan ilmu pengetahuan yang luar biasa. Sudah siap menjelajah?</p>
+                        <div class="info-bar">
+                            <i class="fa-solid fa-star"></i>
+                            <span><strong>Info Hari Ini:</strong> Belum ada pengumuman terbaru. Selamat membaca, Sobat Pustaka!</span>
                         </div>
                     </div>
-                    <div class="book-notif-card">
-                        <div class="book-notif-icon eksemplar"><i class="fa-solid fa-layer-group"></i></div>
-                        <div class="book-notif-info">
-                            <h4 id="txtTotalEksemplarBuku">0</h4>
-                            <p>Total Eksemplar Buku</p>
+
+                    <div class="home-stats-col">
+                        <div class="book-notif-card">
+                            <div class="book-notif-icon judul"><i class="fa-solid fa-book"></i></div>
+                            <div class="book-notif-info">
+                                <h4 id="txtTotalJudulBuku">0</h4>
+                                <p>Judul Buku Tercatat di Sistem</p>
+                            </div>
+                        </div>
+                        <div class="book-notif-card">
+                            <div class="book-notif-icon eksemplar"><i class="fa-solid fa-layer-group"></i></div>
+                            <div class="book-notif-info">
+                                <h4 id="txtTotalEksemplarBuku">0</h4>
+                                <p>Total Eksemplar Buku</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="schedule-section home-schedule">
+                        <h3><i class="fa-solid fa-calendar-days" style="color: var(--primary-blue);"></i> Jadwal Kunjungan</h3>
+                        <p class="subtitle">Gukar Sekolah Kristen Lentera Ambarawa • Tahun Pelajaran 2025/2026</p>
+                        <div class="table-responsive">
+                            <table class="schedule-table">
+                                <thead>
+                                    <tr>
+                                        <th>No</th>
+                                        <th>Senin</th>
+                                        <th>Selasa</th>
+                                        <th>Rabu</th>
+                                        <th>Kamis</th>
+                                        <th>Jumat</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="userScheduleBody">
+                                    </tbody>
+                            </table>
                         </div>
                     </div>
                 </div>
@@ -1972,6 +2221,11 @@ window.showAdminDetail = function(type, title, desc) {
 
             totalJudulEl.innerText = judulUnik.size;
             totalEksemplarEl.innerText = totalEksemplar;
+
+            const heroJudulEl = document.getElementById('heroTotalJudul');
+            const heroEksemplarEl = document.getElementById('heroTotalEksemplar');
+            if (heroJudulEl) heroJudulEl.innerText = judulUnik.size;
+            if (heroEksemplarEl) heroEksemplarEl.innerText = totalEksemplar;
         }
 
         window.renderBooksTable = function(dataArray) {
