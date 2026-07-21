@@ -3,26 +3,35 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SKL Library - SD Kristen</title>
+    <title>Pelangi Pustaka - SD Kristen</title>
     
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
     <style>
         :root {
-            --primary-blue: #2563eb;
-            --primary-gradient: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
-            --hero-gradient: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%);
-            --light-blue: #eff6ff;
-            --accent-orange: #f97316;
+            --primary-blue: #4338ca;
+            --primary-blue-light: #6366f1;
+            --primary-gradient: linear-gradient(135deg, #4f46e5 0%, #4338ca 100%);
+            --hero-gradient: linear-gradient(135deg, #312e81 0%, #4338ca 45%, #6366f1 100%);
+            --admin-gradient: linear-gradient(135deg, #1e1b4b 0%, #3730a3 60%, #4f46e5 100%);
+            --light-blue: #eef2ff;
+            --accent-orange: #fb923c;
+            --accent-teal: #14b8a6;
+            --accent-pink: #ec4899;
+            --accent-amber: #f59e0b;
             --text-dark: #0f172a;
             --text-gray: #64748b;
             --white: #ffffff;
-            --bg-body: #f8fafc;
+            --bg-body: #f4f5fb;
             --danger-red: #ef4444;
             --success-green: #10b981;
-            --card-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.05);
-            --hover-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -6px rgba(0, 0, 0, 0.1);
+            --border-soft: 1px solid rgba(15, 23, 42, 0.06);
+            --card-shadow: 0 8px 24px -8px rgba(30, 27, 75, 0.08), 0 2px 8px -2px rgba(30, 27, 75, 0.05);
+            --hover-shadow: 0 25px 50px -12px rgba(67, 56, 202, 0.18), 0 10px 20px -8px rgba(67, 56, 202, 0.1);
+            --radius-lg: 28px;
+            --radius-md: 18px;
+            --radius-sm: 12px;
         }
 
         * { 
@@ -33,7 +42,10 @@
         }
         
         body { 
-            background-color: var(--bg-body); 
+            background-color: var(--bg-body);
+            background-image:
+                radial-gradient(circle at 8% 12%, rgba(99, 102, 241, 0.07), transparent 32%),
+                radial-gradient(circle at 92% 82%, rgba(20, 184, 166, 0.06), transparent 32%);
             color: var(--text-dark); 
             overflow-x: hidden;
             -webkit-font-smoothing: antialiased;
@@ -152,7 +164,18 @@
             content: '';
             position: absolute;
             top: 0; left: 0; right: 0; bottom: 0;
-            background: radial-gradient(circle at top right, rgba(59, 130, 246, 0.4), transparent 60%);
+            background:
+                radial-gradient(circle at top right, rgba(129, 140, 248, 0.45), transparent 60%),
+                radial-gradient(circle at 10% 90%, rgba(20, 184, 166, 0.25), transparent 45%);
+            pointer-events: none;
+        }
+        .hero::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background-image: radial-gradient(rgba(255,255,255,0.16) 1.5px, transparent 1.5px);
+            background-size: 26px 26px;
+            opacity: 0.5;
             pointer-events: none;
         }
         .hero-content { 
@@ -203,9 +226,10 @@
         /* --- CARDS (PERBAIKAN POSISI TEKS TETAP DI TENGAH) --- */
         .welcome-card {
             background: var(--white);
-            border-radius: 40px;
+            border-radius: var(--radius-lg);
             padding: 50px 40px;
-            box-shadow: 0 20px 50px rgba(0,0,0,0.05);
+            box-shadow: var(--hover-shadow);
+            border: 1px solid rgba(255,255,255,0.8);
             text-align: center;
             display: flex;
             flex-direction: column;
@@ -222,19 +246,20 @@
         }
 
         .welcome-card .icon-circle {
-            width: 80px;
-            height: 80px; 
-            background: var(--light-blue); 
-            color: var(--primary-blue);
-            border-radius: 50%; 
+            width: 84px;
+            height: 84px; 
+            background: var(--primary-gradient);
+            color: var(--white);
+            border-radius: 26px; 
             display: flex; 
             align-items: center; 
             justify-content: center;
-            font-size: 2rem; 
+            font-size: 2.1rem; 
             margin-bottom: 25px; 
             flex-shrink: 0;
             margin-left: auto !important;
             margin-right: auto !important;
+            box-shadow: 0 12px 24px -8px rgba(67, 56, 202, 0.4);
         }
         .welcome-card h2 { 
             font-size: 2.2rem; 
@@ -250,15 +275,15 @@
 
         .info-bar {
             margin-top: 30px;
-            background: var(--primary-blue);
+            background: var(--primary-gradient);
             color: white;
             padding: 20px 40px;
-            border-radius: 30px;
+            border-radius: 22px;
             display: flex;
             align-items: center;
             justify-content: center;
             gap: 20px;
-            box-shadow: 0 10px 30px rgba(42, 92, 153, 0.2);
+            box-shadow: 0 15px 35px -10px rgba(67, 56, 202, 0.35);
             width: 100%;
         }
         .info-bar i { font-size: 1.5rem; color: var(--accent-orange); flex-shrink: 0; }
@@ -297,13 +322,36 @@
         }
         .login-card { 
             background: var(--white); 
-            padding: 45px 35px; 
+            padding: 48px 38px; 
             border-radius: 28px;
             box-shadow: var(--hover-shadow); 
             text-align: center; 
             width: 100%; 
             max-width: 440px;
             border: 1px solid rgba(255, 255, 255, 0.7);
+            position: relative;
+            overflow: hidden;
+        }
+        .login-card::before {
+            content: '';
+            position: absolute;
+            top: -60px; left: -60px;
+            width: 160px; height: 160px;
+            background: var(--primary-gradient);
+            opacity: 0.08;
+            border-radius: 50%;
+        }
+        .login-card i.fa-lock {
+            background: var(--primary-gradient);
+            width: 72px; height: 72px;
+            border-radius: 20px;
+            color: var(--white) !important;
+            font-size: 1.8rem !important;
+            display: flex !important;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px auto !important;
+            box-shadow: 0 12px 24px -8px rgba(67, 56, 202, 0.4);
         }
         .login-card input { 
             width: 100%; 
@@ -318,11 +366,11 @@
         }
         .login-card input:focus { 
             border-color: var(--primary-blue);
-            box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.1);
+            box-shadow: 0 0 0 4px rgba(67, 56, 202, 0.1);
         }
         .login-card button { 
             width: 100%; 
-            padding: 14px; 
+            padding: 15px; 
             background: var(--primary-gradient); 
             color: white;
             border: none; 
@@ -331,11 +379,12 @@
             cursor: pointer; 
             font-size: 1rem;
             transition: all 0.2s ease;
-            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.2);
+            box-shadow: 0 10px 22px -6px rgba(67, 56, 202, 0.4);
         }
         .login-card button:hover {
             opacity: 0.95;
-            transform: translateY(-1px);
+            transform: translateY(-2px);
+            box-shadow: 0 14px 26px -6px rgba(67, 56, 202, 0.5);
         }
 
         /* --- ADMIN SECTION --- */
@@ -350,42 +399,72 @@
             justify-content: space-between; 
             align-items: center; 
             margin-bottom: 35px; 
-            background: var(--white); 
-            padding: 25px 40px; 
-            border-radius: 20px; 
-            box-shadow: var(--card-shadow); 
+            background: var(--admin-gradient);
+            padding: 32px 40px; 
+            border-radius: var(--radius-md);
+            box-shadow: 0 20px 40px -14px rgba(30, 27, 75, 0.45);
             gap: 15px;
-            border: 1px solid rgba(255, 255, 255, 0.7);
+            position: relative;
+            overflow: hidden;
+        }
+        .admin-header::before {
+            content: '';
+            position: absolute;
+            top: -80px; right: -40px;
+            width: 260px; height: 260px;
+            background: radial-gradient(circle, rgba(255,255,255,0.12), transparent 70%);
+            pointer-events: none;
+        }
+        .admin-header::after {
+            content: '';
+            position: absolute;
+            bottom: -100px; left: 10%;
+            width: 220px; height: 220px;
+            background: radial-gradient(circle, rgba(20,184,166,0.18), transparent 70%);
+            pointer-events: none;
         }
         .admin-header h2 {
-            font-size: 1.6rem;
+            font-size: 1.7rem;
             letter-spacing: -0.02em;
+            color: var(--white);
+            position: relative;
+            z-index: 1;
+        }
+        .admin-header p {
+            color: rgba(255,255,255,0.65) !important;
+            position: relative;
+            z-index: 1;
         }
         .btn-logout { 
-            background: #fef2f2; 
-            color: var(--danger-red); 
-            border: 1px solid #fee2e2; 
-            padding: 12px 24px;
+            background: rgba(255,255,255,0.1);
+            color: var(--white); 
+            border: 1px solid rgba(255,255,255,0.2);
+            padding: 12px 26px;
             border-radius: 12px; 
             cursor: pointer; 
             font-weight: 600; 
             flex-shrink: 0; 
             transition: all 0.2s ease;
+            position: relative;
+            z-index: 1;
+            backdrop-filter: blur(8px);
         }
         .btn-logout:hover {
             background: var(--danger-red);
+            border-color: var(--danger-red);
             color: white;
+            transform: translateY(-1px);
         }
 
         .grid-container { 
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); 
-            gap: 25px; 
+            gap: 22px; 
         }
         .card { 
             background: var(--white); 
-            border-radius: 20px;
-            padding: 35px 25px; 
+            border-radius: var(--radius-md);
+            padding: 32px 25px; 
             display: flex; 
             flex-direction: column; 
             align-items: center; 
@@ -393,56 +472,75 @@
             box-shadow: var(--card-shadow);
             cursor: pointer; 
             text-align: center;
-            border: 1px solid rgba(255, 255, 255, 0.5);
+            border: var(--border-soft);
+            position: relative;
         }
         .card:hover { 
-            transform: translateY(-6px); 
+            transform: translateY(-8px); 
             background: var(--white); 
             box-shadow: var(--hover-shadow);
-            border-color: var(--primary-blue);
         }
         .icon-wrapper { 
-            width: 64px; 
-            height: 64px; 
-            border-radius: 16px; 
-            background-color: var(--light-blue); 
+            width: 62px; 
+            height: 62px; 
+            border-radius: 18px; 
+            background: var(--light-blue);
             display: flex;
             align-items: center; 
             justify-content: center; 
-            margin-bottom: 20px; 
+            margin-bottom: 18px; 
             color: var(--primary-blue); 
-            font-size: 1.6rem;
+            font-size: 1.5rem;
             transition: all 0.3s ease;
         }
         .card h3 {
-            font-size: 1.2rem;
+            font-size: 1.15rem;
             margin-bottom: 4px;
             color: var(--text-dark);
+            font-weight: 600;
         }
         .card p {
-            font-size: 0.9rem;
+            font-size: 0.88rem;
             color: var(--text-gray);
         }
         .card:hover .icon-wrapper { 
             background: var(--primary-gradient); 
             color: white;
-            transform: scale(1.05);
+            transform: scale(1.08) rotate(-4deg);
+        }
+        /* Variasi warna ikon tiap kartu admin agar dashboard lebih hidup */
+        #adminGrid .card:nth-child(1) .icon-wrapper { background: #eef2ff; color: #4338ca; }
+        #adminGrid .card:nth-child(2) .icon-wrapper { background: #fdf2f8; color: #db2777; }
+        #adminGrid .card:nth-child(3) .icon-wrapper { background: #ecfdf5; color: #059669; }
+        #adminGrid .card:nth-child(4) .icon-wrapper { background: #fffbeb; color: #d97706; }
+        #adminGrid .card:nth-child(5) .icon-wrapper { background: #f0fdfa; color: #0d9488; }
+        #adminGrid .card:nth-child(6) .icon-wrapper { background: #eff6ff; color: #2563eb; }
+        #adminGrid .card:nth-child(7) .icon-wrapper { background: #fef2f2; color: #dc2626; }
+        #adminGrid .card:nth-child(1):hover .icon-wrapper,
+        #adminGrid .card:nth-child(2):hover .icon-wrapper,
+        #adminGrid .card:nth-child(3):hover .icon-wrapper,
+        #adminGrid .card:nth-child(4):hover .icon-wrapper,
+        #adminGrid .card:nth-child(5):hover .icon-wrapper,
+        #adminGrid .card:nth-child(6):hover .icon-wrapper,
+        #adminGrid .card:nth-child(7):hover .icon-wrapper {
+            background: var(--primary-gradient);
+            color: white;
         }
 
         /* Detail Halaman Admin & CRUD */
         .admin-detail-box { 
             display: none;
             background: var(--white); 
-            border-radius: 24px; 
+            border-radius: var(--radius-md); 
             padding: 40px; 
             box-shadow: var(--card-shadow);
-            border: 1px solid rgba(255, 255, 255, 0.7);
+            border: var(--border-soft);
         }
         .btn-back-admin { 
-            background: #f1f5f9; 
-            color: var(--text-gray); 
+            background: var(--light-blue); 
+            color: var(--primary-blue); 
             border: none; 
-            padding: 10px 20px;
+            padding: 10px 22px;
             border-radius: 10px; 
             cursor: pointer; 
             font-weight: 600; 
@@ -451,17 +549,18 @@
             font-size: 0.9rem;
         }
         .btn-back-admin:hover { 
-            background: #e2e8f0;
-            color: var(--text-dark);
+            background: var(--primary-gradient);
+            color: var(--white);
+            transform: translateX(-3px);
         }
 
         /* Styling Form Buku & Siswa */
         .book-form-container { 
-            background: #f8fafc;
+            background: linear-gradient(180deg, #f8faff 0%, #f3f4fb 100%);
             padding: 30px; 
-            border-radius: 18px; 
+            border-radius: var(--radius-sm); 
             margin-bottom: 35px; 
-            border: 1px solid #e2e8f0;
+            border: var(--border-soft);
         }
         .form-grid { 
             display: grid;
@@ -492,21 +591,22 @@
         }
         .form-grid .form-group input:focus { 
             border-color: var(--primary-blue);
-            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.08);
+            box-shadow: 0 0 0 3px rgba(67, 56, 202, 0.1);
         }
         .btn-save-book { 
             background: var(--primary-gradient); 
             color: white; 
             border: none; 
-            padding: 12px 28px;
+            padding: 13px 30px;
             border-radius: 10px; 
             font-weight: 600; 
             cursor: pointer; 
             transition: all 0.2s ease; 
-            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.15);
+            box-shadow: 0 8px 18px -6px rgba(67, 56, 202, 0.35);
         }
         .btn-save-book:hover { 
-            opacity: 0.95;
+            transform: translateY(-2px);
+            box-shadow: 0 12px 22px -6px rgba(67, 56, 202, 0.45);
         }
         .btn-cancel-edit { 
             background: #e2e8f0; 
@@ -525,7 +625,7 @@
 
         /* Styling Info Box Hasil scan */
         .scanned-info-box { 
-            background: #ecf5ff;
+            background: var(--light-blue);
             border-left: 4px solid var(--primary-blue); 
             padding: 18px 24px; 
             border-radius: 12px; 
@@ -533,6 +633,202 @@
             display: flex; 
             justify-content: space-between; 
             align-items: center;
+        }
+
+        /* --- STEP CARD (Minimalis) untuk alur transaksi Pinjam/Kembali/Absensi --- */
+        .step-card {
+            background: var(--white);
+            border-radius: var(--radius-md);
+            padding: 28px 30px;
+            border: var(--border-soft);
+            margin-bottom: 20px;
+            transition: box-shadow 0.25s ease;
+        }
+        .step-card.is-active {
+            box-shadow: var(--card-shadow);
+        }
+        .step-header {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            margin-bottom: 22px;
+        }
+        .step-number {
+            width: 34px;
+            height: 34px;
+            border-radius: 10px;
+            background: var(--light-blue);
+            color: var(--primary-blue);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 0.95rem;
+            flex-shrink: 0;
+        }
+        .step-header.done .step-number {
+            background: var(--success-green);
+            color: white;
+        }
+        .step-header .step-title {
+            font-size: 1.02rem;
+            font-weight: 600;
+            color: var(--text-dark);
+        }
+        .step-header .step-subtitle {
+            font-size: 0.82rem;
+            color: var(--text-gray);
+            margin-top: 1px;
+        }
+        .step-input-row {
+            display: flex;
+            gap: 10px;
+        }
+        .step-input {
+            flex: 1;
+            padding: 13px 18px;
+            border: 1.5px solid #e5e7eb;
+            border-radius: 12px;
+            outline: none;
+            font-size: 0.95rem;
+            transition: all 0.2s ease;
+            background: #fafbff;
+            color: var(--text-dark);
+        }
+        .step-input:focus {
+            border-color: var(--primary-blue);
+            background: var(--white);
+            box-shadow: 0 0 0 3px rgba(67, 56, 202, 0.08);
+        }
+        .btn-minimal {
+            border: none;
+            padding: 0 24px;
+            border-radius: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            font-size: 0.9rem;
+            color: white;
+            transition: all 0.2s ease;
+            white-space: nowrap;
+        }
+        .btn-minimal:hover {
+            filter: brightness(1.05);
+            transform: translateY(-1px);
+        }
+        .btn-minimal-primary { background: var(--primary-blue); }
+        .btn-minimal-success { background: var(--success-green); }
+        .btn-minimal-outline {
+            background: transparent;
+            color: var(--danger-red);
+            border: 1.5px solid #fecaca;
+            padding: 8px 16px;
+            border-radius: 10px;
+            font-size: 0.82rem;
+        }
+        .btn-minimal-outline:hover {
+            background: var(--danger-red);
+            color: white;
+            border-color: var(--danger-red);
+        }
+        .verified-box {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            background: #f8faff;
+            border-radius: 14px;
+            padding: 16px 20px;
+            margin-top: 14px;
+        }
+        .verified-box.success {
+            background: #f0fdf9;
+        }
+        .verified-box .verified-left {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+        .verified-avatar {
+            width: 44px;
+            height: 44px;
+            border-radius: 12px;
+            background: var(--primary-gradient);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.1rem;
+            flex-shrink: 0;
+        }
+        .verified-avatar.success {
+            background: var(--success-green);
+        }
+        .verified-box .verified-label {
+            font-size: 0.78rem;
+            color: var(--text-gray);
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+        }
+        .verified-box .verified-label.success {
+            color: var(--success-green);
+        }
+        .verified-box .verified-name {
+            font-size: 1.05rem;
+            font-weight: 600;
+            color: var(--text-dark);
+        }
+        .verified-box .verified-meta {
+            font-size: 0.85rem;
+            color: var(--text-gray);
+        }
+        .btn-minimal-accent { background: var(--accent-orange); }
+        .btn-minimal-ghost {
+            background: #f1f2f6;
+            color: var(--text-gray);
+            padding: 0 20px;
+        }
+        .btn-minimal-ghost:hover {
+            background: #e5e7eb;
+            color: var(--text-dark);
+        }
+        .step-search-input {
+            width: 100%;
+            padding: 12px 20px 12px 45px;
+            border: 1.5px solid #e5e7eb;
+            border-radius: 25px;
+            outline: none;
+            font-size: 0.92rem;
+            background: #fafbff;
+            transition: all 0.2s ease;
+        }
+        .step-search-input:focus {
+            border-color: var(--primary-blue);
+            background: var(--white);
+            box-shadow: 0 0 0 3px rgba(67, 56, 202, 0.08);
+        }
+        .minimal-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.92rem;
+        }
+        .minimal-table th {
+            text-align: left;
+            padding: 10px 14px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--text-gray);
+            border-bottom: 1.5px solid #f1f2f6;
+        }
+        .minimal-table td {
+            padding: 14px;
+            border-bottom: 1px solid #f5f6fa;
+            color: var(--text-dark);
+        }
+        .minimal-table tr:last-child td {
+            border-bottom: none;
         }
 
         /* Badge Status */
@@ -556,14 +852,24 @@
             color: #047857;
             border: 1px solid #d1fae5;
         }
+        .badge-success {
+            background-color: #ecfdf5;
+            color: #047857;
+            border: 1px solid #d1fae5;
+        }
+        .badge-warning {
+            background-color: #fffbeb;
+            color: #b45309;
+            border: 1px solid #fde68a;
+        }
 
         /* Styling Table */
         .table-responsive { 
             width: 100%;
             overflow-x: auto; 
             margin-top: 25px; 
-            border-radius: 14px;
-            border: 1px solid #e2e8f0;
+            border-radius: var(--radius-sm);
+            border: var(--border-soft);
         }
         .book-table { 
             width: 100%; 
@@ -577,18 +883,18 @@
             border-bottom: 1px solid #f1f5f9; 
         }
         .book-table th { 
-            background-color: #f8fafc; 
-            color: var(--text-dark);
-            font-weight: 600; 
-            font-size: 0.9rem;
+            background: linear-gradient(180deg, #f8faff, #f1f2fb);
+            color: var(--primary-blue);
+            font-weight: 700; 
+            font-size: 0.82rem;
             text-transform: uppercase;
-            letter-spacing: 0.05em;
+            letter-spacing: 0.06em;
         }
         .book-table tr:last-child td {
             border-bottom: none;
         }
         .book-table tr:hover { 
-            background-color: #fafafa;
+            background-color: #f8f9ff;
         }
         
         .btn-action { 
@@ -729,20 +1035,26 @@
         }
         .stat-box { 
             background: var(--white); 
-            border: 1px solid #e2e8f0;
+            border: var(--border-soft);
             padding: 24px; 
-            border-radius: 18px; 
+            border-radius: var(--radius-sm); 
             display: flex; 
             align-items: center; 
             gap: 20px; 
             box-shadow: var(--card-shadow);
+            transition: all 0.25s ease;
+        }
+        .stat-box:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--hover-shadow);
         }
         .stat-box i { 
-            font-size: 1.8rem;
-            color: var(--primary-blue); 
-            background: var(--light-blue); 
-            padding: 14px; 
-            border-radius: 14px; 
+            font-size: 1.7rem;
+            color: var(--white); 
+            background: var(--primary-gradient); 
+            padding: 16px; 
+            border-radius: 16px; 
+            box-shadow: 0 8px 16px -4px rgba(67, 56, 202, 0.35);
         }
         .stat-box .stat-info h4 { 
             font-size: 1.8rem; 
@@ -755,15 +1067,146 @@
             color: var(--text-gray);
             font-weight: 500;
         }
+        /* --- CSS DIAGRAM LINGKARAN KOLEKSI BUKU (HOME) --- */
+        .book-chart-section {
+            margin-top: 30px;
+            width: 100%;
+            background: var(--white);
+            padding: 35px;
+            border-radius: var(--radius-lg);
+            box-shadow: var(--card-shadow);
+            border: var(--border-soft);
+        }
+        .book-chart-section h3 {
+            font-size: 1.3rem;
+            margin-bottom: 5px;
+            color: var(--text-dark);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .book-chart-section p.subtitle {
+            font-size: 0.9rem;
+            color: var(--text-gray);
+            margin-bottom: 25px;
+        }
+        .book-chart-flex {
+            display: flex;
+            align-items: center;
+            gap: 45px;
+            flex-wrap: wrap;
+        }
+        .book-pie-wrapper {
+            position: relative;
+            width: 220px;
+            height: 220px;
+            flex-shrink: 0;
+            margin: 0 auto;
+        }
+        .book-pie {
+            width: 220px;
+            height: 220px;
+            border-radius: 50%;
+            background: conic-gradient(var(--light-blue) 0 100%);
+            box-shadow: 0 8px 20px -6px rgba(30, 27, 75, 0.15);
+            transition: background 0.6s ease;
+        }
+        .book-pie-hole {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 130px;
+            height: 130px;
+            background: var(--white);
+            border-radius: 50%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            box-shadow: inset 0 2px 8px rgba(15, 23, 42, 0.05);
+            text-align: center;
+        }
+        .book-pie-hole h4 {
+            font-size: 1.9rem;
+            font-weight: 700;
+            color: var(--text-dark);
+            line-height: 1.1;
+        }
+        .book-pie-hole span {
+            font-size: 0.72rem;
+            color: var(--text-gray);
+            font-weight: 500;
+            margin-top: 2px;
+        }
+        .book-chart-legend {
+            list-style: none;
+            flex: 1;
+            min-width: 240px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        .book-chart-legend li {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 10px 14px;
+            border-radius: var(--radius-sm);
+            background: var(--bg-body);
+            transition: transform 0.2s ease;
+        }
+        .book-chart-legend li:hover {
+            transform: translateX(4px);
+        }
+        .legend-dot {
+            width: 14px;
+            height: 14px;
+            border-radius: 4px;
+            flex-shrink: 0;
+        }
+        .legend-text {
+            flex: 1;
+            min-width: 0;
+        }
+        .legend-text .legend-title {
+            font-weight: 600;
+            font-size: 0.9rem;
+            color: var(--text-dark);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        .legend-text .legend-sub {
+            font-size: 0.78rem;
+            color: var(--text-gray);
+        }
+        .legend-percentage {
+            font-weight: 700;
+            font-size: 0.95rem;
+            color: var(--primary-blue);
+            flex-shrink: 0;
+        }
+        .book-chart-empty {
+            color: var(--text-gray);
+            font-size: 0.9rem;
+            text-align: center;
+            padding: 20px 0;
+        }
+        @media (max-width: 640px) {
+            .book-chart-section { padding: 25px 20px; }
+            .book-chart-flex { justify-content: center; }
+        }
+
         /* --- CSS TABEL JADWAL KUNJUNG HOME --- */
         .schedule-section {
             margin-top: 45px;
             width: 100%;
             background: var(--white);
             padding: 35px;
-            border-radius: 30px;
-            box-shadow: 0 20px 50px rgba(0,0,0,0.03);
-            border: 1px solid rgba(0,0,0,0.02);
+            border-radius: var(--radius-lg);
+            box-shadow: var(--card-shadow);
+            border: var(--border-soft);
         }
         .schedule-section h3 {
             font-size: 1.3rem;
@@ -789,18 +1232,19 @@
             border: 1px solid #e2e8f0;
         }
         .schedule-table th {
-            background-color: var(--light-blue);
+            background: var(--light-blue);
             color: var(--primary-blue);
             font-weight: 700;
+            border-radius: 8px;
         }
         .schedule-table td:first-child {
-            background-color: #f8fafc;
+            background-color: #f8faff;
             font-weight: 600;
             color: var(--text-dark);
             width: 50px;
         }
         .schedule-table tr:hover td {
-            background-color: rgba(227, 242, 253, 0.2);
+            background-color: rgba(238, 242, 255, 0.6);
         }
 
         /* Input khusus panel admin jadwal */
@@ -825,7 +1269,7 @@
     <nav class="navbar" id="mainNavbar">
         <div class="nav-logo" onclick="showUserSection('home')">
             <i class="fa-solid fa-book-open"></i>
-            <span>SKL Library</span>
+            <span>Pelangi Pustaka</span>
         </div>
         
         <div class="menu-toggle" onclick="toggleMobileMenu()">
@@ -886,12 +1330,29 @@
                         </table>
                     </div>
                 </div>
+
+                <div class="book-chart-section" style="text-align: left;">
+                    <h3><i class="fa-solid fa-chart-pie" style="color: var(--primary-blue);"></i> Statistik Koleksi Buku</h3>
+                    <p class="subtitle">Persentase judul buku dan jumlah eksemplar (buku dengan judul yang sama) yang tercatat di sistem</p>
+                    <div class="book-chart-flex">
+                        <div class="book-pie-wrapper">
+                            <div class="book-pie" id="bookPieChart"></div>
+                            <div class="book-pie-hole">
+                                <h4 id="bookPieTotalEksemplar">0</h4>
+                                <span>Total Eksemplar</span>
+                            </div>
+                        </div>
+                        <ul class="book-chart-legend" id="bookChartLegend">
+                            <li class="book-chart-empty" style="list-style:none;">Memuat data buku...</li>
+                        </ul>
+                    </div>
+                </div>
             </div>
 
             <div id="sub-tata-tertib" class="welcome-card user-sub-page" style="display: none;">
                 <div class="icon-circle"><i class="fa-solid fa-scale-balanced"></i></div>
                 <h2>Tata Tertib Perpustakaan</h2>
-                <p>Mohon dipatuhi peraturan di dalam ruang SKL Library demi kenyamanan bersama:</p>
+                <p>Mohon dipatuhi peraturan di dalam ruang Pelangi Pustaka demi kenyamanan bersama:</p>
                 <ul class="rules-list">
                     <li>Harap tenang dan tidak membuat kegaduhan di area membaca.</li>
                     <li>Menjaga kebersihan dan tidak membawa makanan/minuman ke dalam ruangan.</li>
@@ -929,7 +1390,7 @@
         <div class="admin-header">
             <div>
                 <h2 id="adminTitle">Dashboard Admin</h2>
-                <p style="color: var(--text-gray); font-size: 0.9rem;">Manajemen SKL Library</p>
+                <p style="color: var(--text-gray); font-size: 0.9rem;">Manajemen Perpustakaan Pelangi</p>
             </div>
             <button class="btn-logout" onclick="showUserSection('home')">Keluar</button>
         </div>
@@ -1049,38 +1510,45 @@
                     </div>
                 </div>
             
-                <div class="book-form-container" style="border-left: 5px solid var(--primary-blue);">
-                    <h3 style="margin-bottom: 15px; font-size: 1.1rem; color: var(--text-dark);">
-                        <i class="fa-solid fa-qrcode"></i> Scan Barcode / Input NIS Anggota
-                    </h3>
-                    <div style="display: flex; gap: 10px;">
-                        <input type="text" id="attendanceInput" placeholder="Masukkan Nomor Anggota / Scan Barcode Siswa..." onkeypress="handleAttendancePress(event)" oninput="previewAttendanceStudent()" style="flex: 1; padding: 14px 20px; border: 2px solid var(--light-blue); border-radius: 15px; outline: none; font-size: 1rem;">
-                        <button onclick="submitAttendance()" style="background: var(--primary-blue); color: white; border: none; padding: 0 25px; border-radius: 15px; font-weight: 600; cursor: pointer;">Absen Hadir</button>
-                    </div>
-                    <div id="attendancePreviewBox" class="scanned-info-box" style="display: none; margin-top: 15px;">
+                <div class="step-card is-active">
+                    <div class="step-header">
+                        <div class="step-number"><i class="fa-solid fa-qrcode" style="font-size: 0.85rem;"></i></div>
                         <div>
-                            <p style="font-size: 0.85rem; color: var(--text-gray); font-weight: 600;">Data Siswa Ditemukan:</p>
-                            <h4 id="txtAttendancePreviewName" style="font-size: 1.2rem; color: var(--primary-blue);">Nama Siswa</h4>
-                            <p id="txtAttendancePreviewClass" style="font-size: 0.95rem;">Kelas: -</p>
+                            <div class="step-title">Scan Barcode / Input NIS Anggota</div>
+                            <div class="step-subtitle">Sistem akan mencocokkan data siswa secara otomatis</div>
                         </div>
                     </div>
-                    <p id="attendanceMsg" style="margin-top: 10px; font-size: 0.9rem; font-weight: 600; display: none;"></p>
+                    <div class="step-input-row">
+                        <input type="text" id="attendanceInput" class="step-input" placeholder="Masukkan Nomor Anggota / Scan Barcode Siswa..." onkeypress="handleAttendancePress(event)" oninput="previewAttendanceStudent()">
+                        <button onclick="submitAttendance()" class="btn-minimal btn-minimal-primary">Absen Hadir</button>
+                    </div>
+                    <div id="attendancePreviewBox" class="verified-box" style="display: none;">
+                        <div class="verified-left">
+                            <div class="verified-avatar"><i class="fa-solid fa-user"></i></div>
+                            <div>
+                                <p class="verified-label">Data Siswa Ditemukan</p>
+                                <h4 id="txtAttendancePreviewName" class="verified-name">Nama Siswa</h4>
+                                <p id="txtAttendancePreviewClass" class="verified-meta">Kelas: -</p>
+                            </div>
+                        </div>
+                    </div>
+                    <p id="attendanceMsg" style="margin-top: 14px; font-size: 0.9rem; font-weight: 600; display: none;"></p>
                 </div>
             
                 <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 30px; margin-bottom: 15px; flex-wrap: wrap; gap: 15px;">
                     <h3 style="margin: 0; font-size: 1.2rem; color: var(--text-dark);">Riwayat Absensi Hari Ini</h3>
                     <div style="display: flex; gap: 10px; flex-wrap: wrap;">
-                        <button onclick="downloadAttendanceBackupCSV()" style="background-color: #2ecc71; color: white; border: none; padding: 8px 15px; border-radius: 5px; cursor: pointer; font-weight: bold; display: flex; align-items: center; gap: 8px;">
+                        <button onclick="downloadAttendanceBackupCSV()" class="btn-minimal btn-minimal-success" style="padding: 10px 18px; display: flex; align-items: center; gap: 8px; font-size: 0.85rem;">
                             <i class="fa-solid fa-file-excel"></i> Backup Data Absensi
                         </button>
-                        <button onclick="clearAttendanceLog()" style="background-color: var(--danger-red); color: white; border: none; padding: 8px 15px; border-radius: 8px; cursor: pointer; font-size: 0.85rem; font-weight: 600;">
+                        <button onclick="clearAttendanceLog()" class="btn-minimal-outline" style="padding: 10px 18px; font-size: 0.85rem;">
                             <i class="fa-solid fa-trash-can"></i> Bersihkan Log
                         </button>
                     </div>
                 </div>
             
-                <div class="table-responsive">
-                    <table class="book-table" style="background: white; border-radius: 20px;">
+                <div class="table-responsive" style="border: none;">
+                    <table class="minimal-table">
                         <thead>
                             <tr>
                                 <th>No</th>
@@ -1097,33 +1565,48 @@
                 </div>
             </div>
             <div id="loanTransactionContainer" style="display: none;">
-                <div class="book-form-container">
-                    <h3 style="margin-bottom: 15px; font-size: 1.1rem; color: var(--primary-blue);"><i class="fa-solid fa-id-card"></i> Langkah 1: Scan Barcode Anggota Siswa</h3>
-                    <div style="display: flex; gap: 10px; margin-bottom: 15px;">
-                        <input type="text" id="loanStudentBarcodeInput" placeholder="Masukkan / Scan Barcode Siswa..." onkeypress="handleStudentScan(event)" style="flex: 1; padding: 14px 20px; border: 2px solid var(--light-blue); border-radius: 15px; outline: none; font-size: 1rem;">
-                        <button onclick="checkStudentLoanBarcode()" style="background: var(--primary-blue); color: white; border: none; padding: 0 25px; border-radius: 15px; font-weight: 600; cursor: pointer;">Cari Siswa</button>
+                <div class="step-card is-active">
+                    <div class="step-header" id="loanStep1Header">
+                        <div class="step-number">1</div>
+                        <div>
+                            <div class="step-title">Scan Barcode Anggota Siswa</div>
+                            <div class="step-subtitle">Pastikan siswa terdaftar sebagai anggota perpustakaan</div>
+                        </div>
+                    </div>
+                    <div class="step-input-row">
+                        <input type="text" id="loanStudentBarcodeInput" class="step-input" placeholder="Masukkan / Scan Barcode Siswa..." onkeypress="handleStudentScan(event)">
+                        <button onclick="checkStudentLoanBarcode()" class="btn-minimal btn-minimal-primary">Cari Siswa</button>
                     </div>
 
-                    <div id="loanStudentInfoBox" class="scanned-info-box" style="display: none;">
-                        <div>
-                            <p style="font-size: 0.85rem; color: var(--text-gray); font-weight: 600;">Siswa Terverifikasi:</p>
-                            <h4 id="txtLoanStudentName" style="font-size: 1.2rem; color: var(--primary-blue);">Nama Siswa</h4>
-                            <p id="txtLoanStudentClass" style="font-size: 0.95rem;">Kelas: -</p>
+                    <div id="loanStudentInfoBox" class="verified-box" style="display: none;">
+                        <div class="verified-left">
+                            <div class="verified-avatar"><i class="fa-solid fa-user"></i></div>
+                            <div>
+                                <p class="verified-label">Siswa Terverifikasi</p>
+                                <h4 id="txtLoanStudentName" class="verified-name">Nama Siswa</h4>
+                                <p id="txtLoanStudentClass" class="verified-meta">Kelas: -</p>
+                            </div>
                         </div>
-                        <button onclick="resetLoanSession()" style="background: var(--danger-red); color: white; border: none; padding: 8px 15px; border-radius: 10px; cursor: pointer; font-size: 0.85rem;"><i class="fa-solid fa-rotate"></i> Ganti Siswa</button>
+                        <button onclick="resetLoanSession()" class="btn-minimal-outline"><i class="fa-solid fa-rotate"></i> Ganti Siswa</button>
                     </div>
                 </div>
 
-                <div id="loanBookSection" class="book-form-container" style="display: none; border-top: 4px solid var(--success-green);">
-                    <h3 style="margin-bottom: 15px; font-size: 1.1rem; color: var(--success-green);"><i class="fa-solid fa-book"></i> Langkah 2: Masukkan Barcode Buku</h3>
-                    <div style="display: flex; gap: 10px; margin-bottom: 15px;">
-                        <input type="text" id="loanBookBarcodeInput" placeholder="Masukkan / Scan Barcode Buku..." onkeypress="handleBookScan(event)" style="flex: 1; padding: 14px 20px; border: 2px solid var(--light-blue); border-radius: 15px; outline: none; font-size: 1rem;">
-                        <button onclick="addBookToLoanList()" style="background: var(--success-green); color: white; border: none; padding: 0 25px; border-radius: 15px; font-weight: 600; cursor: pointer;">Tambah Peminjaman</button>
+                <div id="loanBookSection" class="step-card" style="display: none;">
+                    <div class="step-header done">
+                        <div class="step-number"><i class="fa-solid fa-check" style="font-size: 0.75rem;"></i></div>
+                        <div>
+                            <div class="step-title">Masukkan Barcode Buku</div>
+                            <div class="step-subtitle">Tambahkan satu atau lebih buku ke daftar peminjaman</div>
+                        </div>
+                    </div>
+                    <div class="step-input-row">
+                        <input type="text" id="loanBookBarcodeInput" class="step-input" placeholder="Masukkan / Scan Barcode Buku..." onkeypress="handleBookScan(event)">
+                        <button onclick="addBookToLoanList()" class="btn-minimal btn-minimal-success">Tambah Peminjaman</button>
                     </div>
 
-                    <h4 style="margin-top: 25px; margin-bottom: 10px; font-size: 1rem;">Buku yang akan Dipinjam Saat Ini:</h4>
-                    <div class="table-responsive">
-                        <table class="book-table" style="background: white; border-radius: 15px;">
+                    <h4 style="margin-top: 26px; margin-bottom: 12px; font-size: 0.85rem; color: var(--text-gray); font-weight: 600; text-transform: uppercase; letter-spacing: 0.04em;">Buku yang akan Dipinjam Saat Ini</h4>
+                    <div class="table-responsive" style="border: none; margin-top: 0;">
+                        <table class="minimal-table">
                             <thead>
                                 <tr>
                                     <th>Barcode</th>
@@ -1138,28 +1621,35 @@
                         </table>
                     </div>
 
-                    <div style="margin-top: 25px; display: flex; justify-content: flex-end;">
-                        <button onclick="submitLoanTransaction()" style="background: var(--primary-blue); color: white; border: none; padding: 15px 40px; border-radius: 15px; font-weight: bold; font-size: 1.05rem; cursor: pointer; box-shadow: 0 5px 15px rgba(42, 92, 153, 0.3);"><i class="fa-solid fa-floppy-disk"></i> Proses Selesai & Simpan Transaksi</button>
+                    <div style="margin-top: 26px; display: flex; justify-content: flex-end;">
+                        <button onclick="submitLoanTransaction()" class="btn-minimal btn-minimal-primary" style="padding: 15px 34px; font-size: 0.98rem; box-shadow: 0 10px 22px -8px rgba(67, 56, 202, 0.4);"><i class="fa-solid fa-floppy-disk"></i> Proses Selesai & Simpan Transaksi</button>
                     </div>
                 </div>
             </div>
 
             <div id="returnTransactionContainer" style="display: none;">
-                <div class="book-form-container" style="border-top: 4px solid var(--accent-orange);">
-                    <h3 style="margin-bottom: 15px; font-size: 1.1rem; color: var(--text-dark);">
-                        <i class="fa-solid fa-barcode"></i> Scan Barcode Buku untuk Pengembalian
-                    </h3>
-                    <div style="display: flex; gap: 10px; margin-bottom: 15px;">
-                        <input type="text" id="returnBookBarcodeInput" placeholder="Scan Barcode Buku di Sini..." onkeypress="handleReturnScan(event)" style="flex: 1; padding: 14px 20px; border: 2px solid var(--light-blue); border-radius: 15px; outline: none; font-size: 1rem;">
-                        <button onclick="processBookReturn()" style="background: var(--accent-orange); color: white; border: none; padding: 0 25px; border-radius: 15px; font-weight: 600; cursor: pointer;">Proses Kembali</button>
+                <div class="step-card is-active">
+                    <div class="step-header">
+                        <div class="step-number"><i class="fa-solid fa-barcode" style="font-size: 0.85rem;"></i></div>
+                        <div>
+                            <div class="step-title">Scan Barcode Buku untuk Pengembalian</div>
+                            <div class="step-subtitle">Buku akan otomatis ditandai sebagai tersedia kembali</div>
+                        </div>
                     </div>
-                </div>
+                    <div class="step-input-row">
+                        <input type="text" id="returnBookBarcodeInput" class="step-input" placeholder="Scan Barcode Buku di Sini..." onkeypress="handleReturnScan(event)">
+                        <button onclick="processBookReturn()" class="btn-minimal btn-minimal-accent">Proses Kembali</button>
+                    </div>
 
-                <div id="returnSuccessBox" class="scanned-info-box" style="display: none; background: #e8f8f5; border-left: 5px solid var(--success-green);">
-                    <div>
-                        <p style="font-size: 0.85rem; color: var(--success-green); font-weight: 600;"><i class="fa-solid fa-circle-check"></i> PENGEMBALIAN BERHASIL!</p>
-                        <h4 id="txtReturnBookTitle" style="font-size: 1.2rem; color: var(--text-dark);">Judul Buku</h4>
-                        <p id="txtReturnStudentName" style="font-size: 0.95rem; color: var(--text-gray);">Dikembalikan oleh: -</p>
+                    <div id="returnSuccessBox" class="verified-box success" style="display: none;">
+                        <div class="verified-left">
+                            <div class="verified-avatar success"><i class="fa-solid fa-circle-check"></i></div>
+                            <div>
+                                <p class="verified-label success">Pengembalian Berhasil</p>
+                                <h4 id="txtReturnBookTitle" class="verified-name">Judul Buku</h4>
+                                <p id="txtReturnStudentName" class="verified-meta">Dikembalikan oleh: -</p>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -1548,7 +2038,74 @@ window.showAdminDetail = function(type, title, desc) {
             } else {
                 renderBooksTable(localBooksArray);
             }
+            renderBookPieChart();
         });
+
+        /* --- DIAGRAM LINGKARAN STATISTIK KOLEKSI BUKU (HALAMAN AWAL) --- */
+        const PIE_CHART_COLORS = ['#4338ca', '#fb923c', '#14b8a6', '#ec4899', '#f59e0b', '#6366f1', '#94a3b8'];
+
+        window.renderBookPieChart = function() {
+            const pieEl = document.getElementById('bookPieChart');
+            const legendEl = document.getElementById('bookChartLegend');
+            const totalEl = document.getElementById('bookPieTotalEksemplar');
+            if (!pieEl || !legendEl || !totalEl) return;
+
+            const totalEksemplar = localBooksArray.length;
+            totalEl.innerText = totalEksemplar;
+
+            if (totalEksemplar === 0) {
+                pieEl.style.background = 'var(--light-blue)';
+                legendEl.innerHTML = '<li class="book-chart-empty" style="list-style:none;">Belum ada data buku yang masuk ke sistem.</li>';
+                return;
+            }
+
+            // Kelompokkan buku berdasarkan judul yang sama untuk menghitung jumlah eksemplar
+            const titleMap = {};
+            localBooksArray.forEach(book => {
+                const judul = (book.title || 'Tanpa Judul').trim();
+                titleMap[judul] = (titleMap[judul] || 0) + 1;
+            });
+
+            let entries = Object.entries(titleMap).sort((a, b) => b[1] - a[1]);
+
+            // Batasi maksimal 6 judul teratas, sisanya digabung menjadi "Lainnya"
+            const MAX_SLICES = 6;
+            let displayEntries = entries.slice(0, MAX_SLICES);
+            const sisaEntries = entries.slice(MAX_SLICES);
+            if (sisaEntries.length > 0) {
+                const sisaTotal = sisaEntries.reduce((sum, e) => sum + e[1], 0);
+                displayEntries.push([`Lainnya (${sisaEntries.length} judul lain)`, sisaTotal]);
+            }
+
+            // Bangun conic-gradient untuk diagram lingkaran serta daftar legenda
+            let gradientParts = [];
+            let legendHtml = '';
+            let cumulativePercent = 0;
+
+            displayEntries.forEach((entry, index) => {
+                const [judul, eksemplar] = entry;
+                const percent = (eksemplar / totalEksemplar) * 100;
+                const color = PIE_CHART_COLORS[index % PIE_CHART_COLORS.length];
+                const startPercent = cumulativePercent;
+                cumulativePercent += percent;
+
+                gradientParts.push(`${color} ${startPercent.toFixed(2)}% ${cumulativePercent.toFixed(2)}%`);
+
+                legendHtml += `
+                    <li>
+                        <span class="legend-dot" style="background:${color};"></span>
+                        <div class="legend-text">
+                            <div class="legend-title" title="${judul}">${judul}</div>
+                            <div class="legend-sub">${eksemplar} eksemplar</div>
+                        </div>
+                        <span class="legend-percentage">${percent.toFixed(1)}%</span>
+                    </li>
+                `;
+            });
+
+            pieEl.style.background = `conic-gradient(${gradientParts.join(', ')})`;
+            legendEl.innerHTML = legendHtml;
+        }
 
         window.renderBooksTable = function(dataArray) {
             const tbody = document.getElementById('bookTableBody');
@@ -1880,7 +2437,7 @@ window.showAdminDetail = function(type, title, desc) {
             const url = URL.createObjectURL(blob);
             
             link.setAttribute("href", url);
-            link.setAttribute("download", "Laporan_Sirkulasi_SKL_Library.csv");
+            link.setAttribute("download", "Laporan_Sirkulasi_Pelangi_Pustaka.csv");
             link.style.visibility = 'hidden';
             document.body.appendChild(link);
             link.click();
@@ -1953,7 +2510,7 @@ window.showAdminDetail = function(type, title, desc) {
             const encodedUri = encodeURI(csvContent);
             const link = document.createElement("a");
             link.setAttribute("href", encodedUri);
-            link.setAttribute("download", "Laporan_Sirkulasi_SKL_Library.csv");
+            link.setAttribute("download", "Laporan_Sirkulasi_Pelangi_Pustaka.csv");
             document.body.appendChild(link);
             link.click();
             document.body.removeChild(link);
@@ -2223,7 +2780,7 @@ window.showAdminDetail = function(type, title, desc) {
             const url = URL.createObjectURL(blob);
             
             link.setAttribute("href", url);
-            link.setAttribute("download", "Backup_Katalog_Buku_SKL_Library.csv");
+            link.setAttribute("download", "Backup_Katalog_Buku_Pelangi_Pustaka.csv");
             link.style.visibility = 'hidden';
             document.body.appendChild(link);
             link.click();
@@ -2248,7 +2805,7 @@ window.showAdminDetail = function(type, title, desc) {
             const url = URL.createObjectURL(blob);
             
             link.setAttribute("href", url);
-            link.setAttribute("download", "Backup_Data_Siswa_SKL_Library.csv");
+            link.setAttribute("download", "Backup_Data_Siswa_Pelangi_Pustaka.csv");
             link.style.visibility = 'hidden';
             document.body.appendChild(link);
             link.click();
@@ -2273,7 +2830,7 @@ window.showAdminDetail = function(type, title, desc) {
             const url = URL.createObjectURL(blob);
 
             link.setAttribute("href", url);
-            link.setAttribute("download", "Backup_Data_Absensi_SKL_Library.csv");
+            link.setAttribute("download", "Backup_Data_Absensi_Pelangi_Pustaka.csv");
             link.style.visibility = 'hidden';
             document.body.appendChild(link);
             link.click();
