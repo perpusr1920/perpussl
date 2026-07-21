@@ -1626,7 +1626,7 @@
                     <span class="hero-badge"><i class="fa-solid fa-sparkles" id="heroBadgeIcon"></i> <span id="heroBadgeText">Perpustakaan Digital Sekolah</span></span>
                     <h1><span id="heroTitleMain">Ayo Membaca</span><br><span id="heroTitleAccent" class="accent-text">Hari Ini!</span></h1>
                     <p id="heroDesc">Selamat datang di SKL Library — jendela dunia milik SD Kristen Pelangi Bangsa. Temukan buku, jadwal kunjungan, dan info terbaru di satu tempat.</p>
-                    <div class="hero-mini-stats">
+                    <div class="hero-mini-stats" id="heroMiniStats">
                         <div class="mini-stat"><i class="fa-solid fa-book" id="heroStat1Icon"></i> <div><b id="heroStat1Value">0</b><span id="heroStat1Label">Judul Buku</span></div></div>
                         <div class="mini-stat"><i class="fa-solid fa-layer-group" id="heroStat2Icon"></i> <div><b id="heroStat2Value">0</b><span id="heroStat2Label">Eksemplar</span></div></div>
                     </div>
@@ -2202,6 +2202,7 @@
                 titleMain: 'Tata Tertib',
                 titleAccent: 'Perpustakaan',
                 desc: 'Empat aturan sederhana supaya ruang baca tetap nyaman dan menyenangkan untuk semua.',
+                showStats: false,
                 stat1: { icon: 'fa-list-check', value: '4', label: 'Aturan Utama' },
                 stat2: { icon: 'fa-clock', value: '7 Hari', label: 'Batas Pinjam' }
             },
@@ -2246,6 +2247,8 @@
             document.getElementById('heroStat2Icon').className = 'fa-solid ' + c.stat2.icon;
             document.getElementById('heroStat2Value').innerText = c.stat2.value;
             document.getElementById('heroStat2Label').innerText = c.stat2.label;
+
+            document.getElementById('heroMiniStats').style.display = (c.showStats === false) ? 'none' : 'flex';
 
             // Untuk Home, angka statistik diambil dari data buku terkini
             if (target === 'home' && typeof window.renderBookSummaryNotif === 'function') {
