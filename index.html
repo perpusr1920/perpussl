@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pelangi Pustaka - SD Kristen</title>
+    <title>SKL Library - SD Kristen</title>
     
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -1067,135 +1067,50 @@
             color: var(--text-gray);
             font-weight: 500;
         }
-        /* --- CSS DIAGRAM LINGKARAN KOLEKSI BUKU (HOME) --- */
-        .book-chart-section {
-            margin-top: 30px;
+        /* --- CSS NOTIFIKASI RINGKASAN KOLEKSI BUKU (HOME) --- */
+        .book-notif-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 22px;
+            margin-top: 35px;
             width: 100%;
+        }
+        .book-notif-card {
+            display: flex;
+            align-items: center;
+            gap: 18px;
             background: var(--white);
-            padding: 35px;
-            border-radius: var(--radius-lg);
-            box-shadow: var(--card-shadow);
             border: var(--border-soft);
+            border-radius: var(--radius-md);
+            padding: 24px 26px;
+            box-shadow: var(--card-shadow);
+            transition: all 0.25s ease;
         }
-        .book-chart-section h3 {
-            font-size: 1.3rem;
-            margin-bottom: 5px;
-            color: var(--text-dark);
-            display: flex;
-            align-items: center;
-            gap: 12px;
+        .book-notif-card:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--hover-shadow);
         }
-        .book-chart-section p.subtitle {
-            font-size: 0.9rem;
-            color: var(--text-gray);
-            margin-bottom: 25px;
-        }
-        .book-chart-flex {
-            display: flex;
-            align-items: center;
-            gap: 45px;
-            flex-wrap: wrap;
-        }
-        .book-pie-wrapper {
-            position: relative;
-            width: 220px;
-            height: 220px;
+        .book-notif-icon {
+            font-size: 1.6rem;
+            color: var(--white);
+            padding: 16px;
+            border-radius: 16px;
             flex-shrink: 0;
-            margin: 0 auto;
+            box-shadow: 0 8px 16px -4px rgba(67, 56, 202, 0.35);
         }
-        .book-pie {
-            width: 220px;
-            height: 220px;
-            border-radius: 50%;
-            background: conic-gradient(var(--light-blue) 0 100%);
-            box-shadow: 0 8px 20px -6px rgba(30, 27, 75, 0.15);
-            transition: background 0.6s ease;
-        }
-        .book-pie-hole {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            width: 130px;
-            height: 130px;
-            background: var(--white);
-            border-radius: 50%;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            box-shadow: inset 0 2px 8px rgba(15, 23, 42, 0.05);
-            text-align: center;
-        }
-        .book-pie-hole h4 {
+        .book-notif-icon.judul { background: var(--primary-gradient); }
+        .book-notif-icon.eksemplar { background: linear-gradient(135deg, #14b8a6 0%, #0d9488 100%); box-shadow: 0 8px 16px -4px rgba(13, 148, 136, 0.35); }
+        .book-notif-info h4 {
             font-size: 1.9rem;
             font-weight: 700;
             color: var(--text-dark);
-            line-height: 1.1;
+            line-height: 1.15;
         }
-        .book-pie-hole span {
-            font-size: 0.72rem;
+        .book-notif-info p {
+            font-size: 0.88rem;
             color: var(--text-gray);
             font-weight: 500;
             margin-top: 2px;
-        }
-        .book-chart-legend {
-            list-style: none;
-            flex: 1;
-            min-width: 240px;
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-        }
-        .book-chart-legend li {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            padding: 10px 14px;
-            border-radius: var(--radius-sm);
-            background: var(--bg-body);
-            transition: transform 0.2s ease;
-        }
-        .book-chart-legend li:hover {
-            transform: translateX(4px);
-        }
-        .legend-dot {
-            width: 14px;
-            height: 14px;
-            border-radius: 4px;
-            flex-shrink: 0;
-        }
-        .legend-text {
-            flex: 1;
-            min-width: 0;
-        }
-        .legend-text .legend-title {
-            font-weight: 600;
-            font-size: 0.9rem;
-            color: var(--text-dark);
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-        }
-        .legend-text .legend-sub {
-            font-size: 0.78rem;
-            color: var(--text-gray);
-        }
-        .legend-percentage {
-            font-weight: 700;
-            font-size: 0.95rem;
-            color: var(--primary-blue);
-            flex-shrink: 0;
-        }
-        .book-chart-empty {
-            color: var(--text-gray);
-            font-size: 0.9rem;
-            text-align: center;
-            padding: 20px 0;
-        }
-        @media (max-width: 640px) {
-            .book-chart-section { padding: 25px 20px; }
-            .book-chart-flex { justify-content: center; }
         }
 
         /* --- CSS TABEL JADWAL KUNJUNG HOME --- */
@@ -1269,7 +1184,7 @@
     <nav class="navbar" id="mainNavbar">
         <div class="nav-logo" onclick="showUserSection('home')">
             <i class="fa-solid fa-book-open"></i>
-            <span>Pelangi Pustaka</span>
+            <span>SKL Library</span>
         </div>
         
         <div class="menu-toggle" onclick="toggleMobileMenu()">
@@ -1331,20 +1246,20 @@
                     </div>
                 </div>
 
-                <div class="book-chart-section" style="text-align: left;">
-                    <h3><i class="fa-solid fa-chart-pie" style="color: var(--primary-blue);"></i> Statistik Koleksi Buku</h3>
-                    <p class="subtitle">Persentase judul buku dan jumlah eksemplar (buku dengan judul yang sama) yang tercatat di sistem</p>
-                    <div class="book-chart-flex">
-                        <div class="book-pie-wrapper">
-                            <div class="book-pie" id="bookPieChart"></div>
-                            <div class="book-pie-hole">
-                                <h4 id="bookPieTotalEksemplar">0</h4>
-                                <span>Total Eksemplar</span>
-                            </div>
+                <div class="book-notif-grid">
+                    <div class="book-notif-card">
+                        <div class="book-notif-icon judul"><i class="fa-solid fa-book"></i></div>
+                        <div class="book-notif-info">
+                            <h4 id="txtTotalJudulBuku">0</h4>
+                            <p>Judul Buku Tercatat di Sistem</p>
                         </div>
-                        <ul class="book-chart-legend" id="bookChartLegend">
-                            <li class="book-chart-empty" style="list-style:none;">Memuat data buku...</li>
-                        </ul>
+                    </div>
+                    <div class="book-notif-card">
+                        <div class="book-notif-icon eksemplar"><i class="fa-solid fa-layer-group"></i></div>
+                        <div class="book-notif-info">
+                            <h4 id="txtTotalEksemplarBuku">0</h4>
+                            <p>Total Eksemplar Buku</p>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -1352,7 +1267,7 @@
             <div id="sub-tata-tertib" class="welcome-card user-sub-page" style="display: none;">
                 <div class="icon-circle"><i class="fa-solid fa-scale-balanced"></i></div>
                 <h2>Tata Tertib Perpustakaan</h2>
-                <p>Mohon dipatuhi peraturan di dalam ruang Pelangi Pustaka demi kenyamanan bersama:</p>
+                <p>Mohon dipatuhi peraturan di dalam ruang SKL Library demi kenyamanan bersama:</p>
                 <ul class="rules-list">
                     <li>Harap tenang dan tidak membuat kegaduhan di area membaca.</li>
                     <li>Menjaga kebersihan dan tidak membawa makanan/minuman ke dalam ruangan.</li>
@@ -1390,7 +1305,7 @@
         <div class="admin-header">
             <div>
                 <h2 id="adminTitle">Dashboard Admin</h2>
-                <p style="color: var(--text-gray); font-size: 0.9rem;">Manajemen Perpustakaan Pelangi</p>
+                <p style="color: var(--text-gray); font-size: 0.9rem;">Manajemen SKL Library</p>
             </div>
             <button class="btn-logout" onclick="showUserSection('home')">Keluar</button>
         </div>
@@ -2038,73 +1953,25 @@ window.showAdminDetail = function(type, title, desc) {
             } else {
                 renderBooksTable(localBooksArray);
             }
-            renderBookPieChart();
+            renderBookSummaryNotif();
         });
 
-        /* --- DIAGRAM LINGKARAN STATISTIK KOLEKSI BUKU (HALAMAN AWAL) --- */
-        const PIE_CHART_COLORS = ['#4338ca', '#fb923c', '#14b8a6', '#ec4899', '#f59e0b', '#6366f1', '#94a3b8'];
+        /* --- NOTIFIKASI RINGKASAN JUMLAH BUKU (HALAMAN AWAL) --- */
+        window.renderBookSummaryNotif = function() {
+            const totalJudulEl = document.getElementById('txtTotalJudulBuku');
+            const totalEksemplarEl = document.getElementById('txtTotalEksemplarBuku');
+            if (!totalJudulEl || !totalEksemplarEl) return;
 
-        window.renderBookPieChart = function() {
-            const pieEl = document.getElementById('bookPieChart');
-            const legendEl = document.getElementById('bookChartLegend');
-            const totalEl = document.getElementById('bookPieTotalEksemplar');
-            if (!pieEl || !legendEl || !totalEl) return;
-
+            // Total eksemplar = seluruh baris data buku yang masuk ke sistem
             const totalEksemplar = localBooksArray.length;
-            totalEl.innerText = totalEksemplar;
 
-            if (totalEksemplar === 0) {
-                pieEl.style.background = 'var(--light-blue)';
-                legendEl.innerHTML = '<li class="book-chart-empty" style="list-style:none;">Belum ada data buku yang masuk ke sistem.</li>';
-                return;
-            }
+            // Jumlah judul unik didapat dari pengelompokan judul yang sama
+            const judulUnik = new Set(
+                localBooksArray.map(book => (book.title || 'Tanpa Judul').trim().toLowerCase())
+            );
 
-            // Kelompokkan buku berdasarkan judul yang sama untuk menghitung jumlah eksemplar
-            const titleMap = {};
-            localBooksArray.forEach(book => {
-                const judul = (book.title || 'Tanpa Judul').trim();
-                titleMap[judul] = (titleMap[judul] || 0) + 1;
-            });
-
-            let entries = Object.entries(titleMap).sort((a, b) => b[1] - a[1]);
-
-            // Batasi maksimal 6 judul teratas, sisanya digabung menjadi "Lainnya"
-            const MAX_SLICES = 6;
-            let displayEntries = entries.slice(0, MAX_SLICES);
-            const sisaEntries = entries.slice(MAX_SLICES);
-            if (sisaEntries.length > 0) {
-                const sisaTotal = sisaEntries.reduce((sum, e) => sum + e[1], 0);
-                displayEntries.push([`Lainnya (${sisaEntries.length} judul lain)`, sisaTotal]);
-            }
-
-            // Bangun conic-gradient untuk diagram lingkaran serta daftar legenda
-            let gradientParts = [];
-            let legendHtml = '';
-            let cumulativePercent = 0;
-
-            displayEntries.forEach((entry, index) => {
-                const [judul, eksemplar] = entry;
-                const percent = (eksemplar / totalEksemplar) * 100;
-                const color = PIE_CHART_COLORS[index % PIE_CHART_COLORS.length];
-                const startPercent = cumulativePercent;
-                cumulativePercent += percent;
-
-                gradientParts.push(`${color} ${startPercent.toFixed(2)}% ${cumulativePercent.toFixed(2)}%`);
-
-                legendHtml += `
-                    <li>
-                        <span class="legend-dot" style="background:${color};"></span>
-                        <div class="legend-text">
-                            <div class="legend-title" title="${judul}">${judul}</div>
-                            <div class="legend-sub">${eksemplar} eksemplar</div>
-                        </div>
-                        <span class="legend-percentage">${percent.toFixed(1)}%</span>
-                    </li>
-                `;
-            });
-
-            pieEl.style.background = `conic-gradient(${gradientParts.join(', ')})`;
-            legendEl.innerHTML = legendHtml;
+            totalJudulEl.innerText = judulUnik.size;
+            totalEksemplarEl.innerText = totalEksemplar;
         }
 
         window.renderBooksTable = function(dataArray) {
@@ -2437,7 +2304,7 @@ window.showAdminDetail = function(type, title, desc) {
             const url = URL.createObjectURL(blob);
             
             link.setAttribute("href", url);
-            link.setAttribute("download", "Laporan_Sirkulasi_Pelangi_Pustaka.csv");
+            link.setAttribute("download", "Laporan_Sirkulasi_SKL_Library.csv");
             link.style.visibility = 'hidden';
             document.body.appendChild(link);
             link.click();
@@ -2510,7 +2377,7 @@ window.showAdminDetail = function(type, title, desc) {
             const encodedUri = encodeURI(csvContent);
             const link = document.createElement("a");
             link.setAttribute("href", encodedUri);
-            link.setAttribute("download", "Laporan_Sirkulasi_Pelangi_Pustaka.csv");
+            link.setAttribute("download", "Laporan_Sirkulasi_SKL_Library.csv");
             document.body.appendChild(link);
             link.click();
             document.body.removeChild(link);
@@ -2780,7 +2647,7 @@ window.showAdminDetail = function(type, title, desc) {
             const url = URL.createObjectURL(blob);
             
             link.setAttribute("href", url);
-            link.setAttribute("download", "Backup_Katalog_Buku_Pelangi_Pustaka.csv");
+            link.setAttribute("download", "Backup_Katalog_Buku_SKL_Library.csv");
             link.style.visibility = 'hidden';
             document.body.appendChild(link);
             link.click();
@@ -2805,7 +2672,7 @@ window.showAdminDetail = function(type, title, desc) {
             const url = URL.createObjectURL(blob);
             
             link.setAttribute("href", url);
-            link.setAttribute("download", "Backup_Data_Siswa_Pelangi_Pustaka.csv");
+            link.setAttribute("download", "Backup_Data_Siswa_SKL_Library.csv");
             link.style.visibility = 'hidden';
             document.body.appendChild(link);
             link.click();
@@ -2830,7 +2697,7 @@ window.showAdminDetail = function(type, title, desc) {
             const url = URL.createObjectURL(blob);
 
             link.setAttribute("href", url);
-            link.setAttribute("download", "Backup_Data_Absensi_Pelangi_Pustaka.csv");
+            link.setAttribute("download", "Backup_Data_Absensi_SKL_Library.csv");
             link.style.visibility = 'hidden';
             document.body.appendChild(link);
             link.click();
