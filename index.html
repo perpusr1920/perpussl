@@ -1054,8 +1054,15 @@
                         <i class="fa-solid fa-qrcode"></i> Scan Barcode / Input NIS Anggota
                     </h3>
                     <div style="display: flex; gap: 10px;">
-                        <input type="text" id="attendanceInput" placeholder="Masukkan Nomor Anggota / Scan Barcode Siswa..." onkeypress="handleAttendancePress(event)" style="flex: 1; padding: 14px 20px; border: 2px solid var(--light-blue); border-radius: 15px; outline: none; font-size: 1rem;">
+                        <input type="text" id="attendanceInput" placeholder="Masukkan Nomor Anggota / Scan Barcode Siswa..." onkeypress="handleAttendancePress(event)" oninput="previewAttendanceStudent()" style="flex: 1; padding: 14px 20px; border: 2px solid var(--light-blue); border-radius: 15px; outline: none; font-size: 1rem;">
                         <button onclick="submitAttendance()" style="background: var(--primary-blue); color: white; border: none; padding: 0 25px; border-radius: 15px; font-weight: 600; cursor: pointer;">Absen Hadir</button>
+                    </div>
+                    <div id="attendancePreviewBox" class="scanned-info-box" style="display: none; margin-top: 15px;">
+                        <div>
+                            <p style="font-size: 0.85rem; color: var(--text-gray); font-weight: 600;">Data Siswa Ditemukan:</p>
+                            <h4 id="txtAttendancePreviewName" style="font-size: 1.2rem; color: var(--primary-blue);">Nama Siswa</h4>
+                            <p id="txtAttendancePreviewClass" style="font-size: 0.95rem;">Kelas: -</p>
+                        </div>
                     </div>
                     <p id="attendanceMsg" style="margin-top: 10px; font-size: 0.9rem; font-weight: 600; display: none;"></p>
                 </div>
@@ -1275,14 +1282,6 @@
     </div>
 
     <script>
-        // 1. Taruh ini di baris paling atas di dalam tag <script> Anda
-let attendanceData = JSON.parse(localStorage.getItem('attendance_logs')) || [];
-const masterSiswa = {
-    "12345": { nama: "Budi Santoso", kelas: "Kelas 4A" },
-    "12346": { nama: "Siti Rahma", kelas: "Kelas 5B" },
-    "12347": { nama: "Andi Wijaya", kelas: "Kelas 3" },
-    "899123": { nama: "Gisela Putri", kelas: "Kelas 6" }
-};
         function showLogin() {
             document.getElementById('mainNavbar').style.display = 'none';
             document.getElementById('userSection').style.display = 'none';
@@ -1353,132 +1352,21 @@ const masterSiswa = {
             showAdminDetail('Laporan', 'Laporan Riwayat Transaksi', 'Memantau data riwayat sirkulasi keluar masuknya buku secara real-time.');
         }
         // ==================== LOGIKA FITUR ABSENSI PERPUSTAKAAN ====================
+        // Catatan: fungsi inti absensi (submitAttendance, renderAttendanceTable, dst)
+        // sekarang didefinisikan di <script type="module"> di bawah, supaya bisa
+        // langsung mengakses data siswa (localStudentsArray) dan database Firestore.
 function openAttendanceManager() {
     showAdminDetail('Absensi', 'Daftar Hadir Pengunjung', 'Melihat statistik serta menginput absensi kunjungan harian siswa.');
-    renderAttendanceTable();
-    calculateAttendanceStats();
+    if (typeof window.renderAttendanceTable === 'function') window.renderAttendanceTable();
+    if (typeof window.calculateAttendanceStats === 'function') window.calculateAttendanceStats();
+    setTimeout(() => {
+        const attInput = document.getElementById('attendanceInput');
+        if (attInput) attInput.focus();
+    }, 200);
 }
 
 function handleAttendancePress(e) {
     if(e.key === 'Enter') submitAttendance();
-}
-
-window.submitAttendance = function() {
-    const inputField = document.getElementById('attendanceInput');
-    const msgEl = document.getElementById('attendanceMsg');
-    
-    if(!inputField) return;
-    
-    const barcodeValue = inputField.value.trim();
-    if(!barcodeValue) return;
-
-    // Default jika barcode tidak/belum terdaftar di database siswa
-    let namaSiswa = "Pengunjung Umum";
-    let kelasSiswa = "-";
-
-    // MENIRU PERSIS BAGIAN PEMINJAMAN: Mencari ke localStudentsArray
-    if (typeof localStudentsArray !== 'undefined' && localStudentsArray.length > 0) {
-        const siswaDitemukan = localStudentsArray.find(siswa => {
-            const barcodeDB = siswa.barcode ? String(siswa.barcode).trim().toLowerCase() : "";
-            const barcodeInput = String(barcodeValue).trim().toLowerCase();
-            return barcodeDB === barcodeInput;
-        });
-        
-        if(siswaDitemukan) {
-            // Mengambil field .name dan .class sesuai database Firestore Anda
-            namaSiswa = siswaDitemukan.name || "Siswa Aktif";
-            kelasSiswa = siswaDitemukan.class || "-";
-        }
-    }
-
-    const now = new Date();
-    const timeString = now.toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit', second: '2-digit' }) + " WIB";
-    const dateString = now.toLocaleDateString('id-ID');
-
-    // Membuat objek log baru dengan properti nama dan kelas hasil pencarian database
-    const newLog = {
-        waktu: timeString,
-        tanggal: dateString, // Menggunakan 'tanggal' agar sesuai fungsi statistik harian Anda
-        id: barcodeValue,
-        nama: namaSiswa,
-        kelas: kelasSiswa
-    };
-
-    attendanceData.unshift(newLog);
-    localStorage.setItem('attendance_logs', JSON.stringify(attendanceData));
-
-    // Menampilkan pesan sukses tepat di bawah input box
-    msgEl.style.color = '#2563eb';
-    msgEl.innerHTML = `<i class="fa-solid fa-circle-check"></i> Absen Berhasil! Selamat Datang, <b>${namaSiswa}</b> (Kelas: ${kelasSiswa})`;
-    msgEl.style.display = 'block';
-
-    inputField.value = '';
-    inputField.focus();
-    
-    renderAttendanceTable();
-    calculateAttendanceStats();
-
-    setTimeout(() => { msgEl.style.display = 'none'; }, 4000);
-}
-window.renderAttendanceTable = function() {
-    const tbody = document.getElementById('attendanceTableBody');
-    if(!tbody) return;
-    
-    tbody.innerHTML = '';
-    
-    if(attendanceData.length === 0) {
-        tbody.innerHTML = `<tr><td colspan="5" style="text-align:center; color:var(--text-gray);">Belum ada data absensi hari ini.</td></tr>`;
-        return;
-    }
-    
-    attendanceData.forEach((log, index) => {
-        const tr = document.createElement('tr');
-        
-        // Membaca data nama dan kelas dari log (atau default jika kosong/log lama)
-        const namaTampil = log.nama || "Pengunjung Umum";
-        const kelasTampil = log.kelas || "-";
-        
-        // Tentukan badge status berdasarkan ada tidaknya kelas
-        const statusBadge = kelasTampil !== "-" 
-            ? `<span class="badge badge-success">Siswa</span>` 
-            : `<span class="badge badge-warning">Umum</span>`;
-
-        tr.innerHTML = `
-            <td>${index + 1}</td>
-            <td>${log.waktu}</td>
-            <td>${log.id}</td>
-            <td>
-                <div style="font-weight:600; color:var(--text-dark);">${namaTampil}</div>
-                <div style="font-size:0.8rem; color:var(--text-gray);">Kelas: ${kelasTampil}</div>
-            </td>
-            <td>${statusBadge}</td>
-        `;
-        tbody.appendChild(tr);
-    });
-}
-function calculateAttendanceStats() {
-    const todayStr = new Date().toLocaleDateString('id-ID');
-    
-    const totalToday = attendanceData.filter(item => item.tanggal === todayStr).length;
-    const txtTotal = document.getElementById('txtTotalAbsen');
-    if(txtTotal) txtTotal.innerText = totalToday;
-
-    const uniqueDates = [...new Set(attendanceData.map(item => item.tanggal))];
-    const totalDaysRecorded = uniqueDates.length || 1;
-    const totalAllDays = attendanceData.length;
-
-    const averagePerDay = (totalAllDays / totalDaysRecorded).toFixed(1);
-    const txtAvg = document.getElementById('txtRataRataAbsen');
-    if(txtAvg) txtAvg.innerText = averagePerDay;
-}
-
-function clearAttendanceLog() {
-    if(confirm("Apakah Anda yakin ingin menghapus semua history log absensi?")) {
-        attendanceData = [];
-        localStorage.removeItem('attendance_logs');
-        renderAttendanceTable();
-        calculateAttendanceStats();
-    }
 }
 // ===========================================================================
 // ==================== LOGIKA TRANSAKSI TABEL JADWAL HOME ====================
@@ -1633,10 +1521,12 @@ window.showAdminDetail = function(type, title, desc) {
         const booksCollection = collection(db, "books");
         const studentsCollection = collection(db, "students");
         const loansCollection = collection(db, "loans");
+        const attendanceCollection = collection(db, "attendance");
 
         let localBooksArray = [];
         let localStudentsArray = [];
         let localLoansArray = []; 
+        let localAttendanceArray = [];
         
         let currentActiveStudent = null;
         let loanCartBooks = [];
@@ -2150,6 +2040,159 @@ window.showAdminDetail = function(type, title, desc) {
             const filtered = localStudentsArray.filter(s => (s.name||"").toLowerCase().includes(keyword) || (s.barcode||"").toLowerCase().includes(keyword) || (s.class||"").toLowerCase().includes(keyword));
             renderStudentsTable(filtered);
         }
+
+        /* --- MANAJEMEN LIVE DATA ABSENSI --- */
+        // Fungsi bantu: cari data siswa di localStudentsArray berdasarkan barcode/NIS
+        function findSiswaByBarcode(barcodeValue) {
+            if (!barcodeValue || localStudentsArray.length === 0) return null;
+            const barcodeInput = String(barcodeValue).trim().toLowerCase();
+            return localStudentsArray.find(siswa => {
+                const barcodeDB = siswa.barcode ? String(siswa.barcode).trim().toLowerCase() : "";
+                return barcodeDB === barcodeInput;
+            }) || null;
+        }
+
+        // Menampilkan data siswa secara langsung (real-time) begitu barcode/NIS diketik/discan
+        window.previewAttendanceStudent = function() {
+            const inputField = document.getElementById('attendanceInput');
+            const previewBox = document.getElementById('attendancePreviewBox');
+            if (!inputField || !previewBox) return;
+
+            const barcodeValue = inputField.value.trim();
+            if (!barcodeValue) { previewBox.style.display = 'none'; return; }
+
+            const siswaDitemukan = findSiswaByBarcode(barcodeValue);
+            if (siswaDitemukan) {
+                document.getElementById('txtAttendancePreviewName').innerText = siswaDitemukan.name || 'Siswa Aktif';
+                document.getElementById('txtAttendancePreviewClass').innerText = 'Kelas: ' + (siswaDitemukan.class || '-');
+                previewBox.style.display = 'flex';
+            } else {
+                previewBox.style.display = 'none';
+            }
+        }
+
+        // Menyimpan absensi ke Firestore (cloud) agar data tersimpan permanen & real-time di semua perangkat
+        window.submitAttendance = async function() {
+            const inputField = document.getElementById('attendanceInput');
+            const msgEl = document.getElementById('attendanceMsg');
+            if (!inputField) return;
+
+            const barcodeValue = inputField.value.trim();
+            if (!barcodeValue) return;
+
+            let namaSiswa = "Pengunjung Umum";
+            let kelasSiswa = "-";
+
+            const siswaDitemukan = findSiswaByBarcode(barcodeValue);
+            if (siswaDitemukan) {
+                namaSiswa = siswaDitemukan.name || "Siswa Aktif";
+                kelasSiswa = siswaDitemukan.class || "-";
+            }
+
+            const now = new Date();
+            const timeString = now.toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit', second: '2-digit' }) + " WIB";
+            const dateString = now.toLocaleDateString('id-ID');
+
+            const newLog = {
+                waktu: timeString,
+                tanggal: dateString,
+                id: barcodeValue,
+                nama: namaSiswa,
+                kelas: kelasSiswa,
+                createdAt: now.getTime()
+            };
+
+            try {
+                await addDoc(attendanceCollection, newLog);
+
+                msgEl.style.color = '#2563eb';
+                msgEl.innerHTML = `<i class="fa-solid fa-circle-check"></i> Absen Berhasil! Selamat Datang, <b>${namaSiswa}</b> (Kelas: ${kelasSiswa})`;
+                msgEl.style.display = 'block';
+
+                inputField.value = '';
+                document.getElementById('attendancePreviewBox').style.display = 'none';
+                inputField.focus();
+
+                setTimeout(() => { msgEl.style.display = 'none'; }, 4000);
+            } catch (e) {
+                console.error(e);
+                alert("Terjadi kesalahan saat menyimpan data absensi.");
+            }
+        }
+
+        window.renderAttendanceTable = function(dataArray) {
+            const tbody = document.getElementById('attendanceTableBody');
+            if (!tbody) return;
+            const data = dataArray || localAttendanceArray;
+
+            tbody.innerHTML = '';
+            if (data.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="5" style="text-align:center; color:var(--text-gray);">Belum ada data absensi hari ini.</td></tr>`;
+                return;
+            }
+
+            data.forEach((log, index) => {
+                const tr = document.createElement('tr');
+                const namaTampil = log.nama || "Pengunjung Umum";
+                const kelasTampil = log.kelas || "-";
+                const statusBadge = kelasTampil !== "-"
+                    ? `<span class="badge badge-success">Siswa</span>`
+                    : `<span class="badge badge-warning">Umum</span>`;
+
+                tr.innerHTML = `
+                    <td>${index + 1}</td>
+                    <td>${log.waktu}</td>
+                    <td>${log.id}</td>
+                    <td>
+                        <div style="font-weight:600; color:var(--text-dark);">${namaTampil}</div>
+                        <div style="font-size:0.8rem; color:var(--text-gray);">Kelas: ${kelasTampil}</div>
+                    </td>
+                    <td>${statusBadge}</td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        window.calculateAttendanceStats = function() {
+            const todayStr = new Date().toLocaleDateString('id-ID');
+
+            const totalToday = localAttendanceArray.filter(item => item.tanggal === todayStr).length;
+            const txtTotal = document.getElementById('txtTotalAbsen');
+            if (txtTotal) txtTotal.innerText = totalToday;
+
+            const uniqueDates = [...new Set(localAttendanceArray.map(item => item.tanggal))];
+            const totalDaysRecorded = uniqueDates.length || 1;
+            const totalAllDays = localAttendanceArray.length;
+
+            const averagePerDay = (totalAllDays / totalDaysRecorded).toFixed(1);
+            const txtAvg = document.getElementById('txtRataRataAbsen');
+            if (txtAvg) txtAvg.innerText = averagePerDay;
+        }
+
+        window.clearAttendanceLog = async function() {
+            if (!confirm("Apakah Anda yakin ingin menghapus semua history log absensi?")) return;
+            try {
+                for (const log of localAttendanceArray) {
+                    await deleteDoc(doc(db, "attendance", log.id_));
+                }
+                alert("Log absensi berhasil dihapus.");
+            } catch (e) {
+                console.error(e);
+                alert("Terjadi kesalahan saat menghapus log absensi.");
+            }
+        }
+
+        // Sinkronisasi real-time: setiap ada perubahan data absensi di cloud, tabel & statistik otomatis diperbarui
+        onSnapshot(attendanceCollection, (snapshot) => {
+            localAttendanceArray = [];
+            snapshot.forEach((docSnap) => {
+                localAttendanceArray.push({ id_: docSnap.id, ...docSnap.data() });
+            });
+            // Urutkan dari yang paling baru berdasarkan waktu disimpan
+            localAttendanceArray.sort((a, b) => (b.createdAt || 0) - (a.createdAt || 0));
+            renderAttendanceTable();
+            calculateAttendanceStats();
+        });
 
         /* ======================================================= */
         /* --- FUNGSI BARU: EKSPOR DATA (BUKU & SISWA) KE CSV --- */
