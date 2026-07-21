@@ -1633,15 +1633,40 @@
             }
             .home-grid {
                 grid-template-columns: 1fr;
+                min-width: 0;
             }
             .home-welcome, .home-stats-col {
                 grid-column: 1;
+                min-width: 0;
             }
             .home-stats-col {
                 flex-direction: row;
+                min-width: 0;
+            }
+            .home-stats-col .book-notif-card {
+                min-width: 0;
+                padding: 16px 14px;
+                gap: 12px;
+            }
+            .book-notif-card {
+                min-width: 0;
+            }
+            .book-notif-icon {
+                padding: 12px;
+                font-size: 1.2rem;
+            }
+            .book-notif-info h4 {
+                font-size: 1.4rem;
+            }
+            .book-notif-info p {
+                font-size: 0.78rem;
             }
             .home-welcome {
                 padding: 32px 24px;
+                min-width: 0;
+            }
+            .home-welcome p {
+                max-width: 100%;
             }
             .page-header {
                 flex-direction: column;
@@ -2603,6 +2628,8 @@
             document.getElementById('loginSection').style.display = 'none';
             document.getElementById('adminSection').style.display = 'none';
             document.getElementById('userSection').style.display = 'block';
+            const navC = document.getElementById('navContainer');
+            if (navC) navC.classList.remove('active');
         }
         /* --- KONTEN HERO PER HALAMAN --- */
         let currentHeroPage = 'home';
@@ -2697,6 +2724,8 @@
             document.getElementById('sub-' + target).style.display = 'block';
             document.getElementById('li-' + target).classList.add('active');
             updateHero(target);
+            document.getElementById('navContainer').classList.remove('active');
+            window.scrollTo(0, 0);
         }
         function toggleMobileMenu() {
             document.getElementById('navContainer').classList.toggle('active');
