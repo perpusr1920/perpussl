@@ -552,6 +552,7 @@
         .page-header-icon.amber { background: linear-gradient(135deg, #f59e0b, #fb923c); box-shadow: 0 10px 20px -6px rgba(245,158,11,.4); }
         .page-header-icon.teal { background: linear-gradient(135deg, #14b8a6, #0d9488); box-shadow: 0 10px 20px -6px rgba(13,148,136,.4); }
         .page-header-icon.pink { background: linear-gradient(135deg, #ec4899, #c026d3); box-shadow: 0 10px 20px -6px rgba(192,38,211,.4); }
+        .page-header-icon.indigo { background: linear-gradient(135deg, #6366f1, #4338ca); box-shadow: 0 10px 20px -6px rgba(67,56,202,.4); }
         .page-header h2 { font-size: 1.5rem; font-weight: 700; color: var(--text-dark); margin-bottom: 6px; }
         .page-header p { font-size: 0.98rem; color: var(--text-gray); line-height: 1.6; max-width: 600px; }
 
@@ -749,6 +750,132 @@
         }
         @media (prefers-reduced-motion: reduce) {
             .ebook-progress-bar { animation: none; width: 55%; }
+        }
+
+        /* --- OPAC: PENCARIAN KATALOG --- */
+        .opac-page {
+            background: var(--white);
+            border-radius: var(--radius-lg);
+            padding: 42px 40px;
+            box-shadow: var(--card-shadow);
+            border: var(--border-soft);
+        }
+        .opac-search-bar {
+            display: flex;
+            gap: 12px;
+            margin-top: 28px;
+            flex-wrap: wrap;
+        }
+        .opac-search-bar input {
+            flex: 1;
+            min-width: 220px;
+            padding: 15px 22px;
+            border: 1.5px solid #e9ecf3;
+            border-radius: 14px;
+            outline: none;
+            font-size: 1rem;
+            background: #f9fafc;
+            transition: all 0.2s ease;
+        }
+        .opac-search-bar input:focus {
+            border-color: var(--primary-blue-light);
+            background: var(--white);
+            box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.1);
+        }
+        .opac-search-bar button {
+            background: var(--primary-gradient);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 14px;
+            font-weight: 600;
+            font-size: 0.95rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            box-shadow: 0 8px 18px -6px rgba(67, 56, 202, 0.35);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .opac-search-bar button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 22px -6px rgba(67, 56, 202, 0.45);
+        }
+        .opac-empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            color: var(--text-gray);
+        }
+        .opac-empty-state i {
+            font-size: 2.6rem;
+            color: #dbe0f5;
+            margin-bottom: 16px;
+            display: block;
+        }
+        .opac-result-count {
+            font-size: 0.9rem;
+            color: var(--text-gray);
+            margin: 28px 0 16px;
+        }
+        .opac-results-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+            gap: 22px;
+        }
+        .opac-book-card {
+            background: #f9fafc;
+            border: 1px solid #eef0f6;
+            border-radius: 16px;
+            padding: 14px;
+            transition: all 0.25s ease;
+        }
+        .opac-book-card:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--hover-shadow);
+            border-color: transparent;
+        }
+        .opac-book-cover {
+            width: 100%;
+            aspect-ratio: 3 / 4;
+            border-radius: 10px;
+            background: #eef0f6;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #c3c9d9;
+            font-size: 1.8rem;
+            overflow: hidden;
+            margin-bottom: 12px;
+        }
+        .opac-book-cover img { width: 100%; height: 100%; object-fit: cover; }
+        .opac-book-card h4 {
+            font-size: 0.92rem;
+            font-weight: 700;
+            color: var(--text-dark);
+            line-height: 1.35;
+            margin-bottom: 4px;
+        }
+        .opac-book-card .opac-author {
+            font-size: 0.82rem;
+            color: var(--text-gray);
+            margin-bottom: 8px;
+        }
+        .opac-book-card .opac-meta {
+            font-size: 0.75rem;
+            color: var(--text-gray);
+            display: flex;
+            flex-wrap: wrap;
+            gap: 4px 8px;
+            margin-bottom: 6px;
+        }
+        .opac-book-card .opac-barcode {
+            font-family: monospace;
+            font-size: 0.78rem;
+            color: var(--primary-blue);
+            background: var(--light-blue);
+            padding: 3px 8px;
+            border-radius: 6px;
+            display: inline-block;
         }
 
         /* --- LOGIN SECTION --- */
@@ -1725,6 +1852,7 @@
                 <li id="li-tata-tertib" onclick="navigateUser('tata-tertib')">Tata Tertib</li>
                 <li id="li-keanggotaan" onclick="navigateUser('keanggotaan')">Keanggotaan</li>
                 <li id="li-ebook" onclick="navigateUser('ebook')">E-Book</li>
+                <li id="li-opac" onclick="navigateUser('opac')">OPAC</li>
             </ul>
             <button class="btn-admin-nav" onclick="showLogin()">Admin Portal</button>
         </div>
@@ -1907,6 +2035,26 @@
                 <h2>Koleksi E-Book Digital</h2>
                 <p>Kabar gembira! Layanan Buku Digital (E-Book) saat ini sedang dalam proses integrasi sistem.</p>
                 <div class="ebook-progress"><div class="ebook-progress-bar"></div></div>
+            </div>
+
+            <div id="sub-opac" class="user-sub-page opac-page" style="display: none;">
+                <div class="page-header">
+                    <div class="page-header-icon indigo"><i class="fa-solid fa-magnifying-glass"></i></div>
+                    <div>
+                        <h2>OPAC</h2>
+                        <p>Online Public Access Catalog — cari koleksi buku perpustakaan berdasarkan judul atau nama pengarang.</p>
+                    </div>
+                </div>
+                <div class="opac-search-bar">
+                    <input type="text" id="opacSearchInput" placeholder="Ketik judul buku atau nama pengarang..." onkeypress="if(event.key==='Enter') searchOpac()">
+                    <button onclick="searchOpac()"><i class="fa-solid fa-magnifying-glass"></i> Cari</button>
+                </div>
+                <div id="opacResultsArea">
+                    <div class="opac-empty-state">
+                        <i class="fa-solid fa-book-open-reader"></i>
+                        <p>Masukkan kata kunci lalu tekan tombol Cari untuk menemukan buku.</p>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -2399,6 +2547,18 @@
                 desc: 'Layanan buku digital sedang dalam proses integrasi sistem — nantikan koleksi barunya!',
                 stat1: { icon: 'fa-cloud-arrow-up', value: 'Proses', label: 'Integrasi Sistem' },
                 stat2: { icon: 'fa-hourglass-half', value: 'Segera', label: 'Diluncurkan' }
+            },
+            'opac': {
+                theme: '',
+                badgeIcon: 'fa-magnifying-glass',
+                badgeText: 'Katalog Perpustakaan',
+                showBadge: false,
+                titleMain: 'Cari Buku',
+                titleAccent: 'Lewat OPAC',
+                desc: 'Telusuri koleksi buku perpustakaan berdasarkan judul atau nama pengarang.',
+                showStats: false,
+                stat1: { icon: 'fa-book', value: '0', label: 'Judul Buku' },
+                stat2: { icon: 'fa-layer-group', value: '0', label: 'Eksemplar' }
             }
         };
         function updateHero(target) {
@@ -2866,6 +3026,56 @@ window.showAdminDetail = function(type, title, desc) {
                     || (b.callNumber||"").toLowerCase().includes(keyword);
             });
             renderBooksTable(filtered);
+        }
+
+        /* --- OPAC: PENCARIAN KATALOG UNTUK PENGUNJUNG --- */
+        window.searchOpac = function() {
+            const keyword = document.getElementById('opacSearchInput').value.toLowerCase().trim();
+            const resultsArea = document.getElementById('opacResultsArea');
+
+            if (!keyword) {
+                resultsArea.innerHTML = `
+                    <div class="opac-empty-state">
+                        <i class="fa-solid fa-book-open-reader"></i>
+                        <p>Masukkan kata kunci lalu tekan tombol Cari untuk menemukan buku.</p>
+                    </div>`;
+                return;
+            }
+
+            const filtered = localBooksArray.filter(b => {
+                return (b.title||"").toLowerCase().includes(keyword) || (b.author||"").toLowerCase().includes(keyword);
+            });
+
+            if (filtered.length === 0) {
+                resultsArea.innerHTML = `
+                    <div class="opac-empty-state">
+                        <i class="fa-solid fa-circle-exclamation"></i>
+                        <p>Buku dengan judul/pengarang "<b>${keyword}</b>" tidak ditemukan.</p>
+                    </div>`;
+                return;
+            }
+
+            const cardsHtml = filtered.map(book => {
+                const coverHtml = book.coverUrl
+                    ? `<img src="${getDriveImageUrl(book.coverUrl)}" alt="Cover ${book.title || ''}">`
+                    : `<i class="fa-solid fa-book"></i>`;
+                const metaParts = [];
+                if (book.publisher) metaParts.push(book.publisher);
+                if (book.year) metaParts.push(book.year);
+                const metaHtml = metaParts.length > 0 ? `<div class="opac-meta">${metaParts.join(' &bull; ')}</div>` : '';
+                return `
+                    <div class="opac-book-card">
+                        <div class="opac-book-cover">${coverHtml}</div>
+                        <h4>${book.title || ''}</h4>
+                        <div class="opac-author">${book.author || ''}</div>
+                        ${metaHtml}
+                        <span class="opac-barcode">${book.barcode || ''}</span>
+                    </div>`;
+            }).join('');
+
+            resultsArea.innerHTML = `
+                <p class="opac-result-count">Ditemukan <b>${filtered.length}</b> buku untuk "${keyword}"</p>
+                <div class="opac-results-grid">${cardsHtml}</div>`;
         }
 
         /* --- SISTEM TRANSAKSI PEMINJAMAN --- */
