@@ -1067,11 +1067,16 @@
                     <p id="attendanceMsg" style="margin-top: 10px; font-size: 0.9rem; font-weight: 600; display: none;"></p>
                 </div>
             
-                <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 30px; margin-bottom: 15px;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 30px; margin-bottom: 15px; flex-wrap: wrap; gap: 15px;">
                     <h3 style="margin: 0; font-size: 1.2rem; color: var(--text-dark);">Riwayat Absensi Hari Ini</h3>
-                    <button onclick="clearAttendanceLog()" style="background-color: var(--danger-red); color: white; border: none; padding: 8px 15px; border-radius: 8px; cursor: pointer; font-size: 0.85rem; font-weight: 600;">
-                        <i class="fa-solid fa-trash-can"></i> Bersihkan Log
-                    </button>
+                    <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+                        <button onclick="downloadAttendanceBackupCSV()" style="background-color: #2ecc71; color: white; border: none; padding: 8px 15px; border-radius: 5px; cursor: pointer; font-weight: bold; display: flex; align-items: center; gap: 8px;">
+                            <i class="fa-solid fa-file-excel"></i> Backup Data Absensi
+                        </button>
+                        <button onclick="clearAttendanceLog()" style="background-color: var(--danger-red); color: white; border: none; padding: 8px 15px; border-radius: 8px; cursor: pointer; font-size: 0.85rem; font-weight: 600;">
+                            <i class="fa-solid fa-trash-can"></i> Bersihkan Log
+                        </button>
+                    </div>
                 </div>
             
                 <div class="table-responsive">
@@ -2244,6 +2249,31 @@ window.showAdminDetail = function(type, title, desc) {
             
             link.setAttribute("href", url);
             link.setAttribute("download", "Backup_Data_Siswa_Pelangi_Pustaka.csv");
+            link.style.visibility = 'hidden';
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
+
+        // 3. Ekspor / Backup Data Absensi
+        window.downloadAttendanceBackupCSV = function() {
+            if(localAttendanceArray.length === 0) {
+                alert("Tidak ada data absensi yang bisa diekspor!");
+                return;
+            }
+
+            let csvContent = "\uFEFFNo,Tanggal,Waktu,Barcode/NIS Siswa,Nama Siswa,Kelas\n";
+
+            localAttendanceArray.forEach((log, index) => {
+                csvContent += `${index + 1},"${log.tanggal || ''}","${log.waktu || ''}","${log.id || ''}","${log.nama || ''}","${log.kelas || ''}"\n`;
+            });
+
+            const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+            const link = document.createElement("a");
+            const url = URL.createObjectURL(blob);
+
+            link.setAttribute("href", url);
+            link.setAttribute("download", "Backup_Data_Absensi_Pelangi_Pustaka.csv");
             link.style.visibility = 'hidden';
             document.body.appendChild(link);
             link.click();
