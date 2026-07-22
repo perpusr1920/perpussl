@@ -3230,6 +3230,12 @@ window.showAdminDetail = function(type, title, desc) {
             if(!inputVal) return;
             const studentFound = localStudentsArray.find(s => (s.barcode || '').toLowerCase() === inputVal.toLowerCase());
             if(studentFound) {
+                const activeLoanCount = localLoansArray.filter(l => l.studentBarcode === studentFound.barcode && l.status === "Dipinjam").length;
+                if(activeLoanCount >= 2) {
+                    alert(`Siswa ${studentFound.name || '-'} sudah meminjam 2 buku (batas maksimal). Buku harus dikembalikan dulu sebelum bisa meminjam lagi.`);
+                    document.getElementById('loanStudentBarcodeInput').value = "";
+                    return;
+                }
                 currentActiveStudent = studentFound;
                 document.getElementById('txtLoanStudentName').innerText = studentFound.name || '-';
                 document.getElementById('txtLoanStudentClass').innerText = "Kelas: " + (studentFound.class || '-');
@@ -3252,6 +3258,12 @@ window.showAdminDetail = function(type, title, desc) {
             if(loanCartBooks.some(b => b.id === bookFound.id)) { alert("Buku sudah ada di daftar!"); document.getElementById('loanBookBarcodeInput').value = ""; return; }
             const bookIsOnLoan = localLoansArray.some(l => l.bookBarcode === bookFound.barcode && l.status === "Dipinjam");
             if(bookIsOnLoan) { alert("Buku ini sedang dipinjam dan belum dikembalikan. Buku baru bisa dipinjamkan lagi setelah dikembalikan."); document.getElementById('loanBookBarcodeInput').value = ""; return; }
+            const activeLoanCount = localLoansArray.filter(l => l.studentBarcode === currentActiveStudent.barcode && l.status === "Dipinjam").length;
+            if(activeLoanCount + loanCartBooks.length >= 2) {
+                alert(`Siswa ini sudah mencapai batas maksimal 2 buku dipinjam (termasuk yang sedang dipinjam sekarang). Buku harus dikembalikan dulu sebelum bisa meminjam lagi.`);
+                document.getElementById('loanBookBarcodeInput').value = "";
+                return;
+            }
             loanCartBooks.push(bookFound);
             document.getElementById('loanBookBarcodeInput').value = "";
             renderLoanCartTable();
@@ -3293,6 +3305,12 @@ window.showAdminDetail = function(type, title, desc) {
             const conflictBook = loanCartBooks.find(book => localLoansArray.some(l => l.bookBarcode === book.barcode && l.status === "Dipinjam"));
             if(conflictBook) {
                 alert(`Gagal: Buku "${conflictBook.title || conflictBook.barcode}" baru saja dipinjam oleh transaksi lain dan belum dikembalikan. Silakan hapus buku ini dari daftar.`);
+                return;
+            }
+
+            const activeLoanCount = localLoansArray.filter(l => l.studentBarcode === currentActiveStudent.barcode && l.status === "Dipinjam").length;
+            if(activeLoanCount + loanCartBooks.length > 2) {
+                alert("Gagal: Total buku yang akan dipinjam melebihi batas maksimal 2 buku per siswa. Silakan kurangi jumlah buku di daftar.");
                 return;
             }
 
