@@ -3250,6 +3250,8 @@ window.showAdminDetail = function(type, title, desc) {
             const bookFound = localBooksArray.find(b => (b.barcode || '').toLowerCase() === inputVal.toLowerCase());
             if(!bookFound) { alert("Barcode buku tidak ditemukan!"); document.getElementById('loanBookBarcodeInput').value = ""; return; }
             if(loanCartBooks.some(b => b.id === bookFound.id)) { alert("Buku sudah ada di daftar!"); document.getElementById('loanBookBarcodeInput').value = ""; return; }
+            const bookIsOnLoan = localLoansArray.some(l => l.bookBarcode === bookFound.barcode && l.status === "Dipinjam");
+            if(bookIsOnLoan) { alert("Buku ini sedang dipinjam dan belum dikembalikan. Buku baru bisa dipinjamkan lagi setelah dikembalikan."); document.getElementById('loanBookBarcodeInput').value = ""; return; }
             loanCartBooks.push(bookFound);
             document.getElementById('loanBookBarcodeInput').value = "";
             renderLoanCartTable();
@@ -3287,6 +3289,13 @@ window.showAdminDetail = function(type, title, desc) {
 
         window.submitLoanTransaction = async function() {
             if(!currentActiveStudent || loanCartBooks.length === 0) return;
+
+            const conflictBook = loanCartBooks.find(book => localLoansArray.some(l => l.bookBarcode === book.barcode && l.status === "Dipinjam"));
+            if(conflictBook) {
+                alert(`Gagal: Buku "${conflictBook.title || conflictBook.barcode}" baru saja dipinjam oleh transaksi lain dan belum dikembalikan. Silakan hapus buku ini dari daftar.`);
+                return;
+            }
+
             const todayStr = new Date().toISOString().split('T')[0];
             try {
                 for(let book of loanCartBooks) {
