@@ -883,6 +883,85 @@
             border-radius: 6px;
             display: inline-block;
         }
+        .btn-read-ebook {
+            width: 100%;
+            margin-top: 4px;
+            padding: 10px 14px;
+            border: none;
+            border-radius: 10px;
+            background: linear-gradient(135deg, #ec4899, #c026d3);
+            color: white;
+            font-weight: 700;
+            font-size: 0.85rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            transition: 0.2s ease;
+        }
+        .btn-read-ebook:hover {
+            opacity: 0.9;
+            transform: translateY(-2px);
+        }
+
+        /* --- E-BOOK READER OVERLAY --- */
+        .ebook-reader-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(15, 15, 25, 0.8);
+            z-index: 9999;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 24px;
+        }
+        .ebook-reader-box {
+            background: white;
+            width: 100%;
+            max-width: 900px;
+            height: 90vh;
+            border-radius: 20px;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.4);
+        }
+        .ebook-reader-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 16px 22px;
+            border-bottom: 1px solid #eef0f6;
+            flex-shrink: 0;
+        }
+        .ebook-reader-header h3 {
+            font-size: 1.05rem;
+            font-weight: 700;
+            color: var(--text-dark);
+            margin: 0;
+            padding-right: 12px;
+        }
+        .ebook-reader-header button {
+            background: #f1f5f9;
+            border: none;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            color: var(--text-dark);
+            font-size: 1rem;
+            cursor: pointer;
+            flex-shrink: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .ebook-reader-header button:hover { background: #e2e8f0; }
+        .ebook-reader-box iframe {
+            flex: 1;
+            width: 100%;
+            border: none;
+        }
 
         /* --- LOGIN SECTION --- */
         #loginSection { 
@@ -1089,13 +1168,15 @@
         #adminGrid .card:nth-child(5) .icon-wrapper { background: #f0fdfa; color: #0d9488; }
         #adminGrid .card:nth-child(6) .icon-wrapper { background: #eff6ff; color: #2563eb; }
         #adminGrid .card:nth-child(7) .icon-wrapper { background: #fef2f2; color: #dc2626; }
+        #adminGrid .card:nth-child(8) .icon-wrapper { background: #fdf2f8; color: #c026d3; }
         #adminGrid .card:nth-child(1):hover .icon-wrapper,
         #adminGrid .card:nth-child(2):hover .icon-wrapper,
         #adminGrid .card:nth-child(3):hover .icon-wrapper,
         #adminGrid .card:nth-child(4):hover .icon-wrapper,
         #adminGrid .card:nth-child(5):hover .icon-wrapper,
         #adminGrid .card:nth-child(6):hover .icon-wrapper,
-        #adminGrid .card:nth-child(7):hover .icon-wrapper {
+        #adminGrid .card:nth-child(7):hover .icon-wrapper,
+        #adminGrid .card:nth-child(8):hover .icon-wrapper {
             background: var(--primary-gradient);
             color: white;
         }
@@ -1797,6 +1878,14 @@
             .opac-results-grid {
                 grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
             }
+            .ebook-reader-overlay {
+                padding: 0;
+            }
+            .ebook-reader-box {
+                max-width: 100%;
+                height: 100vh;
+                border-radius: 0;
+            }
         }
 
         @media (max-width: 400px) {
@@ -2157,12 +2246,23 @@
                 </div>
             </div>
 
-            <div id="sub-ebook" class="user-sub-page ebook-page" style="display: none;">
-                <div class="ebook-icon"><i class="fa-solid fa-tablet-screen-button"></i></div>
-                <span class="ebook-pill">Segera Hadir</span>
-                <h2>Koleksi E-Book Digital</h2>
-                <p>Kabar gembira! Layanan Buku Digital (E-Book) saat ini sedang dalam proses integrasi sistem.</p>
-                <div class="ebook-progress"><div class="ebook-progress-bar"></div></div>
+            <div id="sub-ebook" class="user-sub-page opac-page" style="display: none;">
+                <div class="page-header">
+                    <div class="page-header-icon pink"><i class="fa-solid fa-tablet-screen-button"></i></div>
+                    <div>
+                        <h2>E-Book Digital</h2>
+                        <p>Koleksi buku digital yang bisa langsung dibaca online. Klik "Baca Sekarang" pada judul yang diinginkan.</p>
+                    </div>
+                </div>
+                <div class="opac-search-bar">
+                    <input type="text" id="ebookUserSearchInput" oninput="searchEbook()" placeholder="Cari judul atau pengarang e-book...">
+                </div>
+                <div id="ebookResultsArea">
+                    <div class="opac-empty-state">
+                        <i class="fa-solid fa-tablet-screen-button"></i>
+                        <p>Memuat koleksi e-book...</p>
+                    </div>
+                </div>
             </div>
 
             <div id="sub-opac" class="user-sub-page opac-page" style="display: none;">
@@ -2184,6 +2284,16 @@
                     </div>
                 </div>
             </div>
+        </div>
+    </div>
+
+    <div id="ebookReaderOverlay" class="ebook-reader-overlay" style="display: none;">
+        <div class="ebook-reader-box">
+            <div class="ebook-reader-header">
+                <h3 id="ebookReaderTitle">Judul E-Book</h3>
+                <button onclick="closeEbookReader()" aria-label="Tutup"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <iframe id="ebookReaderFrame" src="" title="E-Book Reader"></iframe>
         </div>
     </div>
 
@@ -2243,6 +2353,11 @@
                 <div class="icon-wrapper"><i class="fa-solid fa-table-cells"></i></div>
                 <h3>Jadwal Kunjung</h3>
                 <p>Ubah Tabel Beranda</p>
+            </div>
+            <div class="card" onclick="openEbookManager()">
+                <div class="icon-wrapper"><i class="fa-solid fa-tablet-screen-button"></i></div>
+                <h3>E-Book</h3>
+                <p>Kelola Buku Digital</p>
             </div>
         </div>
 
@@ -2616,8 +2731,75 @@
                     </table>
                 </div>
             </div>
+
+            <div id="crudEbookContainer" style="display: none;">
+                <div class="book-form-container">
+                    <h3 id="ebookFormTitle" style="margin-bottom: 4px; font-size: 1.15rem; font-weight: 700;">Tambah E-Book Baru</h3>
+                    <p style="font-size: 0.85rem; color: var(--text-gray); margin-bottom: 20px;">Lengkapi data e-book di bawah ini. Link PDF bisa berupa link share Google Drive atau link PDF publik lainnya.</p>
+                    <input type="hidden" id="editEbookId">
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label>Judul E-Book <span class="req-mark">*</span></label>
+                            <input type="text" id="ebookTitleInput" placeholder="Contoh: Laskar Pelangi">
+                        </div>
+                        <div class="form-group">
+                            <label>Pengarang</label>
+                            <input type="text" id="ebookAuthorInput" placeholder="Contoh: Andrea Hirata">
+                        </div>
+                        <div class="form-group">
+                            <label>Kategori</label>
+                            <input type="text" id="ebookCategoryInput" placeholder="Contoh: Fiksi / Pengetahuan Umum">
+                        </div>
+                    </div>
+                    <div class="form-group" style="margin-bottom: 18px;">
+                        <label>Link PDF E-Book <span class="req-mark">*</span></label>
+                        <input type="text" id="ebookPdfLinkInput" placeholder="Tempel link share Google Drive (atau link PDF publik lainnya) di sini...">
+                        <p class="form-hint"><i class="fa-solid fa-circle-info"></i> Jika pakai Google Drive, pastikan akses dibagikan ke "Anyone with the link".</p>
+                    </div>
+                    <div class="form-group" style="margin-bottom: 22px;">
+                        <label style="margin-bottom: 2px;">Cover E-Book</label>
+                        <div class="cover-upload-zone">
+                            <div class="cover-thumb-slot"><i class="fa-solid fa-image" id="ebookCoverPreviewIcon"></i><img id="ebookCoverPreview" src="" alt="Preview Cover" style="display:none;"></div>
+                            <input type="text" id="ebookCoverInput" oninput="previewEbookCover()" placeholder="Tempel link share Google Drive di sini...">
+                        </div>
+                        <p class="form-hint"><i class="fa-solid fa-circle-info"></i> Opsional. Kalau kosong akan ditampilkan ikon default.</p>
+                    </div>
+                    <p class="form-hint" style="margin-bottom: 20px;"><span class="req-mark" style="font-weight:700;">*</span> Wajib diisi &mdash; kolom lainnya opsional.</p>
+                    <div style="display: flex; gap: 10px;">
+                        <button class="btn-save-book" id="btnSaveEbookAction" onclick="saveEbook()">Simpan E-Book</button>
+                        <button class="btn-cancel-edit" id="btnCancelEbookEditAction" onclick="resetEbookForm()">Batal</button>
+                    </div>
+                </div>
+
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 30px; margin-bottom: 15px; flex-wrap: wrap; gap: 15px;">
+                    <h3 style="margin: 0; font-size: 1.2rem; color: var(--text-dark);">Daftar Koleksi E-Book (Cloud Firebase)</h3>
+                </div>
+
+                <div style="position: relative; margin-bottom: 20px;">
+                    <i class="fa-solid fa-magnifying-glass" style="position: absolute; left: 15px; top: 50%; transform: translateY(-50%); color: var(--text-gray);"></i>
+                    <input type="text" id="ebookSearchInput" oninput="searchEbookAdmin()" placeholder="Cari berdasarkan Judul, Pengarang, atau Kategori..." style="width: 100%; padding: 12px 20px 12px 45px; border: 2px solid var(--light-blue); border-radius: 25px; outline: none; font-size: 0.95rem; box-shadow: 0 4px 10px rgba(0,0,0,0.02); transition: 0.3s;">
+                </div>
+
+                <div class="table-responsive">
+                    <table class="book-table" style="background: white; border-radius: 20px; box-shadow: 0 5px 15px rgba(0,0,0,0.01);">
+                        <thead>
+                            <tr>
+                                <th>No</th>
+                                <th>E-Book</th>
+                                <th>Pengarang</th>
+                                <th>Kategori</th>
+                                <th>Aksi</th>
+                            </tr>
+                        </thead>
+                        <tbody id="ebookAdminTableBody">
+                            <tr><td colspan="5" style="text-align:center;">Memuat data e-book dari cloud...</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
         </div>
     </div>
+
 
     <script>
         function showLogin() {
@@ -2673,11 +2855,11 @@
                 theme: 'theme-pink',
                 badgeIcon: 'fa-tablet-screen-button',
                 badgeText: 'Fitur Baru',
-                titleMain: 'E-Book Digital',
-                titleAccent: 'Segera Hadir',
-                desc: 'Layanan buku digital sedang dalam proses integrasi sistem — nantikan koleksi barunya!',
-                stat1: { icon: 'fa-cloud-arrow-up', value: 'Proses', label: 'Integrasi Sistem' },
-                stat2: { icon: 'fa-hourglass-half', value: 'Segera', label: 'Diluncurkan' }
+                titleMain: 'E-Book',
+                titleAccent: 'Digital',
+                desc: 'Baca koleksi buku digital langsung dari browser, kapan saja dan di mana saja.',
+                stat1: { icon: 'fa-book-open-reader', value: 'Baca', label: 'Langsung Online' },
+                stat2: { icon: 'fa-cloud', label: 'Berbasis Cloud', value: '24/7' }
             },
             'opac': {
                 theme: '',
@@ -2757,6 +2939,7 @@
     document.getElementById('returnTransactionContainer').style.display = (type === 'Kembali') ? 'block' : 'none';
     document.getElementById('crudStudentContainer').style.display = (type === 'Siswa') ? 'block' : 'none';
     document.getElementById('reportTransactionContainer').style.display = (type === 'Laporan') ? 'block' : 'none';
+    document.getElementById('crudEbookContainer').style.display = (type === 'Ebook') ? 'block' : 'none';
     
     // Tambahkan baris logika khusus untuk menu Absensi di sini
     document.getElementById('attendanceContainer').style.display = (type === 'Absensi') ? 'block' : 'none';
@@ -2780,6 +2963,10 @@
         }
         function openReportManager() {
             showAdminDetail('Laporan', 'Laporan Riwayat Transaksi', 'Memantau data riwayat sirkulasi keluar masuknya buku secara real-time.');
+        }
+        function openEbookManager() {
+            showAdminDetail('Ebook', 'Kelola E-Book Digital', 'Tambahkan judul dan link PDF e-book agar bisa dibaca siswa.');
+            if (typeof window.renderEbooksAdminTable === 'function') window.renderEbooksAdminTable(window.localEbooksArray || []);
         }
         // ==================== LOGIKA FITUR ABSENSI PERPUSTAKAAN ====================
         // Catatan: fungsi inti absensi (submitAttendance, renderAttendanceTable, dst)
@@ -2952,11 +3139,14 @@ window.showAdminDetail = function(type, title, desc) {
         const studentsCollection = collection(db, "students");
         const loansCollection = collection(db, "loans");
         const attendanceCollection = collection(db, "attendance");
+        const ebooksCollection = collection(db, "ebooks");
 
         let localBooksArray = [];
         let localStudentsArray = [];
         let localLoansArray = []; 
         let localAttendanceArray = [];
+        let localEbooksArray = [];
+        window.localEbooksArray = localEbooksArray;
         
         let currentActiveStudent = null;
         let loanCartBooks = [];
@@ -3012,6 +3202,18 @@ window.showAdminDetail = function(type, title, desc) {
                 return `https://drive.google.com/thumbnail?id=${match[0]}&sz=w400`;
             }
             return trimmed; // fallback: kalau bukan link Drive, pakai apa adanya
+        }
+
+        // Mengubah link (Google Drive atau link PDF publik lain) menjadi URL yang bisa ditanam di <iframe> untuk dibaca langsung
+        function getDriveEmbedUrl(link) {
+            if (!link) return '';
+            const trimmed = link.trim();
+            const driveMatch = trimmed.match(/[-\w]{25,}/); // FILE_ID Google Drive
+            if (trimmed.includes('drive.google.com') && driveMatch) {
+                return `https://drive.google.com/file/d/${driveMatch[0]}/preview`;
+            }
+            // Link PDF publik non-Drive: pakai Google Docs Viewer supaya tetap bisa ditanam di iframe
+            return `https://docs.google.com/viewer?url=${encodeURIComponent(trimmed)}&embedded=true`;
         }
 
         window.previewBookCover = function() {
@@ -3164,6 +3366,201 @@ window.showAdminDetail = function(type, title, desc) {
         // Mengecek apakah sebuah buku (berdasarkan barcode) sedang dalam status dipinjam
         function isBookCurrentlyLoaned(barcode) {
             return localLoansArray.some(loan => loan.bookBarcode === barcode && loan.status === "Dipinjam");
+        }
+
+        /* ==================== MANAJEMEN LIVE DATA E-BOOK ==================== */
+        onSnapshot(ebooksCollection, (snapshot) => {
+            localEbooksArray = [];
+            snapshot.forEach((doc) => {
+                localEbooksArray.push({ id: doc.id, ...doc.data() });
+            });
+            window.localEbooksArray = localEbooksArray;
+
+            const adminSearchInput = document.getElementById('ebookSearchInput');
+            if (adminSearchInput && adminSearchInput.value) {
+                window.searchEbookAdmin();
+            } else {
+                window.renderEbooksAdminTable(localEbooksArray);
+            }
+
+            const userSearchInput = document.getElementById('ebookUserSearchInput');
+            if (userSearchInput && userSearchInput.value) {
+                window.searchEbook();
+            } else {
+                window.renderEbookGrid(localEbooksArray);
+            }
+        });
+
+        window.previewEbookCover = function() {
+            const val = document.getElementById('ebookCoverInput').value.trim();
+            const img = document.getElementById('ebookCoverPreview');
+            const icon = document.getElementById('ebookCoverPreviewIcon');
+            if (!val) { img.style.display = 'none'; img.src = ''; icon.style.display = 'inline-block'; return; }
+            img.src = getDriveImageUrl(val);
+            img.style.display = 'block';
+            icon.style.display = 'none';
+        }
+
+        window.renderEbooksAdminTable = function(dataArray) {
+            const tbody = document.getElementById('ebookAdminTableBody');
+            if (!tbody) return;
+            tbody.innerHTML = "";
+            if (dataArray.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="5" style="text-align:center; color: var(--text-gray);">Belum ada e-book / tidak ditemukan.</td></tr>`;
+                return;
+            }
+            dataArray.forEach((ebook, index) => {
+                const tr = document.createElement('tr');
+                const coverThumb = ebook.coverUrl
+                    ? `<img src="${getDriveImageUrl(ebook.coverUrl)}" alt="Cover" style="width:34px; height:46px; object-fit:cover; border-radius:5px; border:1px solid #e2e8f0; flex-shrink:0;">`
+                    : `<div style="width:34px; height:46px; border-radius:5px; background:#f1f5f9; display:flex; align-items:center; justify-content:center; color:#cbd5e1; flex-shrink:0;"><i class="fa-solid fa-tablet-screen-button"></i></div>`;
+                tr.innerHTML = `
+                    <td>${index + 1}</td>
+                    <td>
+                        <div style="display:flex; align-items:flex-start; gap:10px;">
+                            ${coverThumb}
+                            <div style="font-weight:600; color:var(--text-dark);">${ebook.title || ''}</div>
+                        </div>
+                    </td>
+                    <td>${ebook.author || '-'}</td>
+                    <td>${ebook.category || '-'}</td>
+                    <td style="text-align: center; white-space: nowrap;">
+                        <button class="btn-action btn-edit" onclick="editEbookTrigger('${ebook.id}')"><i class="fa-solid fa-pen-to-square"></i> Edit</button>
+                        <button class="btn-action btn-delete" onclick="deleteEbook('${ebook.id}')"><i class="fa-solid fa-trash"></i> Hapus</button>
+                    </td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        window.searchEbookAdmin = function() {
+            const keyword = document.getElementById('ebookSearchInput').value.toLowerCase().trim();
+            if (!keyword) { window.renderEbooksAdminTable(localEbooksArray); return; }
+            const filtered = localEbooksArray.filter(e => {
+                return (e.title || "").toLowerCase().includes(keyword)
+                    || (e.author || "").toLowerCase().includes(keyword)
+                    || (e.category || "").toLowerCase().includes(keyword);
+            });
+            window.renderEbooksAdminTable(filtered);
+        }
+
+        window.saveEbook = async function() {
+            const idHidden = document.getElementById('editEbookId').value;
+            const title = document.getElementById('ebookTitleInput').value.trim();
+            const author = document.getElementById('ebookAuthorInput').value.trim();
+            const category = document.getElementById('ebookCategoryInput').value.trim();
+            const pdfLink = document.getElementById('ebookPdfLinkInput').value.trim();
+            const coverUrl = document.getElementById('ebookCoverInput').value.trim();
+
+            if (!title || !pdfLink) {
+                alert("Judul E-Book dan Link PDF wajib diisi!");
+                return;
+            }
+
+            try {
+                const ebookData = { title, author, category, pdfLink, coverUrl };
+                if (idHidden) {
+                    await updateDoc(doc(db, "ebooks", idHidden), ebookData);
+                    alert("E-Book berhasil diperbarui!");
+                } else {
+                    await addDoc(ebooksCollection, ebookData);
+                    alert("E-Book baru berhasil ditambahkan!");
+                }
+                window.resetEbookForm();
+            } catch (e) { console.error(e); alert("Gagal menyimpan e-book."); }
+        }
+
+        window.editEbookTrigger = function(id) {
+            const ebook = localEbooksArray.find(e => e.id === id);
+            if (!ebook) return;
+            document.getElementById('editEbookId').value = ebook.id;
+            document.getElementById('ebookTitleInput').value = ebook.title || "";
+            document.getElementById('ebookAuthorInput').value = ebook.author || "";
+            document.getElementById('ebookCategoryInput').value = ebook.category || "";
+            document.getElementById('ebookPdfLinkInput').value = ebook.pdfLink || "";
+            document.getElementById('ebookCoverInput').value = ebook.coverUrl || "";
+            window.previewEbookCover();
+            document.getElementById('ebookFormTitle').innerText = "Edit E-Book";
+            document.getElementById('btnSaveEbookAction').innerText = "Simpan Perubahan";
+            document.getElementById('btnCancelEbookEditAction').style.display = "inline-block";
+            document.getElementById('crudEbookContainer').scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+
+        window.deleteEbook = async function(id) {
+            if (!confirm("Yakin ingin menghapus e-book ini?")) return;
+            try {
+                await deleteDoc(doc(db, "ebooks", id));
+            } catch (e) { console.error(e); alert("Gagal menghapus e-book."); }
+        }
+
+        window.resetEbookForm = function() {
+            document.getElementById('editEbookId').value = "";
+            document.getElementById('ebookTitleInput').value = "";
+            document.getElementById('ebookAuthorInput').value = "";
+            document.getElementById('ebookCategoryInput').value = "";
+            document.getElementById('ebookPdfLinkInput').value = "";
+            document.getElementById('ebookCoverInput').value = "";
+            document.getElementById('ebookCoverPreview').style.display = "none";
+            document.getElementById('ebookCoverPreviewIcon').style.display = "inline-block";
+            document.getElementById('ebookFormTitle').innerText = "Tambah E-Book Baru";
+            document.getElementById('btnSaveEbookAction').innerText = "Simpan E-Book";
+            document.getElementById('btnCancelEbookEditAction').style.display = "none";
+        }
+
+        /* ==================== KATALOG E-BOOK UNTUK SISWA ==================== */
+        function buildEbookCard(ebook) {
+            const coverHtml = ebook.coverUrl
+                ? `<img src="${getDriveImageUrl(ebook.coverUrl)}" alt="Cover ${ebook.title || ''}">`
+                : `<i class="fa-solid fa-tablet-screen-button"></i>`;
+            return `
+                <div class="opac-book-card">
+                    <div class="opac-book-cover">${coverHtml}</div>
+                    <h4>${ebook.title || ''}</h4>
+                    <div class="opac-author">${ebook.author || '-'}</div>
+                    ${ebook.category ? `<div class="opac-meta">${ebook.category}</div>` : ''}
+                    <button class="btn-read-ebook" onclick="openEbookReader('${ebook.id}')"><i class="fa-solid fa-book-open-reader"></i> Baca Sekarang</button>
+                </div>`;
+        }
+
+        window.renderEbookGrid = function(dataArray) {
+            const area = document.getElementById('ebookResultsArea');
+            if (!area) return;
+            if (dataArray.length === 0) {
+                area.innerHTML = `
+                    <div class="opac-empty-state">
+                        <i class="fa-solid fa-tablet-screen-button"></i>
+                        <p>Belum ada e-book yang tersedia saat ini.</p>
+                    </div>`;
+                return;
+            }
+            const cardsHtml = dataArray.map(buildEbookCard).join('');
+            area.innerHTML = `<div class="opac-results-grid">${cardsHtml}</div>`;
+        }
+
+        window.searchEbook = function() {
+            const keyword = document.getElementById('ebookUserSearchInput').value.toLowerCase().trim();
+            if (!keyword) { window.renderEbookGrid(localEbooksArray); return; }
+            const filtered = localEbooksArray.filter(e => {
+                return (e.title || "").toLowerCase().includes(keyword)
+                    || (e.author || "").toLowerCase().includes(keyword)
+                    || (e.category || "").toLowerCase().includes(keyword);
+            });
+            window.renderEbookGrid(filtered);
+        }
+
+        window.openEbookReader = function(id) {
+            const ebook = localEbooksArray.find(e => e.id === id);
+            if (!ebook) return;
+            document.getElementById('ebookReaderTitle').innerText = ebook.title || 'E-Book';
+            document.getElementById('ebookReaderFrame').src = getDriveEmbedUrl(ebook.pdfLink);
+            document.getElementById('ebookReaderOverlay').style.display = 'flex';
+            document.body.style.overflow = 'hidden';
+        }
+
+        window.closeEbookReader = function() {
+            document.getElementById('ebookReaderOverlay').style.display = 'none';
+            document.getElementById('ebookReaderFrame').src = '';
+            document.body.style.overflow = '';
         }
 
         /* --- OPAC: PENCARIAN KATALOG UNTUK PENGUNJUNG --- */
