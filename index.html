@@ -3324,6 +3324,7 @@ window.showAdminDetail = function(type, title, desc) {
                     alert("Gagal: Buku dengan barcode tersebut tidak ditemukan dalam daftar aktif peminjaman!");
                     document.getElementById('returnBookBarcodeInput').value = "";
                     document.getElementById('returnBookBarcodeInput').focus();
+                    if (window.returnSuccessHideTimer) clearTimeout(window.returnSuccessHideTimer);
                     successBox.style.display = "none";
                     return;
                 }
@@ -3341,6 +3342,11 @@ window.showAdminDetail = function(type, title, desc) {
                     document.getElementById('txtReturnBookTitle').innerText = loanData.bookTitle || "Buku Tanpa Judul";
                     document.getElementById('txtReturnStudentName').innerText = `Dikembalikan oleh: ${loanData.studentName || '-'} (Kelas ${loanData.studentClass || '-'})`;
                     successBox.style.display = "flex";
+
+                    if (window.returnSuccessHideTimer) clearTimeout(window.returnSuccessHideTimer);
+                    window.returnSuccessHideTimer = setTimeout(() => {
+                        successBox.style.display = "none";
+                    }, 20000);
                     
                     document.getElementById('returnBookBarcodeInput').value = "";
                     document.getElementById('returnBookBarcodeInput').focus();
