@@ -2948,13 +2948,15 @@
             document.getElementById('adminGrid').style.display = 'grid';
             document.getElementById('adminDetail').style.display = 'none';
         }
-        function openBookManager() { showAdminDetail('Buku', 'Katalog Buku Perpustakaan', 'Kelola data buku yang tersedia.'); }
-        function openStudentManager() { showAdminDetail('Siswa', 'Data Anggota Siswa', 'Manajemen basis data siswa.'); }
+        function openBookManager() { window.startBooksListener(); showAdminDetail('Buku', 'Katalog Buku Perpustakaan', 'Kelola data buku yang tersedia.'); }
+        function openStudentManager() { window.startStudentsListener(); showAdminDetail('Siswa', 'Data Anggota Siswa', 'Manajemen basis data siswa.'); }
         function openLoanManager() { 
+            window.startBooksListener(); window.startStudentsListener(); window.startLoansListener();
             showAdminDetail('Pinjam', 'Transaksi Peminjaman Buku', 'Masukkan Barcode Siswa terlebih dahulu untuk mulai meminjam buku.'); 
             if (typeof window.resetLoanSession === 'function') { window.resetLoanSession(); }
         }
         function openReturnManager() {
+            window.startBooksListener(); window.startStudentsListener(); window.startLoansListener();
             showAdminDetail('Kembali', 'Pengembalian Buku', 'Silakan scan langsung barcode fisik buku untuk memproses pengembalian.');
             setTimeout(() => { 
                 const returnInput = document.getElementById('returnBookBarcodeInput');
@@ -2962,6 +2964,7 @@
             }, 200);
         }
         function openReportManager() {
+            window.startLoansListener();
             showAdminDetail('Laporan', 'Laporan Riwayat Transaksi', 'Memantau data riwayat sirkulasi keluar masuknya buku secara real-time.');
         }
         function openEbookManager() {
@@ -2973,6 +2976,8 @@
         // sekarang didefinisikan di <script type="module"> di bawah, supaya bisa
         // langsung mengakses data siswa (localStudentsArray) dan database Firestore.
 function openAttendanceManager() {
+    if (typeof window.startAttendanceListener === 'function') window.startAttendanceListener();
+    if (typeof window.startStudentsListener === 'function') window.startStudentsListener();
     showAdminDetail('Absensi', 'Daftar Hadir Pengunjung', 'Melihat statistik serta menginput absensi kunjungan harian siswa.');
     if (typeof window.renderAttendanceTable === 'function') window.renderAttendanceTable();
     if (typeof window.calculateAttendanceStats === 'function') window.calculateAttendanceStats();
@@ -3119,7 +3124,7 @@ window.showAdminDetail = function(type, title, desc) {
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
         import { 
-            getFirestore, collection, addDoc, onSnapshot, doc, updateDoc, deleteDoc, getDocs, query, where 
+            getFirestore, collection, addDoc, onSnapshot, doc, updateDoc, deleteDoc, getDocs, query, where, limit, getCountFromServer 
         } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
         const firebaseConfig = {
@@ -3151,20 +3156,57 @@ window.showAdminDetail = function(type, title, desc) {
         let currentActiveStudent = null;
         let loanCartBooks = [];
 
-        /* --- MANAJEMEN LIVE DATA BUKU --- */
-        onSnapshot(booksCollection, (snapshot) => {
-            localBooksArray = [];
-            snapshot.forEach((doc) => {
-                localBooksArray.push({ id: doc.id, ...doc.data() });
+        /* --- MANAJEMEN LIVE DATA BUKU (HEMAT READ) ---
+           Dulu: onSnapshot ditaruh di sini jalan OTOMATIS untuk SETIAP pengunjung yang buka
+           halaman, artinya seluruh isi koleksi "books" ke-download & dihitung sebagai read.
+           Kalau bukunya 10.000, itu 10.000 read hanya untuk 1x buka halaman - kuota gratis
+           Firebase (50.000 read/hari) bisa habis hanya dengan segelintir kunjungan.
+
+           Sekarang: saat halaman pertama dibuka, kita HANYA minta jumlah totalnya lewat
+           getCountFromServer() -> ini dihitung Firestore di sisi server dan cuma kena 1 read,
+           berapa pun jumlah dokumennya. Listener penuh (onSnapshot) baru dinyalakan saat admin
+           benar-benar membuka menu "Kelola Buku". */
+        let booksListenerStarted = false;
+        window.startBooksListener = function() {
+            if (booksListenerStarted) return;
+            booksListenerStarted = true;
+            onSnapshot(booksCollection, (snapshot) => {
+                localBooksArray = [];
+                snapshot.forEach((doc) => {
+                    localBooksArray.push({ id: doc.id, ...doc.data() });
+                });
+                const searchInput = document.getElementById('bookSearchInput');
+                if (searchInput && searchInput.value) {
+                    searchBook();
+                } else {
+                    renderBooksTable(localBooksArray);
+                }
+                renderBookSummaryNotif();
             });
-            const searchInput = document.getElementById('bookSearchInput');
-            if (searchInput && searchInput.value) {
-                searchBook();
-            } else {
-                renderBooksTable(localBooksArray);
+        }
+
+        async function loadBookCountSummary() {
+            try {
+                const countSnap = await getCountFromServer(booksCollection);
+                const total = countSnap.data().count;
+                const totalEksemplarEl = document.getElementById('txtTotalEksemplarBuku');
+                const totalJudulEl = document.getElementById('txtTotalJudulBuku');
+                // Catatan: ini total eksemplar (jumlah dokumen), bukan judul unik.
+                // Angka judul unik yang presisi baru dihitung ulang saat admin membuka
+                // menu Kelola Buku (lihat renderBookSummaryNotif di listener di atas).
+                if (totalEksemplarEl) totalEksemplarEl.innerText = total;
+                if (totalJudulEl) totalJudulEl.innerText = total;
+                if (typeof currentHeroPage === 'undefined' || currentHeroPage === 'home') {
+                    const heroValEl = document.getElementById('heroStat1Value');
+                    const heroVal2El = document.getElementById('heroStat2Value');
+                    if (heroValEl) heroValEl.innerText = total;
+                    if (heroVal2El) heroVal2El.innerText = total;
+                }
+            } catch (e) {
+                console.error("Gagal memuat ringkasan jumlah buku:", e);
             }
-            renderBookSummaryNotif();
-        });
+        }
+        loadBookCountSummary();
 
         /* --- NOTIFIKASI RINGKASAN JUMLAH BUKU (HALAMAN AWAL) --- */
         window.renderBookSummaryNotif = function() {
@@ -3563,10 +3605,35 @@ window.showAdminDetail = function(type, title, desc) {
             document.body.style.overflow = '';
         }
 
-        /* --- OPAC: PENCARIAN KATALOG UNTUK PENGUNJUNG --- */
-        window.searchOpac = function() {
-            const keyword = document.getElementById('opacSearchInput').value.toLowerCase().trim();
+        /* --- OPAC: PENCARIAN KATALOG UNTUK PENGUNJUNG (hemat read) ---
+           Pengunjung publik yang cuma lihat-lihat halaman TIDAK perlu menarik seluruh 10.000
+           data buku. Data baru diambil sekali (getDocs, bukan onSnapshot yang terus mendengarkan)
+           begitu pengunjung benar-benar menekan tombol cari, lalu disimpan di memori untuk
+           pencarian berikutnya di sesi yang sama supaya tidak berulang kali membaca dari Firestore.
+           Status "Dipinjam/Tersedia" juga hanya mengambil transaksi yang statusnya masih aktif
+           (query where status == "Dipinjam"), bukan seluruh riwayat peminjaman dari awal berdiri. */
+        let opacDataLoaded = false;
+        async function ensureOpacDataLoaded() {
+            if (opacDataLoaded) return;
+            const [booksSnap, activeLoansSnap] = await Promise.all([
+                getDocs(booksCollection),
+                getDocs(query(loansCollection, where("status", "==", "Dipinjam")))
+            ]);
+            if (localBooksArray.length === 0) {
+                booksSnap.forEach((d) => localBooksArray.push({ id: d.id, ...d.data() }));
+            }
+            if (localLoansArray.length === 0) {
+                activeLoansSnap.forEach((d) => localLoansArray.push({ id: d.id, ...d.data() }));
+            }
+            opacDataLoaded = true;
+        }
+
+        window.searchOpac = async function() {
             const resultsArea = document.getElementById('opacResultsArea');
+            resultsArea.innerHTML = `<div class="opac-empty-state"><i class="fa-solid fa-spinner fa-spin"></i><p>Memuat data buku...</p></div>`;
+            await ensureOpacDataLoaded();
+
+            const keyword = document.getElementById('opacSearchInput').value.toLowerCase().trim();
 
             if (!keyword) {
                 resultsArea.innerHTML = `
@@ -3782,28 +3849,37 @@ window.showAdminDetail = function(type, title, desc) {
             }
         }
 
-        /* --- SINKRONISASI & LIVE LAPORAN TRANSAKSI + CHECKBOX --- */
-        onSnapshot(loansCollection, (snapshot) => {
-            localLoansArray = [];
-            snapshot.forEach((doc) => {
-                localLoansArray.push({ id: doc.id, ...doc.data() });
+        /* --- SINKRONISASI & LIVE LAPORAN TRANSAKSI + CHECKBOX (lazy-start) ---
+           Koleksi "loans" ini bisa menumpuk terus dari waktu ke waktu (sama seperti absensi),
+           jadi listener realtime-nya HANYA dinyalakan saat admin membuka menu Pinjam/Kembali/
+           Laporan - bukan otomatis untuk setiap pengunjung publik. Backup + hapus berkala
+           (seperti yang sudah didiskusikan untuk absensi) juga disarankan untuk koleksi ini. */
+        let loansListenerStarted = false;
+        window.startLoansListener = function() {
+            if (loansListenerStarted) return;
+            loansListenerStarted = true;
+            onSnapshot(loansCollection, (snapshot) => {
+                localLoansArray = [];
+                snapshot.forEach((doc) => {
+                    localLoansArray.push({ id: doc.id, ...doc.data() });
+                });
+
+                localLoansArray.sort((a, b) => (b.loanDate || '').localeCompare(a.loanDate || ''));
+
+                const searchInput = document.getElementById('loanReportSearchInput');
+                if(searchInput && searchInput.value) {
+                    searchLoanReport();
+                } else {
+                    renderLoanReportTable(localLoansArray);
+                }
+
+                // Refresh hasil OPAC juga jika sedang menampilkan pencarian, supaya status pinjam selalu terbaru
+                const opacInput = document.getElementById('opacSearchInput');
+                if (opacInput && opacInput.value.trim()) {
+                    searchOpac();
+                }
             });
-            
-            localLoansArray.sort((a, b) => (b.loanDate || '').localeCompare(a.loanDate || ''));
-
-            const searchInput = document.getElementById('loanReportSearchInput');
-            if(searchInput && searchInput.value) {
-                searchLoanReport();
-            } else {
-                renderLoanReportTable(localLoansArray);
-            }
-
-            // Refresh hasil OPAC juga jika sedang menampilkan pencarian, supaya status pinjam selalu terbaru
-            const opacInput = document.getElementById('opacSearchInput');
-            if (opacInput && opacInput.value.trim()) {
-                searchOpac();
-            }
-        });
+        }
 
         /* --- SINKRONISASI & LIVE LAPORAN TRANSAKSI + PERHITUNGAN TERLAMBAT --- */
         window.renderLoanReportTable = function(dataArray) {
@@ -3998,13 +4074,18 @@ window.showAdminDetail = function(type, title, desc) {
             renderLoanReportTable(filtered);
         }
 
-        /* --- MANAJEMEN LIVE DATA SISWA --- */
-        onSnapshot(studentsCollection, (snapshot) => {
-            localStudentsArray = [];
-            snapshot.forEach((doc) => { localStudentsArray.push({ id: doc.id, ...doc.data() }); });
-            const searchInput = document.getElementById('studentSearchInput');
-            if (searchInput && searchInput.value) { searchStudent(); } else { renderStudentsTable(localStudentsArray); }
-        });
+        /* --- MANAJEMEN LIVE DATA SISWA (lazy-start, sama seperti buku) --- */
+        let studentsListenerStarted = false;
+        window.startStudentsListener = function() {
+            if (studentsListenerStarted) return;
+            studentsListenerStarted = true;
+            onSnapshot(studentsCollection, (snapshot) => {
+                localStudentsArray = [];
+                snapshot.forEach((doc) => { localStudentsArray.push({ id: doc.id, ...doc.data() }); });
+                const searchInput = document.getElementById('studentSearchInput');
+                if (searchInput && searchInput.value) { searchStudent(); } else { renderStudentsTable(localStudentsArray); }
+            });
+        }
 
         window.renderStudentsTable = function(dataArray) {
             const tbody = document.getElementById('studentTableBody');
@@ -4226,17 +4307,24 @@ window.showAdminDetail = function(type, title, desc) {
             }
         }
 
-        // Sinkronisasi real-time: setiap ada perubahan data absensi di cloud, tabel & statistik otomatis diperbarui
-        onSnapshot(attendanceCollection, (snapshot) => {
-            localAttendanceArray = [];
-            snapshot.forEach((docSnap) => {
-                localAttendanceArray.push({ id_: docSnap.id, ...docSnap.data() });
+        // Sinkronisasi real-time absensi - lazy-start, hanya nyala saat menu Absensi dibuka.
+        // Ditambah backup + hapus mingguan (sudah didiskusikan sebelumnya), koleksi ini
+        // tetap terjaga kecil sehingga read-nya juga tetap murah.
+        let attendanceListenerStarted = false;
+        window.startAttendanceListener = function() {
+            if (attendanceListenerStarted) return;
+            attendanceListenerStarted = true;
+            onSnapshot(attendanceCollection, (snapshot) => {
+                localAttendanceArray = [];
+                snapshot.forEach((docSnap) => {
+                    localAttendanceArray.push({ id_: docSnap.id, ...docSnap.data() });
+                });
+                // Urutkan dari yang paling baru berdasarkan waktu disimpan
+                localAttendanceArray.sort((a, b) => (b.createdAt || 0) - (a.createdAt || 0));
+                renderAttendanceTable();
+                calculateAttendanceStats();
             });
-            // Urutkan dari yang paling baru berdasarkan waktu disimpan
-            localAttendanceArray.sort((a, b) => (b.createdAt || 0) - (a.createdAt || 0));
-            renderAttendanceTable();
-            calculateAttendanceStats();
-        });
+        }
 
         /* ======================================================= */
         /* --- FUNGSI BARU: EKSPOR DATA (BUKU & SISWA) KE CSV --- */
