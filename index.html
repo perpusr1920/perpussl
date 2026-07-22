@@ -2523,14 +2523,15 @@
                                     <input type="checkbox" id="checkAllLoans" onchange="toggleSelectAllLoans(this)" style="transform: scale(1.2); cursor: pointer;">
                                 </th>
                                 <th>No</th>
-                                <th>Tanggal</th>
+                                <th>Tanggal Pinjam</th>
+                                <th>Tanggal Kembali</th>
                                 <th>Siswa (Barcode)</th>
                                 <th>Buku (Barcode)</th>
                                 <th>Status</th>
                             </tr>
                         </thead>
                         <tbody id="loanReportTableBody">
-                            <tr><td colspan="6" style="text-align:center;">Memuat riwayat transaksi dari cloud...</td></tr>
+                            <tr><td colspan="7" style="text-align:center;">Memuat riwayat transaksi dari cloud...</td></tr>
                         </tbody>
                     </table>
                 </div>
@@ -3331,9 +3332,11 @@ window.showAdminDetail = function(type, title, desc) {
                 querySnapshot.forEach(async (docSnap) => {
                     const loanId = docSnap.id;
                     const loanData = docSnap.data();
+                    const todayStr = new Date().toISOString().split('T')[0];
 
                     await updateDoc(doc(db, "loans", loanId), {
-                        status: "Kembali"
+                        status: "Kembali",
+                        returnDate: todayStr
                     });
 
                     document.getElementById('txtReturnBookTitle').innerText = loanData.bookTitle || "Buku Tanpa Judul";
@@ -3384,7 +3387,7 @@ window.showAdminDetail = function(type, title, desc) {
             updateDeleteButtonState();
 
             if(dataArray.length === 0) {
-                tbody.innerHTML = `<tr><td colspan="6" style="text-align:center; color:var(--text-gray);">Belum ada riwayat sirkulasi buku.</td></tr>`;
+                tbody.innerHTML = `<tr><td colspan="7" style="text-align:center; color:var(--text-gray);">Belum ada riwayat sirkulasi buku.</td></tr>`;
                 return;
             }
 
@@ -3416,6 +3419,21 @@ window.showAdminDetail = function(type, title, desc) {
                     }
                 } else {
                     statusBadge = `<span class="badge badge-returned"><i class="fa-solid fa-circle-check"></i> Kembali</span>`;
+
+                    // Meskipun sudah dikembalikan, tetap tampilkan keterangan kecil jika dulu terlambat
+                    if (loan.loanDate && loan.returnDate) {
+                        const borrowDate = new Date(loan.loanDate);
+                        borrowDate.setHours(0,0,0,0);
+                        const returnedDate = new Date(loan.returnDate);
+                        returnedDate.setHours(0,0,0,0);
+                        const timeDiff = returnedDate.getTime() - borrowDate.getTime();
+                        const daysTaken = Math.floor(timeDiff / (1000 * 60 * 60 * 24));
+
+                        if (daysTaken > 7) {
+                            const lateDays = daysTaken - 7;
+                            statusBadge += `<br><span style="font-size:0.75rem; color: var(--danger-red); font-weight: 600;"><i class="fa-solid fa-triangle-exclamation"></i> Terlambat ${lateDays} Hari</span>`;
+                        }
+                    }
                 }
 
                 tr.innerHTML = `
@@ -3424,6 +3442,7 @@ window.showAdminDetail = function(type, title, desc) {
                     </td>
                     <td>${index + 1}</td>
                     <td style="white-space:nowrap; font-size:0.9rem;">${loan.loanDate || '-'}</td>
+                    <td style="white-space:nowrap; font-size:0.9rem;">${loan.returnDate || '-'}</td>
                     <td>
                         <strong>${loan.studentName || '-'}</strong><br>
                         <span style="font-size:0.8rem; color:var(--text-gray);">Barcode: ${loan.studentBarcode || '-'} (Kl: ${loan.studentClass || '-'})</span>
@@ -3444,7 +3463,7 @@ window.showAdminDetail = function(type, title, desc) {
         window.downloadLoanReportCSV = function() {
             if(localLoansArray.length === 0) return;
             
-            let csvContent = "\uFEFFNo,Tanggal Pinjam,Nama Siswa,Barcode Siswa,Kelas,Judul Buku,Barcode Buku,Status Keterangan\n";
+            let csvContent = "\uFEFFNo,Tanggal Pinjam,Tanggal Kembali,Nama Siswa,Barcode Siswa,Kelas,Judul Buku,Barcode Buku,Status Keterangan\n";
             const today = new Date();
             today.setHours(0,0,0,0);
 
@@ -3464,9 +3483,21 @@ window.showAdminDetail = function(type, title, desc) {
                     }
                 } else {
                     statusInfo = "Sudah Kembali";
+
+                    if (loan.loanDate && loan.returnDate) {
+                        const borrowDate = new Date(loan.loanDate);
+                        borrowDate.setHours(0,0,0,0);
+                        const returnedDate = new Date(loan.returnDate);
+                        returnedDate.setHours(0,0,0,0);
+                        const daysTaken = Math.floor((returnedDate.getTime() - borrowDate.getTime()) / (1000 * 60 * 60 * 24));
+
+                        if (daysTaken > 7) {
+                            statusInfo = `Sudah Kembali (Terlambat ${daysTaken - 7} Hari)`;
+                        }
+                    }
                 }
 
-                csvContent += `${index + 1},"${loan.loanDate || ''}","${loan.studentName || ''}","${loan.studentBarcode || ''}","${loan.studentClass || ''}","${loan.bookTitle || ''}","${loan.bookBarcode || ''}","${statusInfo}"\n`;
+                csvContent += `${index + 1},"${loan.loanDate || ''}","${loan.returnDate || ''}","${loan.studentName || ''}","${loan.studentBarcode || ''}","${loan.studentClass || ''}","${loan.bookTitle || ''}","${loan.bookBarcode || ''}","${statusInfo}"\n`;
             });
 
             const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
@@ -3536,21 +3567,6 @@ window.showAdminDetail = function(type, title, desc) {
                        (loan.status || "").toLowerCase().includes(keyword);
             });
             renderLoanReportTable(filtered);
-        }
-
-        window.downloadLoanReportCSV = function() {
-            if(localLoansArray.length === 0) return;
-            let csvContent = "data:text/csv;charset=utf-8,No,Tanggal Pinjam,Nama Siswa,Barcode Siswa,Kelas,Judul Buku,Barcode Buku,Status\n";
-            localLoansArray.forEach((loan, index) => {
-                csvContent += `${index + 1},"${loan.loanDate || ''}","${loan.studentName || ''}","${loan.studentBarcode || ''}","${loan.studentClass || ''}","${loan.bookTitle || ''}","${loan.bookBarcode || ''}","${loan.status || ''}"\n`;
-            });
-            const encodedUri = encodeURI(csvContent);
-            const link = document.createElement("a");
-            link.setAttribute("href", encodedUri);
-            link.setAttribute("download", "Laporan_Sirkulasi_SKL_Library.csv");
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
         }
 
         /* --- MANAJEMEN LIVE DATA SISWA --- */
