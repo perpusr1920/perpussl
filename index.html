@@ -1559,6 +1559,9 @@
         }
         
         @media (max-width: 768px) {
+            * {
+                min-width: 0;
+            }
             .navbar { 
                 padding: 15px 5%;
                 background-color: var(--primary-blue); 
@@ -1640,7 +1643,6 @@
                 min-width: 0;
             }
             .home-stats-col {
-                flex-direction: row;
                 min-width: 0;
             }
             .home-stats-col .book-notif-card {
