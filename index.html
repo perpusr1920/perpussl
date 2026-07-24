@@ -10,25 +10,25 @@
 
     <style>
         :root {
-            --primary-blue: #4338ca;
-            --primary-blue-light: #6366f1;
-            --primary-gradient: linear-gradient(135deg, #4f46e5 0%, #4338ca 100%);
-            --hero-gradient: linear-gradient(135deg, #312e81 0%, #4338ca 45%, #6366f1 100%);
-            --admin-gradient: linear-gradient(135deg, #1e1b4b 0%, #3730a3 60%, #4f46e5 100%);
-            --light-blue: #eef2ff;
-            --accent-orange: #fb923c;
+            --primary-blue: #b8752b;
+            --primary-blue-light: #d99b47;
+            --primary-gradient: linear-gradient(135deg, #f4b942 0%, #d9761f 100%);
+            --hero-gradient: linear-gradient(135deg, #1c1712 0%, #3a2c1a 45%, #c9922f 100%);
+            --admin-gradient: linear-gradient(135deg, #14100c 0%, #2b2016 60%, #96631f 100%);
+            --light-blue: #faf1e0;
+            --accent-orange: #e8702a;
             --accent-teal: #14b8a6;
             --accent-pink: #ec4899;
-            --accent-amber: #f59e0b;
-            --text-dark: #0f172a;
-            --text-gray: #64748b;
+            --accent-amber: #f2a53c;
+            --text-dark: #1e1812;
+            --text-gray: #6b6055;
             --white: #ffffff;
-            --bg-body: #f4f5fb;
+            --bg-body: #faf7f1;
             --danger-red: #ef4444;
             --success-green: #10b981;
-            --border-soft: 1px solid rgba(15, 23, 42, 0.06);
-            --card-shadow: 0 8px 24px -8px rgba(30, 27, 75, 0.08), 0 2px 8px -2px rgba(30, 27, 75, 0.05);
-            --hover-shadow: 0 25px 50px -12px rgba(67, 56, 202, 0.18), 0 10px 20px -8px rgba(67, 56, 202, 0.1);
+            --border-soft: 1px solid rgba(30, 20, 10, 0.08);
+            --card-shadow: 0 8px 24px -8px rgba(40, 28, 12, 0.10), 0 2px 8px -2px rgba(40, 28, 12, 0.06);
+            --hover-shadow: 0 25px 50px -12px rgba(184, 117, 43, 0.22), 0 10px 20px -8px rgba(184, 117, 43, 0.12);
             --radius-lg: 28px;
             --radius-md: 18px;
             --radius-sm: 12px;
@@ -86,6 +86,11 @@
             border-radius: 14px; 
             backdrop-filter: blur(10px);
             font-size: 1.3rem;
+        }
+        .nav-logo-img {
+            height: 40px;
+            width: 40px;
+            object-fit: contain;
         }
         
         .nav-container { 
@@ -605,7 +610,7 @@
         .page-header-icon.amber { background: linear-gradient(135deg, #f59e0b, #fb923c); box-shadow: 0 10px 20px -6px rgba(245,158,11,.4); }
         .page-header-icon.teal { background: linear-gradient(135deg, #14b8a6, #0d9488); box-shadow: 0 10px 20px -6px rgba(13,148,136,.4); }
         .page-header-icon.pink { background: linear-gradient(135deg, #ec4899, #c026d3); box-shadow: 0 10px 20px -6px rgba(192,38,211,.4); }
-        .page-header-icon.indigo { background: linear-gradient(135deg, #6366f1, #4338ca); box-shadow: 0 10px 20px -6px rgba(67,56,202,.4); }
+        .page-header-icon.indigo { background: linear-gradient(135deg, #96631f, #5c3e14); box-shadow: 0 10px 20px -6px rgba(92,62,20,.4); }
         .page-header h2 { font-size: 1.5rem; font-weight: 700; color: var(--text-dark); margin-bottom: 6px; }
         .page-header p { font-size: 0.98rem; color: var(--text-gray); line-height: 1.6; max-width: 600px; }
 
@@ -1208,12 +1213,12 @@
             transform: scale(1.08) rotate(-4deg);
         }
         /* Variasi warna ikon tiap kartu admin agar dashboard lebih hidup */
-        #adminGrid .card:nth-child(1) .icon-wrapper { background: #eef2ff; color: #4338ca; }
+        #adminGrid .card:nth-child(1) .icon-wrapper { background: #faf1e0; color: #b8752b; }
         #adminGrid .card:nth-child(2) .icon-wrapper { background: #fdf2f8; color: #db2777; }
         #adminGrid .card:nth-child(3) .icon-wrapper { background: #ecfdf5; color: #059669; }
         #adminGrid .card:nth-child(4) .icon-wrapper { background: #fffbeb; color: #d97706; }
         #adminGrid .card:nth-child(5) .icon-wrapper { background: #f0fdfa; color: #0d9488; }
-        #adminGrid .card:nth-child(6) .icon-wrapper { background: #eff6ff; color: #2563eb; }
+        #adminGrid .card:nth-child(6) .icon-wrapper { background: #fdf3e4; color: #96631f; }
         #adminGrid .card:nth-child(7) .icon-wrapper { background: #fef2f2; color: #dc2626; }
         #adminGrid .card:nth-child(8) .icon-wrapper { background: #fdf2f8; color: #c026d3; }
         #adminGrid .card:nth-child(1):hover .icon-wrapper,
@@ -2102,7 +2107,7 @@
 
     <nav class="navbar" id="mainNavbar">
         <div class="nav-logo" onclick="showUserSection('home')">
-            <i class="fa-solid fa-book-open"></i>
+            <img src="logo_lentera_transparan.png" alt="Logo SKL Library" class="nav-logo-img">
             <span>SKL Library</span>
         </div>
         
