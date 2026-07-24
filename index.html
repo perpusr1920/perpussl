@@ -1291,7 +1291,8 @@
             letter-spacing: 0.01em;
         }
         .form-grid .form-group label .req-mark { color: var(--primary-blue-light); }
-        .form-grid .form-group input { 
+        .form-grid .form-group input,
+        .form-grid .form-group select { 
             padding: 11px 14px;
             border: 1.5px solid #e9ecf3; 
             border-radius: 10px; 
@@ -1302,11 +1303,27 @@
             color: var(--text-dark);
         }
         .form-grid .form-group input::placeholder { color: #b0b8c9; }
-        .form-grid .form-group input:focus { 
+        .form-grid .form-group input:focus,
+        .form-grid .form-group select:focus { 
             border-color: var(--primary-blue-light);
             background: var(--white);
             box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.1);
         }
+        .status-toggle-btn {
+            border: none;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 0.72rem;
+            padding: 6px 10px;
+            border-radius: 20px;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            transition: all 0.2s ease;
+        }
+        .status-toggle-btn:hover { filter: brightness(0.95); transform: translateY(-1px); }
+        .status-toggle-btn.st-tersedia { background: rgba(16, 185, 129, 0.12); color: var(--success-green); }
+        .status-toggle-btn.st-dipinjam { background: rgba(239, 68, 68, 0.12); color: var(--danger-red); }
         .form-hint {
             font-size: 0.8rem;
             color: var(--text-gray);
@@ -2424,6 +2441,14 @@
                             <label>Deskripsi Fisik</label>
                             <input type="text" id="bookPhysicalDescInput" placeholder="Contoh: 529 hlm.; ilus.; 20 cm">
                         </div>
+                        <div class="form-group">
+                            <label>Status Ketersediaan</label>
+                            <select id="bookStatusInput">
+                                <option value="auto">Otomatis (ikuti data peminjaman)</option>
+                                <option value="tersedia">Tersedia</option>
+                                <option value="dipinjam">Dipinjam</option>
+                            </select>
+                        </div>
                     </div>
                     <div class="form-group" style="margin-bottom: 22px;">
                         <label style="margin-bottom: 2px;">Cover Buku</label>
@@ -2460,11 +2485,12 @@
                                 <th>Barcode</th>
                                 <th>Judul Buku</th>
                                 <th>Pengarang</th>
+                                <th style="text-align: center;">Status</th>
                                 <th style="text-align: center;">Aksi</th>
                             </tr>
                         </thead>
                         <tbody id="bookTableBody">
-                            <tr><td colspan="5" style="text-align:center;">Memuat data dari cloud...</td></tr>
+                            <tr><td colspan="6" style="text-align:center;">Memuat data dari cloud...</td></tr>
                         </tbody>
                     </table>
                 </div>
@@ -2941,7 +2967,8 @@ window.showAdminDetail = function(type, title, desc) {
                         year: b.year || "",
                         publisher: b.publisher || "",
                         callNumber: b.callNumber || "",
-                        coverUrl: b.coverUrl || ""
+                        coverUrl: b.coverUrl || "",
+                        manualStatus: b.manualStatus || "auto"
                     }));
 
                     const chunks = [];
@@ -3213,7 +3240,7 @@ window.showAdminDetail = function(type, title, desc) {
             if (!tbody) return;
             tbody.innerHTML = "";
             if(dataArray.length === 0) {
-                tbody.innerHTML = `<tr><td colspan="5" style="text-align:center; color: var(--text-gray);">Data tidak ditemukan / Katalog kosong.</td></tr>`;
+                tbody.innerHTML = `<tr><td colspan="6" style="text-align:center; color: var(--text-gray);">Data tidak ditemukan / Katalog kosong.</td></tr>`;
                 return;
             }
             dataArray.forEach((book, index) => {
@@ -3241,6 +3268,14 @@ window.showAdminDetail = function(type, title, desc) {
                         </div>
                     </td>
                     <td>${book.author || ''}</td>
+                    <td style="text-align: center;">
+                        ${(() => {
+                            const status = getEffectiveBookStatus(book);
+                            return status === "dipinjam"
+                                ? `<button class="status-toggle-btn st-dipinjam" onclick="toggleBookStatus('${book.id}','dipinjam')" title="Klik untuk ubah jadi Tersedia"><i class="fa-solid fa-clock"></i> Dipinjam</button>`
+                                : `<button class="status-toggle-btn st-tersedia" onclick="toggleBookStatus('${book.id}','tersedia')" title="Klik untuk ubah jadi Dipinjam"><i class="fa-solid fa-circle-check"></i> Tersedia</button>`;
+                        })()}
+                    </td>
                     <td style="text-align: center; white-space: nowrap;">
                         <button class="btn-action btn-edit" onclick="editBookTrigger('${book.id}')"><i class="fa-solid fa-pen-to-square"></i> Edit</button>
                         <button class="btn-action btn-delete" onclick="deleteBook('${book.id}')"><i class="fa-solid fa-trash"></i> Hapus</button>
@@ -3261,6 +3296,7 @@ window.showAdminDetail = function(type, title, desc) {
             const isbnInput = document.getElementById('bookIsbnInput').value.trim();
             const physicalDescInput = document.getElementById('bookPhysicalDescInput').value.trim();
             const coverInput = document.getElementById('bookCoverInput').value.trim();
+            const statusInput = document.getElementById('bookStatusInput').value;
 
             if(!titleInput || !authorInput || !barcodeInput) {
                 alert("Judul, Pengarang, dan Nomor Barcode wajib diisi!");
@@ -3277,7 +3313,8 @@ window.showAdminDetail = function(type, title, desc) {
                     callNumber: callNumberInput,
                     isbn: isbnInput,
                     physicalDesc: physicalDescInput,
-                    coverUrl: coverInput
+                    coverUrl: coverInput,
+                    manualStatus: statusInput
                 };
                 if(idHidden) {
                     await updateDoc(doc(db, "books", idHidden), bookData);
@@ -3306,6 +3343,7 @@ window.showAdminDetail = function(type, title, desc) {
             document.getElementById('bookIsbnInput').value = book.isbn || '';
             document.getElementById('bookPhysicalDescInput').value = book.physicalDesc || '';
             document.getElementById('bookCoverInput').value = book.coverUrl || '';
+            document.getElementById('bookStatusInput').value = book.manualStatus || 'auto';
             previewBookCover();
             document.getElementById('formFormTitle').innerText = "Edit Data Buku";
             document.getElementById('btnSaveBookAction').innerText = "Simpan Perubahan";
@@ -3328,6 +3366,7 @@ window.showAdminDetail = function(type, title, desc) {
             document.getElementById('bookIsbnInput').value = "";
             document.getElementById('bookPhysicalDescInput').value = "";
             document.getElementById('bookCoverInput').value = "";
+            document.getElementById('bookStatusInput').value = "auto";
             document.getElementById('bookCoverPreview').style.display = "none";
             document.getElementById('bookCoverPreviewIcon').style.display = "inline-block";
             document.getElementById('formFormTitle').innerText = "Tambah Buku Baru";
@@ -3351,6 +3390,28 @@ window.showAdminDetail = function(type, title, desc) {
         // Mengecek apakah sebuah buku (berdasarkan barcode) sedang dalam status dipinjam
         function isBookCurrentlyLoaned(barcode) {
             return localLoansArray.some(loan => loan.bookBarcode === barcode && loan.status === "Dipinjam");
+        }
+
+        // Menentukan status ketersediaan buku yang sebenarnya ditampilkan:
+        // jika admin sudah mengatur status secara manual ("tersedia"/"dipinjam"),
+        // status itu yang dipakai. Kalau statusnya "auto" (default), sistem
+        // tetap mengikuti data transaksi peminjaman seperti sebelumnya.
+        function getEffectiveBookStatus(book) {
+            if (book.manualStatus === "tersedia") return "tersedia";
+            if (book.manualStatus === "dipinjam") return "dipinjam";
+            return isBookCurrentlyLoaned(book.barcode) ? "dipinjam" : "tersedia";
+        }
+
+        // Diklik admin dari tabel Kelola Buku untuk mengganti status
+        // ketersediaan buku dengan sekali klik, tanpa perlu buka form edit.
+        window.toggleBookStatus = async function(id, currentStatus) {
+            const nextStatus = currentStatus === "dipinjam" ? "tersedia" : "dipinjam";
+            try {
+                await updateDoc(doc(db, "books", id), { manualStatus: nextStatus });
+            } catch(e) {
+                console.error(e);
+                alert("Gagal mengubah status buku: " + e.message);
+            }
         }
 
         /* ==================== MANAJEMEN LIVE DATA E-BOOK ==================== */
@@ -3639,7 +3700,7 @@ window.showAdminDetail = function(type, title, desc) {
                 if (book.publisher) metaParts.push(book.publisher);
                 if (book.year) metaParts.push(book.year);
                 const metaHtml = metaParts.length > 0 ? `<div class="opac-meta">${metaParts.join(' &bull; ')}</div>` : '';
-                const loaned = isBookCurrentlyLoaned(book.barcode);
+                const loaned = getEffectiveBookStatus(book) === "dipinjam";
                 const statusBadge = loaned
                     ? `<span class="badge badge-loaned"><i class="fa-solid fa-clock"></i> Dipinjam</span>`
                     : `<span class="badge badge-returned"><i class="fa-solid fa-circle-check"></i> Tersedia</span>`;
