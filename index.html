@@ -819,6 +819,45 @@
         .rule-card h4 { font-size: 1.05rem; font-weight: 700; color: var(--text-dark); margin-bottom: 6px; }
         .rule-card p { font-size: 0.9rem; color: var(--text-gray); line-height: 1.55; }
 
+
+        /* --- TATA TERTIB: DAFTAR LENGKAP (SISWA & TENAGA PENDIDIK) --- */
+        .rules-audience + .rules-audience { margin-top: 38px; }
+        .rules-audience .guide-section-header { margin-top: 34px; margin-bottom: 0; }
+        .rules-audience .rule-grid { margin-top: 18px; align-items: start; }
+        .rules-audience .guide-section-header .audience-badge {
+            background: linear-gradient(135deg, #f59e0b, #fb923c);
+            box-shadow: 0 8px 16px -6px rgba(245,158,11,.45);
+        }
+        .rule-card-list h4 { margin-bottom: 14px; }
+        .rule-items { list-style: none; counter-reset: rule; padding: 0; margin: 0; }
+        .rule-items li {
+            counter-increment: rule;
+            position: relative;
+            padding-left: 34px;
+            margin-bottom: 12px;
+            font-size: 0.9rem;
+            color: var(--text-gray);
+            line-height: 1.6;
+        }
+        .rule-items li:last-child { margin-bottom: 0; }
+        .rule-items li::before {
+            content: counter(rule);
+            position: absolute;
+            left: 0;
+            top: 1px;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background: #fde9c7;
+            color: #b45309;
+            font-weight: 700;
+            font-size: 0.78rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .rule-items li strong { color: var(--text-dark); font-weight: 700; }
+
         /* --- PANDUAN PENGUNJUNG: LANGKAH KUNJUNGAN --- */
         .guide-section {
             margin-top: 36px;
@@ -2386,30 +2425,81 @@
                         <p>Mohon dipatuhi peraturan di dalam ruang SKL Library demi kenyamanan bersama.</p>
                     </div>
                 </div>
-                <div class="rule-grid">
-                    <div class="rule-card">
-                        <span class="rule-number">01</span>
-                        <div class="rule-icon"><i class="fa-solid fa-hand"></i></div>
-                        <h4>Jaga Ketenangan</h4>
-                        <p>Harap tenang dan tidak membuat kegaduhan di area membaca.</p>
+                <div class="rules-audience">
+                    <div class="guide-section-header audience-header">
+                        <div class="icon-badge audience-badge"><i class="fa-solid fa-user-graduate"></i></div>
+                        <div><h3>Bagi Siswa</h3></div>
                     </div>
-                    <div class="rule-card">
-                        <span class="rule-number">02</span>
-                        <div class="rule-icon"><i class="fa-solid fa-broom"></i></div>
-                        <h4>Jaga Kebersihan</h4>
-                        <p>Menjaga kebersihan dan tidak membawa makanan/minuman ke dalam ruangan.</p>
+                    <div class="rule-grid">
+                    <div class="rule-card rule-card-list">
+                        <div class="rule-icon"><i class="fa-solid fa-door-open"></i></div>
+                        <h4>a. Di dalam Perpustakaan</h4>
+                        <ol class="rule-items">
+                            <li>Kegiatan makan dan minum dilakukan di luar perpustakaan.</li>
+                            <li>Tas, topi dan jaket berada di luar perpustakaan.</li>
+                            <li>Buku dan alat tulis yang dibawa dari luar perpustakaan harap ditunjukkan kepada petugas perpustakaan ketika masuk ke dalam ruangan perpustakaan.</li>
+                            <li>Meletakkan tanda batas antara buku ketika mengambil buku dari raknya.</li>
+                            <li>Meletakkan dengan betul buku yang selesai dibaca <strong>TEPAT</strong> di tempat buku tersebut berasal.</li>
+                            <li>Berbicara seperlunya ketika di dalam ruangan, agar tidak mengganggu orang lain yang sedang membaca.</li>
+                            <li>Membersihkan dan merapikan kembali ruangan perpustakaan jika membuat kotor dan berantakan ruangan perpustakaan.</li>
+                            <li>Sampah harap dibuang di tempat sampah yang berada di luar perpustakaan.</li>
+                            <li>Sebelum meninggalkan perpustakaan, pastikan meja dan kursi tertata dengan rapi.</li>
+                        </ol>
                     </div>
-                    <div class="rule-card">
-                        <span class="rule-number">03</span>
+                    <div class="rule-card rule-card-list">
                         <div class="rule-icon"><i class="fa-solid fa-clock"></i></div>
-                        <h4>Batas Peminjaman</h4>
-                        <p>Batas waktu peminjaman buku maksimal adalah 7 hari kerja.</p>
+                        <h4>b. Hal Peminjaman Buku</h4>
+                        <ol class="rule-items">
+                            <li>Peminjaman buku dapat dilakukan <strong>MULAI</strong> dari : Pukul 08.00 - 14.30 WIB (kecuali saat jam istirahat PP - menyesuaikan, saat rest area)</li>
+                            <li>Peminjaman buku dilayani oleh petugas perpustakaan.</li>
+                            <li>Peminjaman buku maksimal 5 hari, lebih dari 5 hari <strong>DIKENAKAN DENDA</strong> Rp500,00/hari.</li>
+                            <li>Jumlah peminjaman buku 2 judul/peminjaman. Akan dapat meminjam buku yang lain ketika buku sebelumnya sudah dikembalikan ke perpustakaan.</li>
+                            <li>Perpanjangan masa peminjaman 1 (satu) judul buku <strong>HANYA DAPAT DILAKUKAN MAKSIMAL</strong> 2X. Jika hendak meminjam buku yang sama, buku tersebut baru dapat dipinjam oleh pihak yang sama sehari berikutnya.</li>
+                            <li>Jika buku bacaan yang dipinjam oleh peminjam hilang atau rusak, maka peminjam <strong>HARUS</strong> mengganti buku dengan judul yang sama (penggantian dengan uang dikenakan 4X lipat dari harga buku yang seharusnya yang berlaku saat itu).</li>
+                            <li>Jika <strong>BUKU MATA PELAJARAN</strong> yang <strong>HILANG</strong>, maka siswa wajib mengganti buku tersebut yang sama persis atau uang 4X lipat dari harga buku yang hilang.</li>
+                            <li>Jika peminjam tidak segera mengganti buku yang hilang hingga batas waktu yang diberikan, maka sekolah tidak dapat memberikan Laporan Hasil Belajar peminjam (misalnya raport, nilai UTS, nilai UAS, Ijasah).</li>
+                            <li>Peminjam yang menghilangkan buku <strong>BARU DIIJINKAN</strong> meminjam buku lagi setelah mengganti buku yang hilang.</li>
+                            <li>Peminjam yang mendapat tugas dari guru untuk menganalisis buku tetap <strong>HARUS</strong> mengikuti peraturan yang berlaku.</li>
+                        </ol>
                     </div>
-                    <div class="rule-card">
-                        <span class="rule-number">04</span>
-                        <div class="rule-icon"><i class="fa-solid fa-book-open-reader"></i></div>
-                        <h4>Jaga Kondisi Buku</h4>
-                        <p>Wajib mengembalikan buku dalam kondisi utuh dan tidak rusak.</p>
+                    </div>
+                </div>
+
+                <div class="rules-audience">
+                    <div class="guide-section-header audience-header">
+                        <div class="icon-badge audience-badge"><i class="fa-solid fa-chalkboard-user"></i></div>
+                        <div><h3>Bagi Semua Tenaga Pendidik</h3></div>
+                    </div>
+                    <div class="rule-grid">
+                    <div class="rule-card rule-card-list">
+                        <div class="rule-icon"><i class="fa-solid fa-door-open"></i></div>
+                        <h4>a. Di dalam Perpustakaan</h4>
+                        <ol class="rule-items">
+                            <li>Kegiatan makan dan minum dilakukan di luar perpustakaan.</li>
+                            <li>Tas, topi dan jaket berada di luar perpustakaan.</li>
+                            <li>Buku dan alat tulis yang dibawa dari luar perpustakaan harap ditunjukkan kepada petugas perpustakaan ketika masuk ke dalam ruangan perpustakaan.</li>
+                            <li>Meletakkan tanda batas antara buku ketika mengambil buku dari raknya.</li>
+                            <li>Meletakkan buku yang selesai dibaca <strong>TEPAT</strong> di tempat buku tersebut berasal.</li>
+                            <li>Berbicara seperlunya ketika di dalam ruangan, agar tidak mengganggu orang lain yang sedang membaca.</li>
+                            <li>Membersihkan dan merapikan kembali ruangan perpustakaan jika membuat kotor dan berantakan ruangan perpustakaan.</li>
+                            <li>Sampah harap dibuang di tempat sampah yang berada di luar perpustakaan.</li>
+                            <li>Sebelum meninggalkan perpustakaan, pastikan meja dan kursi tertata dengan rapi.</li>
+                        </ol>
+                    </div>
+                    <div class="rule-card rule-card-list">
+                        <div class="rule-icon"><i class="fa-solid fa-clock"></i></div>
+                        <h4>b. Hal Peminjaman Buku</h4>
+                        <ol class="rule-items">
+                            <li>Peminjaman buku dapat dilakukan <strong>MULAI</strong> dari : Pukul 08.00 - 14.30 WIB (kecuali saat jam istirahat PP - menyesuaikan)</li>
+                            <li>Peminjaman buku dilayani oleh petugas perpustakaan.</li>
+                            <li>Peminjaman buku maksimal 5 hari, lebih dari 5 hari <strong>DIKENAKAN DENDA</strong> Rp1.000,00/hari.</li>
+                            <li>Jumlah peminjaman buku 2 judul/peminjaman. Akan dapat meminjam buku yang lain ketika buku sebelumnya sudah dikembalikan ke perpustakaan.</li>
+                            <li>Perpanjangan masa peminjaman 1 (satu) judul buku <strong>HANYA DAPAT DILAKUKAN MAKSIMAL</strong> 2X. Jika hendak meminjam buku yang sama, buku tersebut baru dapat dipinjam oleh pihak yang sama sehari berikutnya.</li>
+                            <li>Jika buku bacaan yang dipinjam oleh peminjam hilang atau rusak, maka peminjam <strong>HARUS</strong> mengganti buku dengan judul yang sama (penggantian dengan uang dikenakan 4X lipat dari harga buku yang seharusnya yang berlaku saat itu).</li>
+                            <li>Jika peminjam tidak segera mengganti buku yang hilang hingga batas waktu yang diberikan, maka pihak perpustakaan akan bekerjasama dengan bagian Tata Usaha Sekolah Kristen Lentera untuk meminta pertanggungjawaban peminjam (yaitu akan langsung mengambil sejumlah uang dari <strong>SALARY</strong> peminjam sesuai 4X harga buku yang berlaku saat ini).</li>
+                            <li>Peminjam yang menghilangkan buku <strong>BARU DIIJINKAN</strong> meminjam buku lagi setelah mengganti buku yang hilang.</li>
+                        </ol>
+                    </div>
                     </div>
                 </div>
 
@@ -2836,10 +2926,10 @@
                 showBadge: false,
                 titleMain: 'Tata Tertib',
                 titleAccent: 'Perpustakaan',
-                desc: 'Empat aturan sederhana supaya ruang baca tetap nyaman dan menyenangkan untuk semua.',
+                desc: 'Aturan di ruang baca dan peminjaman buku bagi siswa dan tenaga pendidik, supaya perpustakaan tetap nyaman untuk semua.',
                 showStats: false,
-                stat1: { icon: 'fa-list-check', value: '4', label: 'Aturan Utama' },
-                stat2: { icon: 'fa-clock', value: '7 Hari', label: 'Batas Pinjam' }
+                stat1: { icon: 'fa-book', value: '2 Judul', label: 'Per Peminjaman' },
+                stat2: { icon: 'fa-clock', value: '5 Hari', label: 'Batas Pinjam' }
             },
             'keanggotaan': {
                 theme: 'theme-teal',
