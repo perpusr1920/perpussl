@@ -946,6 +946,49 @@
             color: white;
         }
 
+        /* --- KEANGGOTAAN: ISI HALAMAN --- */
+        .member-intro {
+            margin-top: 26px;
+            font-size: 0.98rem;
+            color: var(--text-gray);
+            line-height: 1.7;
+        }
+        .membership-page .guide-section-header { margin-bottom: 18px; }
+        .membership-page .rule-grid { margin-top: 0; align-items: start; }
+        .membership-page .rule-card { background: #f0fdfa; border-color: #ccfbf1; }
+        .membership-page .rule-icon {
+            background: linear-gradient(135deg, #14b8a6, #0d9488);
+            box-shadow: 0 8px 16px -6px rgba(13,148,136,.4);
+        }
+        .membership-page .rule-items li::before { background: #ccfbf1; color: #0f766e; }
+        .membership-page .rule-items li.plain { padding-left: 0; }
+        .membership-page .rule-items li.plain::before { display: none; }
+        .membership-page .rule-items li strong { color: var(--text-dark); }
+        .member-note {
+            margin-top: 18px;
+            background: #fdfaf5;
+            border: 1px solid #fde9c7;
+            border-radius: var(--radius-md);
+            padding: 18px 22px;
+            font-size: 0.92rem;
+            color: var(--text-gray);
+            line-height: 1.65;
+        }
+        .member-note strong { color: var(--text-dark); }
+        .membership-page .guide-steps { margin-top: 14px; }
+        .membership-page .schedule-table { text-align: left; }
+        .membership-page .schedule-table td:first-child { width: 38%; }
+        .membership-page .schedule-table th { background: #f0fdfa; color: #0f766e; }
+        .member-faq { display: flex; flex-direction: column; gap: 14px; }
+        .member-faq-item {
+            background: #fdfaf5;
+            border: 1px solid #fde9c7;
+            border-radius: var(--radius-md);
+            padding: 18px 22px;
+        }
+        .member-faq-item h4 { font-size: 1rem; font-weight: 700; color: var(--text-dark); margin-bottom: 6px; }
+        .member-faq-item p { font-size: 0.9rem; color: var(--text-gray); line-height: 1.6; }
+
         /* --- E-BOOK: EMPTY STATE --- */
         .ebook-page {
             background: var(--white);
@@ -2544,10 +2587,132 @@
                         <p>Seluruh siswa-siswi dan guru Sekolah Kristen Lentera otomatis terdaftar sebagai anggota resmi perpustakaan.</p>
                     </div>
                 </div>
-                <div class="member-badges">
-                    <div class="member-badge"><i class="fa-solid fa-user-graduate"></i><span>Siswa-siswi</span></div>
-                    <div class="member-badge"><i class="fa-solid fa-chalkboard-user"></i><span>Guru</span></div>
-                    <div class="member-badge status"><i class="fa-solid fa-circle-check"></i><span>Anggota Resmi</span></div>
+
+                <p class="member-intro">Selamat datang di pusat perpustakaan dan sumber belajar digital sekolah kami! Kami terus berinovasi untuk memberikan pengalaman literasi yang mudah, cepat, dan nyaman. Melalui integrasi sistem otomasi perpustakaan, seluruh proses peminjaman kini dapat dilakukan secara efektif, akurat, dan transparan.</p>
+
+                <div class="guide-section">
+                    <div class="guide-section-header">
+                        <div class="icon-badge"><i class="fa-solid fa-user-check"></i></div>
+                        <div><h3>1. Ketentuan Keanggotaan</h3><p>Guna mendukung kemudahan akses bagi seluruh komunitas sekolah, kami menerapkan kebijakan keanggotaan otomatis.</p></div>
+                    </div>
+                    <div class="rule-card rule-card-list">
+                        <ol class="rule-items">
+                            <li><strong>Pendaftaran Otomatis:</strong> Seluruh warga sekolah (peserta didik, guru, dan staf/tenaga kependidikan) secara otomatis telah terdaftar sebagai anggota perpustakaan sejak resmi tercatat di sekolah. Anda tidak perlu mengurus pendaftaran manual.</li>
+                            <li><strong>Masa Aktif Keanggotaan:</strong> Status keanggotaan berlaku sepanjang Anda masih aktif menjadi bagian dari sekolah ini.</li>
+                            <li><strong>Penutupan Keanggotaan:</strong> Status keanggotaan akan non-aktif secara otomatis saat peserta didik lulus/pindah sekolah, atau saat staf/guru purna tugas.</li>
+                        </ol>
+                    </div>
+                </div>
+
+                <div class="guide-section">
+                    <div class="guide-section-header">
+                        <div class="icon-badge"><i class="fa-solid fa-barcode"></i></div>
+                        <div><h3>2. Penggunaan Kartu Anggota (Khusus Siswa) &amp; Sistem Digital</h3><p>Untuk menjaga ketertiban dan kerapihan administrasi peminjaman digital.</p></div>
+                    </div>
+                    <div class="rule-card rule-card-list">
+                        <ol class="rule-items">
+                            <li><strong>Kartu Anggota Ber-Barcode Khusus Siswa:</strong> Setiap siswa dibekali dengan Kartu Anggota Perpustakaan khusus yang memiliki kode barcode unik. Kartu ini wajib dibawa setiap kali ingin melakukan peminjaman buku.</li>
+                            <li><strong>Layanan Guru &amp; Staf:</strong> Untuk bapak/ibu guru dan staf kependidikan, peminjaman dapat dilakukan langsung melalui konfirmasi data diri kepada petugas sirkulasi.</li>
+                        </ol>
+                    </div>
+                    <div class="guide-section-header" style="margin-top: 26px;">
+                        <div><h3>Alur Peminjaman Buku untuk Siswa</h3></div>
+                    </div>
+                    <div class="guide-steps">
+                        <div class="guide-step">
+                            <div class="guide-step-number">1</div>
+                            <h4>Pencarian Koleksi</h4>
+                            <p>Pilih buku yang ingin dipinjam dari rak koleksi perpustakaan.</p>
+                        </div>
+                        <div class="guide-step">
+                            <div class="guide-step-number">2</div>
+                            <h4>Pemeriksaan di Meja Sirkulasi</h4>
+                            <p>Bawa buku dan serahkan Kartu Anggota Perpustakaan Anda kepada petugas di meja sirkulasi.</p>
+                        </div>
+                        <div class="guide-step">
+                            <div class="guide-step-number">3</div>
+                            <h4>Pemindaian Barcode (Scanning)</h4>
+                            <p>Petugas akan memindai barcode pada Kartu Anggota siswa dan barcode pada buku yang dipinjam.</p>
+                        </div>
+                        <div class="guide-step">
+                            <div class="guide-step-number">4</div>
+                            <h4>Pencatatan Otomatis</h4>
+                            <p>Sistem perpustakaan digital secara otomatis merekam transaksi peminjaman atas nama siswa yang bersangkutan, lengkap dengan tanggal peminjaman dan batas waktu pengembalian.</p>
+                        </div>
+                        <div class="guide-step">
+                            <div class="guide-step-number">5</div>
+                            <h4>Selesai</h4>
+                            <p>Buku siap dibawa pulang untuk dipelajari.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="guide-section">
+                    <div class="guide-section-header">
+                        <div class="icon-badge"><i class="fa-solid fa-clipboard-list"></i></div>
+                        <div><h3>3. Ketentuan Layanan Peminjaman</h3><p>Berikut adalah aturan dasar peminjaman koleksi perpustakaan.</p></div>
+                    </div>
+                    <div class="table-responsive">
+                        <table class="schedule-table">
+                            <thead>
+                                <tr><th>Ketentuan</th><th>Keterangan</th></tr>
+                            </thead>
+                            <tbody>
+                                <tr><td>Maksimal Peminjaman</td><td>Maksimal 2 buku per transaksi</td></tr>
+                                <tr><td>Batas Waktu Peminjaman</td><td>7 hari kalender sejak tanggal peminjaman</td></tr>
+                                <tr><td>Perpanjangan Masa Pinjam</td><td>Boleh dilakukan 1x perpanjangan selama buku tidak sedang dipesan oleh anggota lain</td></tr>
+                                <tr><td>Sanksi Keterlambatan</td><td>Pengembalian yang melebihi tanggal jatuh tempo akan dikenakan denda administratif atau penangguhan peminjaman sementara</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="guide-section">
+                    <div class="guide-section-header">
+                        <div class="icon-badge"><i class="fa-solid fa-scale-balanced"></i></div>
+                        <div><h3>4. Hak &amp; Tanggung Jawab Siswa</h3></div>
+                    </div>
+                    <div class="rule-grid">
+                        <div class="rule-card rule-card-list">
+                            <div class="rule-icon"><i class="fa-solid fa-hand-holding-heart"></i></div>
+                            <h4>Hak Siswa</h4>
+                            <ol class="rule-items">
+                                <li>Memanfaatkan area baca, ruang diskusi, serta fasilitas digital perpustakaan.</li>
+                                <li>Meminjam koleksi buku fiksi maupun non-fiksi sesuai ketentuan (maksimal 2 buku).</li>
+                                <li>Mengajukan usulan/rekomendasi buku baru yang dibutuhkan untuk pembelajaran.</li>
+                            </ol>
+                        </div>
+                        <div class="rule-card rule-card-list">
+                            <div class="rule-icon"><i class="fa-solid fa-shield-heart"></i></div>
+                            <h4>Tanggung Jawab Siswa</h4>
+                            <ol class="rule-items">
+                                <li><strong>Menjaga Fisik Buku:</strong> Dilarang merusak, mencoret, atau merobek buku yang dipinjam.</li>
+                                <li><strong>Tepat Waktu:</strong> Mengembalikan atau memperpanjang masa pinjam buku sebelum tanggal jatuh tempo.</li>
+                                <li><strong>Menjaga Kartu Anggota:</strong> Kartu Anggota bersifat personal dan tidak boleh dipindahtangankan atau dipinjamkan kepada siswa lain. Segala transaksi yang terekam dari pemindaian barcode kartu menjadi tanggung jawab pemilik kartu.</li>
+                            </ol>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="guide-section">
+                    <div class="guide-section-header">
+                        <div class="icon-badge"><i class="fa-solid fa-circle-question"></i></div>
+                        <div><h3>5. Penanganan Masalah &amp; Pertanyaan Umum (FAQ)</h3></div>
+                    </div>
+                    <div class="member-faq">
+                        <div class="member-faq-item">
+                            <h4>Bagaimana jika Kartu Anggota siswa hilang atau rusak?</h4>
+                            <p>Siswa harap segera melapor kepada petugas perpustakaan untuk memblokir barcode lama demi menghindari penyalahgunaan. Petugas akan membantu proses pencetakan ulang (re-issue) kartu baru sesuai prosedur sekolah.</p>
+                        </div>
+                        <div class="member-faq-item">
+                            <h4>Apakah siswa bisa meminjam buku tanpa membawa Kartu Anggota?</h4>
+                            <p>Demi ketertiban dan kecepatan transaksi sistem digital, peminjaman bagi siswa wajib menggunakan pemindaian barcode pada Kartu Anggota fisik.</p>
+                        </div>
+                        <div class="member-faq-item">
+                            <h4>Bagaimana cara mengecek batas waktu pengembalian buku?</h4>
+                            <p>Siswa dapat menanyakan langsung kepada petugas sirkulasi saat berkunjung ke perpustakaan.</p>
+                        </div>
+                    </div>
                 </div>
             </div>
 
